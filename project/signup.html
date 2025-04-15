@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang=uk>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <title>Реєстрація</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header class="header">
+    <div class="logo-section">
+        <a href="index.html">
+            <img class="logo" src="img/logo.png" alt="Логотип Byway">
+        </a>
+        <span class="brand-name">Byway</span>
+    </div>
+    <a href="category.html" class="categories-link">Категорії</a>
+    <div class="search-bar">
+        <img class="magnifying-glass" src="img/search.png" alt="Пошук">
+        <form class="form-search" method="get">
+            <input
+                    class="search-bar-input"
+                    type="text"
+                    name="query"
+                    placeholder="Пошук курсів"
+                    aria-label="Пошук курсів">
+        </form>
+    </div>
+    <div class="group">
+        <button class="search-btn" aria-label="Відкрити пошук">
+            <img class="search-btn-img" src="img/search.png" alt="Пошук">
+        </button>
+        <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
+        <nav class="nav-menu">
+            <a href="category.html" class="categories-link">Категорії</a>
+            <span class="teach-link">Викладати на Byway</span>
+            <div class="user-actions">
+                <a class="cart-link">
+                    <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
+                </a>
+                <button class="login-btn" id="logInButton">Увійти</button>
+                <button class="signup-btn" id="signUpButton">Зареєструватися</button>
+            </div>
+        </nav>
+    </div>
+</header>
+<div class="main-container signup">
+    <img class="signup-img" src="img/signup.jpg" alt="Фонове зображення 1">
+    <form class="registration-form" id="signupForm">
+        <h1 class="form-title">Створіть свій акаунт</h1>
+        <div class="form-group">
+            <h3 class="form-group-title">Повне імя</h3>
+            <div class="input-group">
+            <input type="text" id="first-name" name="first_name" class="form-input half" placeholder="Введіть ім'я" required>
+            <input type="text" id="last-name" name="last_name" class="form-input half" placeholder="Введіть прізвище" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <h3 class="form-group-title">Логін</h3>
+            <input type="text" id="username" name="username" class="form-input" placeholder="Введіть логін" required>
+        </div>
+        <div class="form-group">
+            <h3 class="form-group-title">Електронна пошта</h3>
+            <input type="email" id="email" name="email" class="form-input" placeholder="Введіть електронну пошту" required>
+        </div>
+        <div class="form-group">
+            <div class="input-group form-titles">
+                <h3 class="form-group-title">Пароль</h3>
+                <h3 class="form-group-title">Підтвердьте пароль</h3>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" class="form-input half" placeholder="Введіть пароль" required>
+                <input type="password" id="confirm-password" name="confirm_password" class="form-input half" placeholder="Повторіть пароль" required>
+            </div>
+        </div>
+        <button type="submit" class="last-banner-button submit-button">
+            <span class="last-banner-button-text">Створити акаунт</span>
+            <img class="arrow-right" src="img/arrow-right.png" alt="Стрілка праворуч">
+        </button>
+        <div class="social-start">
+            <div class="instructor-line line-form"></div>
+            <span class="social-start-title">Або зареєструйтесь за допомогою</span>
+            <div class="instructor-line line-form"></div>
+        </div>
+        <div class="social-options">
+            <div class="social-option">
+                <img src="img/facebook-logo.png" alt="Facebook" class="social-icon">
+                <span class="facebook">Facebook</span>
+            </div>
+            <div class="social-option">
+                <img src="img/google-logo.png" alt="Google" class="social-icon">
+                <span class="google">Google</span>
+            </div>
+            <div class="social-option">
+                <img src="img/microsoft-logo.png" alt="Microsoft" class="social-icon">
+                <span class="microsoft">Microsoft</span>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="register.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

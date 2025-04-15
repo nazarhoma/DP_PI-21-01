@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <title>Навчання для кожного | Онлайн-курси</title>
+    <meta name="description" content="Вивчайте нові навички онлайн разом з нами!">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header class="header">
+    <div class="logo-section">
+        <a href="index.html">
+            <img class="logo" src="img/logo.png" alt="Логотип Byway">
+        </a>
+        <span class="brand-name">Byway</span>
+    </div>
+    <a href="category.html" class="categories-link">Категорії</a>
+    <div class="search-bar">
+        <img class="magnifying-glass" src="img/search.png" alt="Пошук">
+        <form class="form-search" method="get">
+            <input
+                    class="search-bar-input"
+                    type="text"
+                    name="query"
+                    placeholder="Пошук курсів"
+                    aria-label="Пошук курсів">
+        </form>
+    </div>
+    <div class="group">
+        <button class="search-btn" aria-label="Відкрити пошук">
+            <img class="search-btn-img" src="img/search.png" alt="Пошук">
+        </button>
+        <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
+        <nav class="nav-menu">
+            <a href="category.html" class="categories-link">Категорії</a>
+            <span class="teach-link">Викладати на Byway</span>
+            <div class="user-actions">
+                <a class="cart-link">
+                    <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
+                </a>
+                <button class="login-btn" id="logInButton">Увійти</button>
+                <button class="signup-btn" id="signUpButton">Зареєструватися</button>
+            </div>
+        </nav>
+    </div>
+</header>
+<div class="main-container">
+    <section class="banner">
+        <div class="banner-block">
+            <div class="banner-info">
+                <h1 class="banner-title">Розкрийте свій потенціал з Byway</h1>
+                <p class="banner-text">
+                    Ласкаво просимо до Byway, де навчання не має меж. Ми віримо, що освіта — це ключ до особистісного та
+                    професійного зростання, і ми готові допомогти вам на шляху до успіху.
+                </p>
+                <button class="banner-button">
+                    <span class="button-text">Почати шлях інструктора</span>
+                </button>
+            </div>
+        </div>
+        <div class="banner-images">
+            <div class="circle blue">
+                <img src="img/student2.png" alt="Студент 2 в синьому">
+            </div>
+            <img class="student-blue-top" src="img/student2.png" alt="Студент в синьому">
+            <div class="student-blue"></div>
+            <div class="circle-border blue-border"></div>
+
+            <div class="circle red">
+                <img src="img/student3.png" alt="Студент 3 в червоному">
+            </div>
+            <img class="student-red-top" src="img/student3.png" alt="Студент в червоному">
+            <div class="circle-border red-border"></div>
+
+            <div class="circle yellow">
+                <img src="img/student1.png" alt="Студент 1 в жовтому">
+            </div>
+            <img class="student-yellow-top" src="img/student1.png" alt="Студент в жовтому">
+            <div class="circle-border yellow-border"></div>
+            <div class="circle dark"></div>
+            <div class="square"></div>
+
+            <img class="decor1" src="img/decor.png" alt="Декорація банера 1">
+            <img class="decor2" src="img/decor.png" alt="Декорація банера 2">
+
+            <div class="banner-container">
+                <div class="students-img">
+                    <img class="student one" src="img/student-1.png" alt="Зображення студента 1">
+                    <img class="student two" src="img/student-2.png" alt="Зображення студента 2">
+                    <img class="student three" src="img/student-3.png" alt="Зображення студента 3">
+                    <img class="student four" src="img/student-4.png" alt="Зображення студента 4">
+                    <img class="student five" src="img/student-5.png" alt="Зображення студента 5">
+                </div>
+                <p class="join-community">Приєднуйтесь до нашої спільноти з 1200+ студентів</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stat">
+            <h2 class="stat-title">250+</h2>
+            <p class="stat-info">Курси від наших найкращих менторів</p>
+        </div>
+        <hr class="line">
+        <div class="stat">
+            <h2 class="stat-title">1000+</h2>
+            <p class="stat-info">Задоволених студентів</p>
+        </div>
+        <hr class="line">
+        <div class="stat">
+            <h2 class="stat-title">15+</h2>
+            <p class="stat-info">Років досвіду викладання</p>
+        </div>
+        <hr class="line">
+        <div class="stat">
+            <h2 class="stat-title">2400+</h2>
+            <p class="stat-info">Годин навчального контенту</p>
+        </div>
+    </section>
+    <section class="top-categories">
+        <header class="top-categories-header">
+            <h2 class="top-categories-title">Популярні категорії</h2>
+            <button class="see-all-button" aria-label="Переглянути всі категорії" id="sea-all-categories">Переглянути всі</button>
+        </header>
+        <div class="categories">
+            <article class="category-card">
+                <div class="category">
+                    <div class="category-group">
+                        <img src="img/telescope.png" alt="Іконка Астрологія" class="category-icon">
+                        <div class="category-circle"></div>
+                    </div>
+                    <h3 class="category-title">Астрологія</h3>
+                    <p class="category-info">11 курсів</p>
+                </div>
+            </article>
+            <article class="category-card">
+                <div class="category">
+                    <div class="category-group">
+                        <img src="img/code-browser.png" alt="Іконка Розробка" class="category-icon">
+                        <div class="category-circle"></div>
+                    </div>
+                    <h3 class="category-title">Розробка</h3>
+                    <p class="category-info">12 курсів</p>
+                </div>
+            </article>
+            <article class="category-card">
+                <div class="category">
+                    <div class="category-group">
+                        <img src="img/briefcase.png" alt="Іконка Маркетинг" class="category-icon">
+                        <div class="category-circle"></div>
+                    </div>
+                    <h3 class="category-title">Маркетинг</h3>
+                    <p class="category-info">12 курсів</p>
+                </div>
+            </article>
+            <article class="category-card">
+                <div class="category">
+                    <div class="category-group">
+                        <img src="img/physics.png" alt="Іконка Фізика" class="category-icon">
+                        <div class="category-circle"></div>
+                    </div>
+                    <h3 class="category-title">Фізика</h3>
+                    <p class="category-info">14 курсів</p>
+                </div>
+            </article>
+        </div>
+    </section>
+    <section class="top-courses">
+        <header class="top-courses-header">
+            <h2 class="top-courses-title">Найкращі курси</h2>
+            <button class="see-all-button" aria-label="Переглянути всі курси" id="sea-all-curses">Переглянути всі</button>
+        </header>
+        <div class="courses-list">
+            <article class="course-card">
+                <img class="course-image" src="img/courses.jpg" alt="Зображення курсу Beginner’s Guide to Design">
+                <div class="course-details">
+                    <h3 class="course-title">Посібник для початківців з дизайну</h3>
+                    <p class="course-author">Автор: Рональд Річардс</p>
+                    <div class="course-rating">
+                        <div class="stars">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                        </div>
+                        <span class="rating-info">(1200 відгуків)</span>
+                    </div>
+                    <p class="course-info">22 годин. 155 лекцій. Для початківців</p>
+                    <p class="course-price">$149.9</p>
+                </div>
+            </article>
+            <article class="course-card">
+            <img class="course-image" src="img/courses.jpg" alt="Зображення курсу Beginner’s Guide to Design">
+            <div class="course-details">
+                <h3 class="course-title">Посібник для початківців з дизайну</h3>
+                <p class="course-author">Автор: Рональд Річардс</p>
+                <div class="course-rating">
+                    <div class="stars">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                    </div>
+                    <span class="rating-info">(1200 відгуків)</span>
+                </div>
+                <p class="course-info">22 годин. 155 лекцій. Для початківців</p>
+                <p class="course-price">$149.9</p>
+            </div>
+        </article>
+            <article class="course-card">
+                <img class="course-image" src="img/courses.jpg" alt="Зображення курсу Beginner’s Guide to Design">
+                <div class="course-details">
+                    <h3 class="course-title">Посібник для початківців з дизайну</h3>
+                    <p class="course-author">Автор: Рональд Річардс</p>
+                    <div class="course-rating">
+                        <div class="stars">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                        </div>
+                        <span class="rating-info">(1200 відгуків)</span>
+                    </div>
+                    <p class="course-info">22 годин. 155 лекцій. Для початківців</p>
+                    <p class="course-price">$149.9</p>
+                </div>
+            </article>
+            <article class="course-card">
+                <img class="course-image" src="img/courses.jpg" alt="Зображення курсу Beginner’s Guide to Design">
+                <div class="course-details">
+                    <h3 class="course-title">Посібник для початківців з дизайну</h3>
+                    <p class="course-author">Автор: Рональд Річардс</p>
+                    <div class="course-rating">
+                        <div class="stars">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                            <img class="star" src="img/star.png" alt="Зірка">
+                        </div>
+                        <span class="rating-info">(1200 відгуків)</span>
+                    </div>
+                    <p class="course-info">22 годин. 155 лекцій. Для початківців</p>
+                    <p class="course-price">$149.9</p>
+                </div>
+            </article>
+        </div>
+    </section>
+    <section class="top-instructors">
+        <header class="top-instructors-header">
+            <h2 class="top-instructors-title">Топ інструктори</h2>
+            <button class="see-all-button" aria-label="Переглянути всіх інструкторів" id="sea-all-instructors">Переглянути всіх</button>
+        </header>
+        <div class="instructors-list">
+            <article class="instructor-card">
+                <div class="instructor">
+                    <img class="instructor-img" src="img/instructor.png" alt="Фото інструктора">
+                    <div class="instructor-info">
+                        <div class="instructor-title">
+                            <h3 class="instructor-name">Рональд Річардс</h3>
+                            <p class="instructor-role">UI/UX Дизайнер</p>
+                        </div>
+                        <hr class="instructor-line">
+                        <div class="instructors-rating">
+                            <div class="instructor-rating">
+                                <img class="star" src="img/star.png" alt="Зірка">
+                                <span class="ratings-info">4.9</span>
+                            </div>
+                            <span class="instructor-students">2400 студентів</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="instructor-card">
+                <div class="instructor">
+                    <img class="instructor-img" src="img/instructor.png" alt="Фото інструктора">
+                    <div class="instructor-info">
+                        <div class="instructor-title">
+                            <h3 class="instructor-name">Рональд Річардс</h3>
+                            <p class="instructor-role">UI/UX Дизайнер</p>
+                        </div>
+                        <hr class="instructor-line">
+                        <div class="instructors-rating">
+                            <div class="instructor-rating">
+                                <img class="star" src="img/star.png" alt="Зірка">
+                                <span class="ratings-info">4.9</span>
+                            </div>
+                            <span class="instructor-students">2400 студентів</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="instructor-card">
+                <div class="instructor">
+                    <img class="instructor-img" src="img/instructor.png" alt="Фото інструктора">
+                    <div class="instructor-info">
+                        <div class="instructor-title">
+                            <h3 class="instructor-name">Рональд Річардс</h3>
+                            <p class="instructor-role">UI/UX Дизайнер</p>
+                        </div>
+                        <hr class="instructor-line">
+                        <div class="instructors-rating">
+                            <div class="instructor-rating">
+                                <img class="star" src="img/star.png" alt="Зірка">
+                                <span class="ratings-info">4.9</span>
+                            </div>
+                            <span class="instructor-students">2400 студентів</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="instructor-card">
+                <div class="instructor">
+                    <img class="instructor-img" src="img/instructor.png" alt="Фото інструктора">
+                    <div class="instructor-info">
+                        <div class="instructor-title">
+                            <h3 class="instructor-name">Рональд Річардс</h3>
+                            <p class="instructor-role">UI/UX Дизайнер</p>
+                        </div>
+                        <hr class="instructor-line">
+                        <div class="instructors-rating">
+                            <div class="instructor-rating">
+                                <img class="star" src="img/star.png" alt="Зірка">
+                                <span class="ratings-info">4.9</span>
+                            </div>
+                            <span class="instructor-students">2400 студентів</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="instructor-card hidden-m">
+                <div class="instructor">
+                    <img class="instructor-img" src="img/instructor.png" alt="Фото інструктора">
+                    <div class="instructor-info">
+                        <div class="instructor-title">
+                            <h3 class="instructor-name">Рональд Річардс</h3>
+                            <p class="instructor-role">UI/UX Дизайнер</p>
+                        </div>
+                        <hr class="instructor-line">
+                        <div class="instructors-rating">
+                            <div class="instructor-rating">
+                                <img class="star" src="img/star.png" alt="Зірка">
+                                <span class="ratings-info">4.9</span>
+                            </div>
+                            <span class="instructor-students">2400 студентів</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+    <section class="top-comments">
+        <header class="comment-header">
+            <h2 class="top-comments-title">Що кажуть наші клієнти</h2>
+            <div class="comments-navigation">
+                <button class="comments-button-left" aria-label="Перейти до попереднього коментаря">
+                    <img class="left-chevron" src="img/left-chevron.png" alt="Ліворуч">
+                </button>
+                <button class="comments-button-right" aria-label="Перейти до наступного коментаря">
+                    <img class="right-chevron" src="img/right-chevron.png" alt="Праворуч">
+                </button>
+            </div>
+        </header>
+        <div class="comments-list">
+            <article class="comment-card">
+                <img class="quotes" src="img/quotes.png" alt="Цитата">
+                <p class="comment-text">"Курси з технологій на Byway на найвищому рівні! Як людина, яка завжди прагне
+                    залишатися на крок попереду у швидко змінному технологічному світі, я ціную оновлений контент і
+                    захоплюючі мультимедійні матеріали."</p>
+                <div class="comment-info">
+                    <img class="customer-img" src="img/customer.jpg" alt="Фото клієнта">
+                    <div class="customer-info">
+                        <h2 class="customer-name">Джейн Доу</h2>
+                        <span class="customer-role">Дизайнер</span>
+                    </div>
+                </div>
+            </article>
+            <article class="comment-card">
+                <img class="quotes" src="img/quotes.png" alt="Цитата">
+                <p class="comment-text">"Курси з технологій на Byway на найвищому рівні! Як людина, яка завжди прагне
+                    залишатися на крок попереду у швидко змінному технологічному світі, я ціную оновлений контент і
+                    захоплюючі мультимедійні матеріали."</p>
+                <div class="comment-info">
+                    <img class="customer-img" src="img/customer.jpg" alt="Фото клієнта">
+                    <div class="customer-info">
+                        <h2 class="customer-name">Джейн Доу</h2>
+                        <span class="customer-role">Дизайнер</span>
+                    </div>
+                </div>
+            </article>
+            <article class="comment-card">
+                <img class="quotes" src="img/quotes.png" alt="Цитата">
+                <p class="comment-text">"Курси з технологій на Byway на найвищому рівні! Як людина, яка завжди прагне
+                    залишатися на крок попереду у швидко змінному технологічному світі, я ціную оновлений контент і
+                    захоплюючі мультимедійні матеріали."</p>
+                <div class="comment-info">
+                    <img class="customer-img" src="img/customer.jpg" alt="Фото клієнта">
+                    <div class="customer-info">
+                        <h2 class="customer-name">Джейн Доу</h2>
+                        <span class="customer-role">Дизайнер</span>
+                    </div>
+                </div>
+            </article>
+            <article class="comment-card">
+                <img class="quotes" src="img/quotes.png" alt="Цитата">
+                <p class="comment-text">"Курси з технологій на Byway на найвищому рівні! Як людина, яка завжди прагне
+                    залишатися на крок попереду у швидко змінному технологічному світі, я ціную оновлений контент і
+                    захоплюючі мультимедійні матеріали."</p>
+                <div class="comment-info">
+                    <img class="customer-img" src="img/customer.jpg" alt="Фото клієнта">
+                    <div class="customer-info">
+                        <h2 class="customer-name">Джейн Доу</h2>
+                        <span class="customer-role">Дизайнер</span>
+                    </div>
+                </div>
+            </article>
+            <article class="comment-card">
+                <img class="quotes" src="img/quotes.png" alt="Цитата">
+                <p class="comment-text">"Курси з технологій на Byway на найвищому рівні! Як людина, яка завжди прагне
+                    залишатися на крок попереду у швидко змінному технологічному світі, я ціную оновлений контент і
+                    захоплюючі мультимедійні матеріали."</p>
+                <div class="comment-info">
+                    <img class="customer-img" src="img/customer.jpg" alt="Фото клієнта">
+                    <div class="customer-info">
+                        <h2 class="customer-name">Джейн Доу</h2>
+                        <span class="customer-role">Дизайнер</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+    <section class="last-banners">
+        <div class="last-banner">
+            <img class="last-banner-img" src="img/lastbunner-2.png" alt="Зображення інструктора">
+            <div class="last-banner-info">
+                <div class="last-banner-text">
+                    <h2 class="last-banner-title">Стань інструктором</h2>
+                    <p class="last-banner-information">Інструктори з усього світу навчають мільйони студентів на Byway.
+                        Ми надаємо інструменти та навички, щоб навчати те, що ви любите.</p>
+                </div>
+                <a href="#" class="last-banner-button" aria-label="Розпочати кар’єру інструктора">
+                    <span class="last-banner-button-text">Розпочати свою кар’єру інструктора</span>
+                    <img class="arrow-right" src="img/arrow-right.png" alt="Стрілка праворуч">
+                </a>
+            </div>
+        </div>
+        <div class="last-banner reverse">
+            <div class="last-banner-info">
+                <div class="last-banner-text">
+                    <h2 class="last-banner-title">Перетвори своє життя через освіту</h2>
+                    <p class="last-banner-information">Учні з усього світу відкривають нові кар’єри, просуваються в
+                        своїх галузях та збагачують своє життя.</p>
+                </div>
+                <a href="category.html" class="last-banner-button" aria-label="Переглянути курси">
+                    <span class="last-banner-button-text">Переглянути курси</span>
+                    <img class="arrow-right" src="img/arrow-right.png" alt="Стрілка праворуч">
+                </a>
+            </div>
+            <img class="last-banner-img" src="img/lastbunner-1.png" alt="Зображення студента">
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-information">
+            <div class="footer-byway">
+                <img class="footer-logo" src="img/full-logo.png" alt="Логотип сайту">
+                <p class="footer-byway-info">Ми надаємо можливості для навчання через доступну та захоплюючу онлайн-освіту.
+                    <br> Byway — провідна онлайн-платформа для навчання, яка пропонує високоякісні, гнучкі та доступні освітні послуги.</p>
+            </div>
+            <div class="footer-block">
+                <h3 class="footer-title">Отримати допомогу</h3>
+                <ul class="footer-info-list">
+                    <li><a class="footer-info" id="contactLink" style="cursor: pointer">Зв'язатися з нами</a></li>
+                    <li><a href="#" class="footer-info">Останні статті</a></li>
+                    <li><a class="footer-info">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-block">
+                <h3 class="footer-title">Програми</h3>
+                <ul class="footer-info-list">
+                    <li><a href="#" class="footer-info">Мистецтво та дизайн</a></li>
+                    <li><a href="#" class="footer-info">Бізнес</a></li>
+                    <li><a href="#" class="footer-info">ІТ та програмування</a></li>
+                    <li><a href="#" class="footer-info">Мови</a></li>
+                    <li><a href="#" class="footer-info">Програмування</a></li>
+                </ul>
+            </div>
+            <div class="footer-contactus">
+                <div class="footer-block">
+                    <h3 class="footer-title">Зв'язатися з нами</h3>
+                    <p class="footer-info">Адреса: 123 Main Street, Anytown, CA 12345</p>
+                    <p class="footer-info">Тел: +(123) 456-7890</p>
+                    <p class="footer-info">Ел. пошта: <a href="mailto:bywayedu@webkul.in" class="footer-info">bywayedu@webkul.in</a></p>
+                </div>
+                <div class="footer-social">
+                    <img class="footer-social-logo" src="img/social-logo.png" alt="Іконки соціальних мереж">
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Зв'язатися з нами</h2>
+            <span class="close" id="closeModal">&times;</span>
+        </div>
+        <form id="contactForm">
+            <label for="name">Ім'я:</label>
+            <input class="modal-input" type="text" id="name" name="name" required><br>
+
+            <label for="email">Електронна адреса:</label>
+            <input class="modal-input" type="email" id="email" name="email" required><br>
+
+            <label for="message">Повідомлення:</label><br>
+            <textarea class="modal-input" id="message" name="message" rows="4" required></textarea><br>
+
+            <button type="submit">Відправити</button>
+        </form>
+    </div>
+</div>
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Ви впевнені, що хочете відправити?</h2>
+            <span class="close" id="closeConfirmationModal">&times;</span>
+        </div>
+        <button id="confirmSend">Так</button>
+        <button id="cancelSend">Ні</button>
+    </div>
+</div>
+<div id="closeModalConfirm" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Ви впевнені, що хочете закрити це вікно?</h2>
+            <span class="close" id="closeCloseModalConfirm">&times;</span>
+        </div>
+        <button id="confirmClose">Так</button>
+        <button id="cancelClose">Ні</button>
+    </div>
+</div>
+<script src="modal.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+[
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  },
+  {
+    "title": "Посібник для початківців з дизайну",
+    "author": "Рональд Річардс",
+    "rating": 5,
+    "reviews": 1200,
+    "info": "22 годин. 155 лекцій. Для початківців",
+    "price": 149.9,
+    "image": "img/courses.jpg"
+  },
+  {
+    "title": "Майстерність програмування на Python",
+    "author": "Анна Карен",
+    "rating": 4,
+    "reviews": 980,
+    "info": "30 годин. 200 лекцій. Для всіх рівнів",
+    "price": 199.9,
+    "image": "img/python.png"
+  },
+  {
+    "title": "Основи маркетингу",
+    "author": "Джон Доу",
+    "rating": 5,
+    "reviews": 450,
+    "info": "15 годин. 80 лекцій. Для початківців",
+    "price": 99.9,
+    "image": "img/marketing.webp"
+  }
+]

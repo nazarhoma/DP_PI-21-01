@@ -1,0 +1,19 @@
+# IDE files
+.idea/
+.vscode/
+
+# PHP
+/server/connect.php
+
+# Dependencies
+/node_modules/
+
+# Системні файли
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
+
+# Тимчасові файли
+*.tmp

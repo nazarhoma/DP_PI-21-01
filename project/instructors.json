@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Рональд Річардс",
+    "role": "UI/UX Дизайнер",
+    "rating": 4.9,
+    "students": 2400,
+    "image": "img/instructor.png"
+  },
+  {
+    "name": "Сара Джонсон",
+    "role": "Веб-розробник",
+    "rating": 4.8,
+    "students": 1900,
+    "image": "img/instructor.png"
+  },
+  {
+    "name": "Майкл Лі",
+    "role": "Дизайнер графіки",
+    "rating": 4.7,
+    "students": 1500,
+    "image": "img/instructor.png"
+  },
+  {
+    "name": "Емма Вільямс",
+    "role": "Менеджер проєктів",
+    "rating": 4.9,
+    "students": 2600,
+    "image": "img/instructor.png"
+  },
+  {
+    "name": "Рональд Річардс",
+    "role": "UI/UX Дизайнер",
+    "rating": 4.9,
+    "students": 2400,
+    "image": "img/instructor.png"
+  }
+]

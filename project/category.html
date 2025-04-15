@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <title>Категорії</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header class="header">
+  <div class="logo-section">
+    <a href="index.html">
+      <img class="logo" src="img/logo.png" alt="Логотип Byway">
+    </a>
+    <span class="brand-name">Byway</span>
+  </div>
+  <a href="category.html" class="categories-link">Категорії</a>
+  <div class="search-bar">
+    <img class="magnifying-glass" src="img/search.png" alt="Пошук">
+    <form class="form-search" method="get">
+      <input
+              class="search-bar-input"
+              type="text"
+              name="query"
+              placeholder="Пошук курсів"
+              aria-label="Пошук курсів">
+    </form>
+  </div>
+  <div class="group">
+    <button class="search-btn" aria-label="Відкрити пошук">
+      <img class="search-btn-img" src="img/search.png" alt="Пошук">
+    </button>
+    <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
+    <nav class="nav-menu">
+      <a href="category.html" class="categories-link">Категорії</a>
+      <span class="teach-link">Викладати на Byway</span>
+      <div class="user-actions">
+        <a class="cart-link">
+          <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
+        </a>
+        <button class="login-btn" id="logInButton">Увійти</button>
+        <button class="signup-btn" id="signUpButton">Зареєструватися</button>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="main-container">
+  <section class="courses">
+    <h1 class="banner-title">Курси Дизайну</h1>
+    <h4 class="courses-title">Всі Курси Розвитку</h4>
+    <div class="control">
+      <button class="filter-button">
+        <img src="img/filter.png" alt="Фільтер">
+        <span class="curses-button-text">Фільтер</span>
+      </button>
+      <div class="sort">
+        <span class="sort-text">Сортувати за</span>
+        <select class="sort-select">
+          <option value="relevance">Доречністю</option>
+          <option value="price">Ціна</option>
+          <option value="popularity">Популярністю</option>
+          <option value="rating">Рейтинг</option>
+        </select>
+      </div>
+    </div>
+    <div class="courses-block">
+      <div class="filter-list filter-list-wrapper hidden">
+        <div class="filter-card">
+          <button class="filter-card-button">
+            <span class="filter-card-text">Рейтинг</span>
+            <img src="img/down-chevron.png" alt="стрілка вниз">
+          </button>
+          <div class="filter-info hidden">
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+            </div>
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+            </div>
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+            </div>
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+            </div>
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+              <img class="star" src="img/gstar.png" alt="Зірка">
+            </div>
+          </div>
+        </div>
+        <div class="filter-card">
+          <button class="filter-card-button">
+            <span class="filter-card-text">Кількість лекцій</span>
+            <img src="img/down-chevron.png" alt="стрілка вниз">
+          </button>
+          <div class="filter-info hidden">
+            <div class="check-box">
+              <input type="checkbox" id="checkbox1" value="1-10">
+              <label for="checkbox1">1-10</label>
+            </div>
+            <div class="check-box">
+              <input type="checkbox" id="checkbox2" value="10-15">
+              <label for="checkbox2">10-15</label>
+            </div>
+            <div class="check-box hidden">
+              <input type="checkbox" id="checkbox3" value="15-20">
+              <label for="checkbox3">15-20</label>
+            </div>
+            <div class="check-box hidden">
+              <input type="checkbox" id="checkbox4" value="20-25">
+              <label class="checkbox-text" for="checkbox4">20-25</label>
+            </div>
+            <button class="see-more-button" aria-label="Переглянути більше лекцій">
+              <span class="filter-card-text blue-text">Переглянути більше</span>
+              <img src="img/bdown-chevron.png" alt="синя стрілка вниз">
+            </button>
+          </div>
+        </div>
+        <div class="filter-card">
+          <button class="filter-card-button">
+            <span class="filter-card-text">Ціна</span>
+            <img src="img/down-chevron.png" alt="стрілка вниз">
+          </button>
+          <div class="filter-info hidden"></div>
+        </div>
+        <div class="filter-card">
+          <button class="filter-card-button">
+            <span class="filter-card-text">Категорія</span>
+            <img src="img/down-chevron.png" alt="стрілка вниз">
+          </button>
+          <div class="filter-info hidden"></div>
+        </div>
+      </div>
+      <div class="courses-pagination">
+        <div class="courses-list"></div>
+        <div class="pagination">
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <section class="top-instructors gray">
+    <header class="top-instructors-header">
+      <h2 class="top-instructors-title">Популярні інструктори</h2>
+    </header>
+    <div class="instructors-list"></div>
+  </section>
+  <section class="top-courses">
+    <header class="top-courses-header">
+      <h2 class="top-courses-title">Популярні курси</h2>
+    </header>
+    <div class="courses-list">
+      <article class="course-card">
+        <img class="course-image" src="img/courses.jpg" alt="Зображення курсу Beginner’s Guide to Design">
+        <div class="course-details">
+          <h3 class="course-title">Посібник для початківців з дизайну</h3>
+          <p class="course-author">Автор: Рональд Річардс</p>
+          <div class="course-rating">
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+            </div>
+            <span class="rating-info">(1200 відгуків)</span>
+          </div>
+          <p class="course-info">22 годин. 155 лекцій. Для початківців</p>
+          <p class="course-price">$149.9</p>
+        </div>
+      </article>
+      <article class="course-card">
+        <img class="course-image" src="img/courses.jpg" alt="Зображення курсу Beginner’s Guide to Design">
+        <div class="course-details">
+          <h3 class="course-title">Посібник для початківців з дизайну</h3>
+          <p class="course-author">Автор: Рональд Річардс</p>
+          <div class="course-rating">
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+            </div>
+            <span class="rating-info">(1200 відгуків)</span>
+          </div>
+          <p class="course-info">22 годин. 155 лекцій. Для початківців</p>
+          <p class="course-price">$149.9</p>
+        </div>
+      </article>
+      <article class="course-card">
+        <img class="course-image" src="img/courses.jpg" alt="Зображення курсу Beginner’s Guide to Design">
+        <div class="course-details">
+          <h3 class="course-title">Посібник для початківців з дизайну</h3>
+          <p class="course-author">Автор: Рональд Річардс</p>
+          <div class="course-rating">
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+            </div>
+            <span class="rating-info">(1200 відгуків)</span>
+          </div>
+          <p class="course-info">22 годин. 155 лекцій. Для початківців</p>
+          <p class="course-price">$149.9</p>
+        </div>
+      </article>
+      <article class="course-card">
+        <img class="course-image" src="img/courses.jpg" alt="Зображення курсу Beginner’s Guide to Design">
+        <div class="course-details">
+          <h3 class="course-title">Посібник для початківців з дизайну</h3>
+          <p class="course-author">Автор: Рональд Річардс</p>
+          <div class="course-rating">
+            <div class="stars">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+              <img class="star" src="img/star.png" alt="Зірка">
+            </div>
+            <span class="rating-info">(1200 відгуків)</span>
+          </div>
+          <p class="course-info">22 годин. 155 лекцій. Для початківців</p>
+          <p class="course-price">$149.9</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <footer class="footer m1">
+    <div class="footer-information">
+      <div class="footer-byway">
+        <img class="footer-logo" src="img/full-logo.png" alt="Логотип сайту">
+        <p class="footer-byway-info">Ми надаємо можливості для навчання через доступну та захоплюючу онлайн-освіту.
+          <br> Byway — провідна онлайн-платформа для навчання, яка пропонує високоякісні, гнучкі та доступні освітні послуги.</p>
+      </div>
+      <div class="footer-block">
+        <h3 class="footer-title">Отримати допомогу</h3>
+        <ul class="footer-info-list">
+          <li><a class="footer-info" id="contactLink" style="cursor: pointer">Зв'язатися з нами</a></li>
+          <li><a href="#" class="footer-info">Останні статті</a></li>
+          <li><a href="#" class="footer-info">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-block">
+        <h3 class="footer-title">Програми</h3>
+        <ul class="footer-info-list">
+          <li><a href="#" class="footer-info">Мистецтво та дизайн</a></li>
+          <li><a href="#" class="footer-info">Бізнес</a></li>
+          <li><a href="#" class="footer-info">ІТ та програмування</a></li>
+          <li><a href="#" class="footer-info">Мови</a></li>
+          <li><a href="#" class="footer-info">Програмування</a></li>
+        </ul>
+      </div>
+      <div class="footer-contactus">
+        <div class="footer-block">
+          <h3 class="footer-title">Зв'язатися з нами</h3>
+          <p class="footer-info">Адреса: 123 Main Street, Anytown, CA 12345</p>
+          <p class="footer-info">Тел: +(123) 456-7890</p>
+          <p class="footer-info">Ел. пошта: <a href="mailto:bywayedu@webkul.in" class="footer-info">bywayedu@webkul.in</a></p>
+        </div>
+        <div class="footer-social">
+          <img class="footer-social-logo" src="img/social-logo.png" alt="Іконки соціальних мереж">
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+<div id="contactModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">
+      <h2>Зв'язатися з нами</h2>
+      <span class="close" id="closeModal">&times;</span>
+    </div>
+    <form id="contactForm">
+      <label for="name">Ім'я:</label>
+      <input class="modal-input" type="text" id="name" name="name" required><br>
+
+      <label for="email">Електронна адреса:</label>
+      <input class="modal-input" type="email" id="email" name="email" required><br>
+
+      <label for="message">Повідомлення:</label><br>
+      <textarea class="modal-input" id="message" name="message" rows="4" required></textarea><br>
+
+      <button type="submit">Відправити</button>
+    </form>
+  </div>
+</div>
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">
+      <h2>Ви впевнені, що хочете відправити?</h2>
+      <span class="close" id="closeConfirmationModal">&times;</span>
+    </div>
+    <button id="confirmSend">Так</button>
+    <button id="cancelSend">Ні</button>
+  </div>
+</div>
+<div id="closeModalConfirm" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">
+      <h2>Ви впевнені, що хочете закрити це вікно?</h2>
+      <span class="close" id="closeCloseModalConfirm">&times;</span>
+    </div>
+    <button id="confirmClose">Так</button>
+    <button id="cancelClose">Ні</button>
+  </div>
+</div>
+<script src="script.js"></script>
+<script src="filter.js"></script>
+<script src="jsonLoader.js"></script>
+<script src="modal.js"></script>
+</body>
+</html>
