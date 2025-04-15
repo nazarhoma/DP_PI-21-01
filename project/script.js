@@ -74,12 +74,38 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("sea-all-curses").addEventListener("click", goToCategories);
     document.getElementById("sea-all-instructors").addEventListener("click", goToCategories);
 
+    // Функція для отримання актуальної ролі користувача з сервера
+    function getUserRoleFromServer(userId) {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append('user_id', userId);
+            
+            fetch('http://localhost/get_user_role.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resolve(data.role);
+                } else {
+                    reject(new Error(data.message || 'Помилка отримання ролі користувача'));
+                }
+            })
+            .catch(error => {
+                console.error('Помилка при запиті ролі:', error);
+                reject(error);
+            });
+        });
+    }
+
     // Функція для перевірки авторизації
     function checkAuth() {
         const token = localStorage.getItem('userToken');
         const profileSection = document.querySelector('.profile-section');
         const loginBtn = document.getElementById('logInButton');
         const signupBtn = document.getElementById('signUpButton');
+        const teachLink = document.querySelector('.teach-link');
         
         if (token) {
             // Користувач авторизований
@@ -94,13 +120,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 profileName.textContent = userData.name;
             }
             
-            // Перевіряємо роль користувача і відповідно змінюємо кнопки
-            updateUIBasedOnRole(userData.role || 'student');
+            // Якщо є ID користувача, отримуємо актуальну роль з сервера
+            if (userData.id) {
+                getUserRoleFromServer(userData.id)
+                    .then(role => {
+                        // Оновлюємо роль у локальному сховищі
+                        userData.role = role;
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                        
+                        // Оновлюємо UI відповідно до ролі
+                        updateUIBasedOnRole(role);
+                    })
+                    .catch(error => {
+                        console.error('Помилка при отриманні ролі:', error);
+                        // У разі помилки використовуємо роль з localStorage
+                        updateUIBasedOnRole(userData.role || 'student');
+                    });
+            } else {
+                // Якщо немає ID, використовуємо роль з localStorage
+                updateUIBasedOnRole(userData.role || 'student');
+            }
         } else {
             // Користувач не авторизований
             profileSection.style.display = 'none';
             loginBtn.style.display = 'block';
             signupBtn.style.display = 'block';
+            
+            // Приховуємо кнопку "Викладати на Byway" для незареєстрованих користувачів
+            if (teachLink) teachLink.style.display = 'none';
         }
     }
     

@@ -10,6 +10,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Отримуємо дані користувача
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
     
+    // Функція для отримання актуальної ролі користувача з сервера
+    function getUserRoleFromServer(userId) {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append('user_id', userId);
+            
+            fetch('http://localhost/get_user_role.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resolve(data.role);
+                } else {
+                    reject(new Error(data.message || 'Помилка отримання ролі користувача'));
+                }
+            })
+            .catch(error => {
+                console.error('Помилка при запиті ролі:', error);
+                reject(error);
+            });
+        });
+    }
+    
     // Заповнюємо дані профілю
     document.getElementById('profile-username').textContent = userData.name || 'Не вказано';
     document.getElementById('profile-email').textContent = userData.email || 'Не вказано';
@@ -18,19 +43,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const registrationDate = new Date().toLocaleDateString('uk-UA');
     document.getElementById('profile-registration-date').textContent = registrationDate;
     
-    // Відображаємо роль користувача
-    const role = userData.role || 'student';
-    const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
-    document.getElementById('profile-role').textContent = roleText;
+    // Отримуємо актуальну роль з сервера
+    if (userData.id) {
+        getUserRoleFromServer(userData.id)
+            .then(role => {
+                // Оновлюємо роль у локальному сховищі
+                userData.role = role;
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                // Відображаємо роль користувача
+                const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
+                document.getElementById('profile-role').textContent = roleText;
+                
+                // Оновлюємо UI елементи відповідно до ролі
+                updateUIBasedOnRole(role);
+            })
+            .catch(error => {
+                console.error('Помилка при отриманні ролі:', error);
+                
+                // У разі помилки використовуємо роль з localStorage
+                const role = userData.role || 'student';
+                const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
+                document.getElementById('profile-role').textContent = roleText;
+                
+                // Оновлюємо UI елементи відповідно до ролі
+                updateUIBasedOnRole(role);
+            });
+    } else {
+        // Відображаємо роль з localStorage, якщо немає ID
+        const role = userData.role || 'student';
+        const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
+        document.getElementById('profile-role').textContent = roleText;
+        
+        // Оновлюємо UI елементи відповідно до ролі
+        updateUIBasedOnRole(role);
+    }
     
     // Оновлюємо ім'я в хедері
     const profileName = document.querySelector('.profile-name');
     if (profileName && userData.name) {
         profileName.textContent = userData.name;
     }
-    
-    // Оновлюємо UI елементи відповідно до ролі
-    updateUIBasedOnRole(role);
     
     // Обробник для кнопки "Редагувати профіль"
     const editProfileBtn = document.querySelector('.edit-profile-btn');

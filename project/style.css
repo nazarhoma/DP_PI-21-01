@@ -1810,19 +1810,24 @@ a {
 }
 
 .verification-btn {
-    background-color: var(--primary-color);
+    background-color: #3b82f6;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 20px;
+    border-radius: 8px;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
     width: 100%;
     margin-top: 20px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
 .verification-btn:hover {
-    background-color: #0056b3;
+    background-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
 
 /* Стилі для сторінки додавання нового курсу */
