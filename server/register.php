@@ -44,10 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    $role = 'student'; // Роль за замовчуванням
 
-    // Вставка в базу даних, тепер з ім'ям і прізвищем
-    $stmt = $conn->prepare("INSERT INTO users (email, username, password, first_name, last_name) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $email, $username, $hashed_password, $first_name, $last_name);
+    // Вставка в базу даних, тепер з роллю
+    $stmt = $conn->prepare("INSERT INTO users (email, username, password, first_name, last_name, role) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $email, $username, $hashed_password, $first_name, $last_name, $role);
 
     if ($stmt->execute()) {
         $response['message'] = "Користувач успішно зареєстрований";

@@ -18,19 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($response);
         exit;
     }
-    $stmt = $conn->prepare("SELECT id, username, email, password FROM users WHERE email = ? OR username = ?");
+    $stmt = $conn->prepare("SELECT id, username, email, password, role FROM users WHERE email = ? OR username = ?");
     $stmt->bind_param("ss", $login, $login);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($id, $username, $email, $hashed_password);
+        $stmt->bind_result($id, $username, $email, $hashed_password, $role);
         $stmt->fetch();
 
         // Перевірка пароля
         if (password_verify($password, $hashed_password)) {
             $response['message'] = "Авторизація успішна!";
-            $response['user'] = array('id' => $id, 'username' => $username, 'email' => $email);
+            $response['user'] = array('id' => $id, 'username' => $username, 'email' => $email, 'role' => $role);
         } else {
             $response['message'] = "Невірний пароль";
         }

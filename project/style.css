@@ -1789,3 +1789,63 @@ a {
         width: 100%;
     }
 }
+
+/* Стилі для модального вікна верифікації */
+.verification-check {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.verification-check input[type="checkbox"] {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.verification-check label {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.verification-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.verification-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Стилі для сторінки додавання нового курсу */
+.new-course-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.new-course-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.new-course-title {
+    font-size: 32px;
+    color: var(--dark-color);
+    margin-bottom: 15px;
+}
+
+.new-course-description {
+    font-size: 18px;
+    color: var(--grey-color);
+    max-width: 800px;
+    margin: 0 auto;
+}

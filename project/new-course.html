@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
-    <title>Мій профіль | Byway</title>
-    <meta name="description" content="Особистий кабінет користувача Byway">
+    <title>Додати новий курс | Byway</title>
+    <meta name="description" content="Створення нового курсу на платформі Byway">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -37,8 +37,8 @@
         <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
         <nav class="nav-menu">
             <a href="category.html" class="categories-link">Категорії</a>
-            <span class="teach-link">Викладати на Byway</span>
-            <a href="new-course.html" class="add-course-link" style="display: none;">Додати новий курс</a>
+            <span class="teach-link" style="display: none;">Викладати на Byway</span>
+            <a href="new-course.html" class="add-course-link">Додати новий курс</a>
             <div class="user-actions">
                 <a class="cart-link">
                     <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
@@ -61,53 +61,10 @@
 </header>
 
 <div class="main-container">
-    <section class="profile-section-page">
-        <div class="profile-header">
-            <h1 class="profile-title">Мій профіль</h1>
-        </div>
-        
-        <div class="profile-content">
-            <div class="profile-info">
-                <div class="profile-avatar-large">
-                    <img src="img/default-avatar.png" alt="Аватар користувача">
-                    <button class="change-avatar-btn">Змінити аватар</button>
-                </div>
-                
-                <div class="profile-details">
-                    <div class="profile-field">
-                        <label>Ім'я користувача:</label>
-                        <p id="profile-username">Завантаження...</p>
-                    </div>
-                    
-                    <div class="profile-field">
-                        <label>Email:</label>
-                        <p id="profile-email">Завантаження...</p>
-                    </div>
-                    
-                    <div class="profile-field">
-                        <label>Дата реєстрації:</label>
-                        <p id="profile-registration-date">Завантаження...</p>
-                    </div>
-                    
-                    <div class="profile-field">
-                        <label>Роль:</label>
-                        <p id="profile-role">Завантаження...</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="profile-actions">
-                <button class="edit-profile-btn">Редагувати профіль</button>
-                <button class="change-password-btn">Змінити пароль</button>
-            </div>
-            
-            <div class="profile-courses">
-                <h2>Мої курси</h2>
-                <div class="courses-list">
-                    <!-- Тут будуть відображатися курси користувача -->
-                    <p class="no-courses">У вас поки немає записаних курсів</p>
-                </div>
-            </div>
+    <section class="new-course-section">
+        <div class="new-course-header">
+            <h1 class="new-course-title">Додати новий курс</h1>
+            <p class="new-course-description">Ця сторінка знаходиться в розробці. Незабаром тут з'явиться форма для створення нових курсів.</p>
         </div>
     </section>
 </div>
@@ -172,27 +129,7 @@
     </div>
 </div>
 
-<div id="verificationModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-title">
-            <h2>Стати ментором</h2>
-            <span class="close" id="closeVerificationModal">&times;</span>
-        </div>
-        <form id="verificationForm">
-            <p>Щоб стати ментором і мати можливість створювати власні курси, підтвердіть, що ви не робот.</p>
-            
-            <div class="verification-check">
-                <input type="checkbox" id="notRobot" name="notRobot" required>
-                <label for="notRobot">Я не робот</label>
-            </div>
-            
-            <button type="submit" class="verification-btn">Підтвердити</button>
-        </form>
-    </div>
-</div>
-
 <script src="modal.js"></script>
 <script src="script.js"></script>
-<script src="profile.js"></script>
 </body>
 </html> 

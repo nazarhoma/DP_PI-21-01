@@ -93,12 +93,101 @@ document.addEventListener('DOMContentLoaded', () => {
             if (profileName && userData.name) {
                 profileName.textContent = userData.name;
             }
+            
+            // Перевіряємо роль користувача і відповідно змінюємо кнопки
+            updateUIBasedOnRole(userData.role || 'student');
         } else {
             // Користувач не авторизований
             profileSection.style.display = 'none';
             loginBtn.style.display = 'block';
             signupBtn.style.display = 'block';
         }
+    }
+    
+    // Оновлення UI елементів відповідно до ролі користувача
+    function updateUIBasedOnRole(role) {
+        const teachLink = document.querySelector('.teach-link');
+        const addCourseLink = document.querySelector('.add-course-link');
+        
+        if (role === 'mentor') {
+            // Ховаємо посилання на реєстрацію як ментор
+            if (teachLink) teachLink.style.display = 'none';
+            
+            // Показуємо посилання на додавання курсу
+            if (addCourseLink) addCourseLink.style.display = 'inline-block';
+        } else {
+            // Показуємо посилання на реєстрацію як ментор
+            if (teachLink) {
+                teachLink.style.display = 'inline-block';
+                
+                // Додаємо обробник для відкриття модального вікна верифікації
+                teachLink.addEventListener('click', openVerificationModal);
+            }
+            
+            // Ховаємо посилання на додавання курсу
+            if (addCourseLink) addCourseLink.style.display = 'none';
+        }
+    }
+    
+    // Відкриття модального вікна верифікації
+    function openVerificationModal() {
+        const modal = document.getElementById('verificationModal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    }
+    
+    // Закриття модального вікна верифікації
+    const closeVerificationBtn = document.getElementById('closeVerificationModal');
+    if (closeVerificationBtn) {
+        closeVerificationBtn.addEventListener('click', function() {
+            document.getElementById('verificationModal').style.display = 'none';
+        });
+    }
+    
+    // Обробка відправки форми верифікації
+    const verificationForm = document.getElementById('verificationForm');
+    if (verificationForm) {
+        verificationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (!userData.id) {
+                alert('Помилка: Неможливо ідентифікувати користувача. Будь ласка, увійдіть заново.');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('user_id', userData.id);
+            
+            fetch('http://localhost/update_role.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Оновлюємо роль у локальному сховищі
+                    userData.role = 'mentor';
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    
+                    // Оновлюємо UI
+                    updateUIBasedOnRole('mentor');
+                    
+                    // Закриваємо модальне вікно
+                    document.getElementById('verificationModal').style.display = 'none';
+                    
+                    // Показуємо повідомлення про успіх
+                    alert('Ваш аккаунт успішно змінено на менторський!');
+                } else {
+                    alert('Помилка: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Помилка:', error);
+                alert('Виникла помилка під час обробки запиту.');
+            });
+        });
     }
 
     // Обробник виходу з системи
@@ -114,5 +203,26 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Перевіряємо авторизацію при завантаженні сторінки
     checkAuth();
+    
+    // Закриття модального вікна при кліці поза ним
+    window.onclick = function(event) {
+        const verificationModal = document.getElementById('verificationModal');
+        if (event.target === verificationModal) {
+            verificationModal.style.display = 'none';
+        }
+        
+        // Існуючий код для інших модальних вікон
+        const contactModal = document.getElementById('contactModal');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const closeModalConfirm = document.getElementById('closeModalConfirm');
+        
+        if (event.target === contactModal) {
+            closeModalConfirm.style.display = 'block';
+        }
+        if (event.target === confirmationModal || event.target === closeModalConfirm) {
+            confirmationModal.style.display = 'none';
+            closeModalConfirm.style.display = 'none';
+        }
+    }
 });
 

@@ -18,11 +18,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const registrationDate = new Date().toLocaleDateString('uk-UA');
     document.getElementById('profile-registration-date').textContent = registrationDate;
     
+    // Відображаємо роль користувача
+    const role = userData.role || 'student';
+    const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
+    document.getElementById('profile-role').textContent = roleText;
+    
     // Оновлюємо ім'я в хедері
     const profileName = document.querySelector('.profile-name');
     if (profileName && userData.name) {
         profileName.textContent = userData.name;
     }
+    
+    // Оновлюємо UI елементи відповідно до ролі
+    updateUIBasedOnRole(role);
     
     // Обробник для кнопки "Редагувати профіль"
     const editProfileBtn = document.querySelector('.edit-profile-btn');
@@ -57,5 +65,38 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.removeItem('userData');
             window.location.href = 'index.html';
         });
+    }
+    
+    // Оновлення UI елементів відповідно до ролі користувача
+    function updateUIBasedOnRole(role) {
+        const teachLink = document.querySelector('.teach-link');
+        const addCourseLink = document.querySelector('.add-course-link');
+        
+        if (role === 'mentor') {
+            // Ховаємо посилання на реєстрацію як ментор
+            if (teachLink) teachLink.style.display = 'none';
+            
+            // Показуємо посилання на додавання курсу
+            if (addCourseLink) addCourseLink.style.display = 'inline-block';
+        } else {
+            // Показуємо посилання на реєстрацію як ментор
+            if (teachLink) {
+                teachLink.style.display = 'inline-block';
+                
+                // Додаємо обробник для відкриття модального вікна верифікації
+                teachLink.addEventListener('click', openVerificationModal);
+            }
+            
+            // Ховаємо посилання на додавання курсу
+            if (addCourseLink) addCourseLink.style.display = 'none';
+        }
+    }
+    
+    // Відкриття модального вікна верифікації
+    function openVerificationModal() {
+        const modal = document.getElementById('verificationModal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
     }
 }); 

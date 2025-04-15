@@ -19,7 +19,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
                 localStorage.setItem('userData', JSON.stringify({
                     id: data.user.id,
                     name: data.user.username,
-                    email: data.user.email
+                    email: data.user.email,
+                    role: data.user.role || 'student' // Додаємо роль зі значенням за замовчуванням
                 }));
                 
                 window.location.href = 'index.html';
