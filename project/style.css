@@ -1038,6 +1038,29 @@ a {
     border: 1px solid gray;
     border-radius: 8px;
 }
+
+/* Перевизначаю стиль для кнопки верифікації, щоб вона перекривала загальний стиль модальних кнопок */
+.modal button.verification-btn {
+    background-color: #3b82f6 !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 20px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    margin-top: 20px !important;
+    transition: background-color 0.3s, transform 0.2s !important;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2) !important;
+}
+
+.modal button.verification-btn:hover {
+    background-color: #2563eb !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
+}
+
 .modal-input {
     width: 100%;
     margin-bottom: 10px;
@@ -1809,25 +1832,25 @@ a {
     cursor: pointer;
 }
 
-.verification-btn {
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 20px;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+.modal-button.verification-btn {
+    background-color: #3b82f6 !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 20px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    margin-top: 20px !important;
+    transition: background-color 0.3s, transform 0.2s !important;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2) !important;
 }
 
-.verification-btn:hover {
-    background-color: #2563eb;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+.modal-button.verification-btn:hover {
+    background-color: #2563eb !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
 }
 
 /* Стилі для сторінки додавання нового курсу */
@@ -1853,4 +1876,24 @@ a {
     color: var(--grey-color);
     max-width: 800px;
     margin: 0 auto;
+}
+
+/* Стилі для посилання "Додати новий курс" */
+.add-course-link {
+    color: #fff;
+    background-color: #3b82f6;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-right: 15px;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.add-course-link:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }

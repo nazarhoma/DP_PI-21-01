@@ -37,6 +37,7 @@
     <nav class="nav-menu">
       <a href="category.html" class="categories-link">Категорії</a>
       <span class="teach-link">Викладати на Byway</span>
+      <a href="new-course.html" class="add-course-link" style="display: none;">Додати новий курс</a>
       <div class="user-actions">
         <a class="cart-link">
           <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
@@ -341,6 +342,24 @@
     </div>
     <button id="confirmClose">Так</button>
     <button id="cancelClose">Ні</button>
+  </div>
+</div>
+<div id="verificationModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">
+      <h2>Стати ментором</h2>
+      <span class="close" id="closeVerificationModal">&times;</span>
+    </div>
+    <form id="verificationForm">
+      <p style="margin-bottom: 20px; font-size: 16px; color: #334155; line-height: 1.5;">Щоб стати ментором і мати можливість створювати власні курси, підтвердіть, що ви не робот.</p>
+      
+      <div class="verification-check">
+        <input type="checkbox" id="notRobot" name="notRobot" required>
+        <label for="notRobot">Я не робот</label>
+      </div>
+      
+      <button type="submit" class="modal-button verification-btn">Підтвердити</button>
+    </form>
   </div>
 </div>
 <script src="script.js"></script>
