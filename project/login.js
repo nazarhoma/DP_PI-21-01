@@ -13,9 +13,15 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
             if (data.message === 'Авторизація успішна!') {
                 alert('Авторизація успішна!');
-                localStorage.setItem('user_id', data.user.id);
-                localStorage.setItem('username', data.user.username);
-                localStorage.setItem('email', data.user.email);
+                
+                // Зберігаємо дані користувача в правильному форматі
+                localStorage.setItem('userToken', 'auth_token_' + data.user.id);
+                localStorage.setItem('userData', JSON.stringify({
+                    id: data.user.id,
+                    name: data.user.username,
+                    email: data.user.email
+                }));
+                
                 window.location.href = 'index.html';
             } else {
                 alert('Помилка: ' + data.message);

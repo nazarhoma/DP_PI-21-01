@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <title>Мій профіль | Byway</title>
+    <meta name="description" content="Особистий кабінет користувача Byway">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header class="header">
+    <div class="logo-section">
+        <a href="index.html">
+            <img class="logo" src="img/logo.png" alt="Логотип Byway">
+        </a>
+        <span class="brand-name">Byway</span>
+    </div>
+    <a href="category.html" class="categories-link">Категорії</a>
+    <div class="search-bar">
+        <img class="magnifying-glass" src="img/search.png" alt="Пошук">
+        <form class="form-search" method="get">
+            <input
+                    class="search-bar-input"
+                    type="text"
+                    name="query"
+                    placeholder="Пошук курсів"
+                    aria-label="Пошук курсів">
+        </form>
+    </div>
+    <div class="group">
+        <button class="search-btn" aria-label="Відкрити пошук">
+            <img class="search-btn-img" src="img/search.png" alt="Пошук">
+        </button>
+        <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
+        <nav class="nav-menu">
+            <a href="category.html" class="categories-link">Категорії</a>
+            <span class="teach-link">Викладати на Byway</span>
+            <div class="user-actions">
+                <a class="cart-link">
+                    <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
+                </a>
+                <div class="profile-section">
+                    <div class="profile-dropdown">
+                        <img class="profile-avatar" src="img/default-avatar.png" alt="Аватар користувача">
+                        <span class="profile-name">Користувач</span>
+                        <div class="profile-menu">
+                            <a href="profile.html" class="profile-menu-item">Мій профіль</a>
+                            <a href="#" class="profile-menu-item">Мої курси</a>
+                            <a href="#" class="profile-menu-item">Налаштування</a>
+                            <a href="#" class="profile-menu-item logout">Вийти</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="main-container">
+    <section class="profile-section-page">
+        <div class="profile-header">
+            <h1 class="profile-title">Мій профіль</h1>
+        </div>
+        
+        <div class="profile-content">
+            <div class="profile-info">
+                <div class="profile-avatar-large">
+                    <img src="img/default-avatar.png" alt="Аватар користувача">
+                    <button class="change-avatar-btn">Змінити аватар</button>
+                </div>
+                
+                <div class="profile-details">
+                    <div class="profile-field">
+                        <label>Ім'я користувача:</label>
+                        <p id="profile-username">Завантаження...</p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Email:</label>
+                        <p id="profile-email">Завантаження...</p>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <label>Дата реєстрації:</label>
+                        <p id="profile-registration-date">Завантаження...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="edit-profile-btn">Редагувати профіль</button>
+                <button class="change-password-btn">Змінити пароль</button>
+            </div>
+            
+            <div class="profile-courses">
+                <h2>Мої курси</h2>
+                <div class="courses-list">
+                    <!-- Тут будуть відображатися курси користувача -->
+                    <p class="no-courses">У вас поки немає записаних курсів</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    <div class="footer-information">
+        <div class="footer-byway">
+            <img class="footer-logo" src="img/full-logo.png" alt="Логотип сайту">
+            <p class="footer-byway-info">Ми надаємо можливості для навчання через доступну та захоплюючу онлайн-освіту.
+                <br> Byway — провідна онлайн-платформа для навчання, яка пропонує високоякісні, гнучкі та доступні освітні послуги.</p>
+        </div>
+        <div class="footer-block">
+            <h3 class="footer-title">Отримати допомогу</h3>
+            <ul class="footer-info-list">
+                <li><a class="footer-info" id="contactLink" style="cursor: pointer">Зв'язатися з нами</a></li>
+                <li><a href="#" class="footer-info">Останні статті</a></li>
+                <li><a class="footer-info">FAQ</a></li>
+            </ul>
+        </div>
+        <div class="footer-block">
+            <h3 class="footer-title">Програми</h3>
+            <ul class="footer-info-list">
+                <li><a href="#" class="footer-info">Мистецтво та дизайн</a></li>
+                <li><a href="#" class="footer-info">Бізнес</a></li>
+                <li><a href="#" class="footer-info">ІТ та програмування</a></li>
+                <li><a href="#" class="footer-info">Мови</a></li>
+                <li><a href="#" class="footer-info">Програмування</a></li>
+            </ul>
+        </div>
+        <div class="footer-contactus">
+            <div class="footer-block">
+                <h3 class="footer-title">Зв'язатися з нами</h3>
+                <p class="footer-info">Адреса: 123 Main Street, Anytown, CA 12345</p>
+                <p class="footer-info">Тел: +(123) 456-7890</p>
+                <p class="footer-info">Ел. пошта: <a href="mailto:bywayedu@webkul.in" class="footer-info">bywayedu@webkul.in</a></p>
+            </div>
+            <div class="footer-social">
+                <img class="footer-social-logo" src="img/social-logo.png" alt="Іконки соціальних мереж">
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Зв'язатися з нами</h2>
+            <span class="close" id="closeModal">&times;</span>
+        </div>
+        <form id="contactForm">
+            <label for="name">Ім'я:</label>
+            <input class="modal-input" type="text" id="name" name="name" required><br>
+
+            <label for="email">Електронна адреса:</label>
+            <input class="modal-input" type="email" id="email" name="email" required><br>
+
+            <label for="message">Повідомлення:</label><br>
+            <textarea class="modal-input" id="message" name="message" rows="4" required></textarea><br>
+
+            <button type="submit">Відправити</button>
+        </form>
+    </div>
+</div>
+
+<script src="modal.js"></script>
+<script src="script.js"></script>
+<script src="profile.js"></script>
+</body>
+</html> 

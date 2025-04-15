@@ -325,7 +325,7 @@
     max-height: 160px;
     border-radius: 8px;
     object-fit: cover;
-    margin-bottom: 16px;: ;
+    margin-bottom: 16px;
 }
 .course-details {
     display: flex;
@@ -1047,6 +1047,75 @@ a {
     align-items: center;
     justify-content: space-between;
 }
+.profile-section {
+    position: relative;
+    margin-left: 20px;
+}
+
+.profile-dropdown {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #f5f5f5;
+    transition: background-color 0.3s;
+}
+
+.profile-dropdown:hover {
+    background: #e8e8e8;
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.profile-name {
+    font-size: 14px;
+    color: #333;
+    margin-right: 8px;
+}
+
+.profile-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 8px 0;
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+}
+
+.profile-dropdown:hover .profile-menu {
+    display: block;
+}
+
+.profile-menu-item {
+    display: block;
+    padding: 8px 16px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.profile-menu-item:hover {
+    background-color: #f5f5f5;
+}
+
+.profile-menu-item.logout {
+    border-top: 1px solid #eee;
+    color: #ff4444;
+}
+
+.profile-menu-item.logout:hover {
+    background-color: #fff5f5;
+}
 @media (min-width: 817px) {
     .hidden { display: none; }
     .teach-link, .categories-link, .login-btn, .signup-btn {
@@ -1572,4 +1641,151 @@ a {
     overflow-y: auto;
 }
     
+}
+
+/* Стилі для сторінки профілю */
+.profile-section-page {
+    padding: 40px 5%;
+    background-color: #f8fafc;
+    min-height: calc(100vh - 77px - 300px);
+}
+
+.profile-header {
+    margin-bottom: 30px;
+}
+
+.profile-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.profile-content {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 0 8px 0 rgba(59, 130, 246, 0.12);
+    padding: 30px;
+}
+
+.profile-info {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.profile-avatar-large {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-avatar-large img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e2e8f0;
+}
+
+.change-avatar-btn {
+    padding: 8px 16px;
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #334155;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.change-avatar-btn:hover {
+    background-color: #e2e8f0;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.profile-field {
+    margin-bottom: 20px;
+}
+
+.profile-field label {
+    display: block;
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.profile-field p {
+    font-size: 16px;
+    color: #0f172a;
+    font-weight: 500;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.edit-profile-btn, .change-password-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-profile-btn {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: none;
+}
+
+.edit-profile-btn:hover {
+    background-color: #2563eb;
+}
+
+.change-password-btn {
+    background-color: #ffffff;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+}
+
+.change-password-btn:hover {
+    background-color: #f1f5f9;
+}
+
+.profile-courses h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.no-courses {
+    color: #64748b;
+    font-size: 16px;
+    text-align: center;
+    padding: 30px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .profile-info {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+    }
+    
+    .edit-profile-btn, .change-password-btn {
+        width: 100%;
+    }
 }

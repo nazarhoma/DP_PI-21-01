@@ -73,5 +73,46 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("sea-all-categories").addEventListener("click", goToCategories);
     document.getElementById("sea-all-curses").addEventListener("click", goToCategories);
     document.getElementById("sea-all-instructors").addEventListener("click", goToCategories);
+
+    // Функція для перевірки авторизації
+    function checkAuth() {
+        const token = localStorage.getItem('userToken');
+        const profileSection = document.querySelector('.profile-section');
+        const loginBtn = document.getElementById('logInButton');
+        const signupBtn = document.getElementById('signUpButton');
+        
+        if (token) {
+            // Користувач авторизований
+            profileSection.style.display = 'block';
+            loginBtn.style.display = 'none';
+            signupBtn.style.display = 'none';
+            
+            // Отримуємо дані користувача
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const profileName = document.querySelector('.profile-name');
+            if (profileName && userData.name) {
+                profileName.textContent = userData.name;
+            }
+        } else {
+            // Користувач не авторизований
+            profileSection.style.display = 'none';
+            loginBtn.style.display = 'block';
+            signupBtn.style.display = 'block';
+        }
+    }
+
+    // Обробник виходу з системи
+    const logoutBtn = document.querySelector('.logout');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userData');
+            window.location.reload();
+        });
+    }
+    
+    // Перевіряємо авторизацію при завантаженні сторінки
+    checkAuth();
 });
 
