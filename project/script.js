@@ -68,11 +68,18 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = "category.html";
     }
 
-    document.getElementById("logInButton").addEventListener("click", goToLogin);
-    document.getElementById("signUpButton").addEventListener("click", goToSignup);
-    document.getElementById("sea-all-categories").addEventListener("click", goToCategories);
-    document.getElementById("sea-all-curses").addEventListener("click", goToCategories);
-    document.getElementById("sea-all-instructors").addEventListener("click", goToCategories);
+    // Отримуємо елементи та перевіряємо їх наявність перед додаванням обробників подій
+    const logInButton = document.getElementById("logInButton");
+    const signUpButton = document.getElementById("signUpButton");
+    const categoryButton = document.getElementById("sea-all-categories");
+    const cursesButton = document.getElementById("sea-all-curses");
+    const instructorsButton = document.getElementById("sea-all-instructors");
+
+    if (logInButton) logInButton.addEventListener("click", goToLogin);
+    if (signUpButton) signUpButton.addEventListener("click", goToSignup);
+    if (categoryButton) categoryButton.addEventListener("click", goToCategories);
+    if (cursesButton) cursesButton.addEventListener("click", goToCategories);
+    if (instructorsButton) instructorsButton.addEventListener("click", goToCategories);
 
     // Функція для отримання актуальної ролі користувача з сервера
     function getUserRoleFromServer(userId) {
@@ -106,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const loginBtn = document.getElementById('logInButton');
         const signupBtn = document.getElementById('signUpButton');
         const teachLink = document.querySelector('.teach-link');
+        const headerAvatarImg = document.querySelector('.profile-avatar');
         
         if (token) {
             // Користувач авторизований
@@ -115,9 +123,24 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Отримуємо дані користувача
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            // Оновлюємо дані користувача з сервера, якщо є ID
+            if (userData.id) {
+                // Отримуємо свіжі дані з сервера
+                fetchUserData(userData.id).catch(error => {
+                    console.error('Помилка при оновленні даних користувача:', error);
+                });
+            }
+            
             const profileName = document.querySelector('.profile-name');
             if (profileName && userData.name) {
                 profileName.textContent = userData.name;
+            }
+            
+            // Встановлюємо аватар, якщо він є
+            if (headerAvatarImg && userData.avatar) {
+                const avatarUrl = getFullAvatarUrl(userData.avatar);
+                headerAvatarImg.src = avatarUrl;
             }
             
             // Якщо є ID користувача, отримуємо актуальну роль з сервера
@@ -145,6 +168,11 @@ document.addEventListener('DOMContentLoaded', () => {
             profileSection.style.display = 'none';
             loginBtn.style.display = 'block';
             signupBtn.style.display = 'block';
+            
+            // Скидаємо аватар до дефолтного
+            if (headerAvatarImg) {
+                headerAvatarImg.src = 'img/default-avatar.png';
+            }
             
             // Приховуємо кнопку "Викладати на Byway" для незареєстрованих користувачів
             if (teachLink) teachLink.style.display = 'none';
@@ -237,11 +265,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Функція для отримання повного URL аватару
+    function getFullAvatarUrl(avatar) {
+        if (!avatar) return '';
+        
+        // Якщо аватар вже містить повний URL, повертаємо його
+        if (avatar.startsWith('http')) {
+            return avatar;
+        }
+        
+        // Створюємо абсолютний URL для аватару
+        const baseUrl = 'http://localhost';
+        
+        // Видаляємо початковий слеш, якщо він є
+        if (avatar.startsWith('/')) {
+            avatar = avatar.substring(1);
+        }
+        
+        const fullUrl = `${baseUrl}/${avatar}`;
+        return fullUrl;
+    }
+
     // Обробник виходу з системи
     const logoutBtn = document.querySelector('.logout');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            
+            // Скидаємо аватар до дефолтного перед видаленням даних
+            const headerAvatarImg = document.querySelector('.profile-avatar');
+            if (headerAvatarImg) {
+                headerAvatarImg.src = 'img/default-avatar.png';
+            }
+            
             localStorage.removeItem('userToken');
             localStorage.removeItem('userData');
             window.location.reload();
@@ -270,6 +326,65 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmationModal.style.display = 'none';
             closeModalConfirm.style.display = 'none';
         }
+    }
+
+    // Функція для отримання повних даних користувача з сервера
+    function fetchUserData(userId) {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append('user_id', userId);
+            
+            fetch('http://localhost/get_user_data.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Оновлюємо існуючі дані користувача
+                    const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    
+                    // Зберігаємо повні дані користувача
+                    const updatedUserData = {
+                        ...currentUserData,
+                        id: data.user_data.id,
+                        name: data.user_data.username,
+                        email: data.user_data.email,
+                        role: data.user_data.role || 'student',
+                        first_name: data.user_data.first_name,
+                        last_name: data.user_data.last_name,
+                        avatar: data.user_data.avatar,
+                        gender: data.user_data.gender,
+                        age: data.user_data.age,
+                        education: data.user_data.education,
+                        native_language: data.user_data.native_language
+                    };
+                    
+                    localStorage.setItem('userData', JSON.stringify(updatedUserData));
+                    
+                    // Оновлюємо UI відповідно до нових даних
+                    const profileName = document.querySelector('.profile-name');
+                    if (profileName) {
+                        profileName.textContent = updatedUserData.name;
+                    }
+                    
+                    // Оновлюємо аватар, якщо він є
+                    const headerAvatarImg = document.querySelector('.profile-avatar');
+                    if (headerAvatarImg && updatedUserData.avatar) {
+                        const avatarUrl = getFullAvatarUrl(updatedUserData.avatar);
+                        headerAvatarImg.src = avatarUrl;
+                    }
+                    
+                    resolve(updatedUserData);
+                } else {
+                    reject(new Error(data.message || 'Не вдалося отримати дані користувача'));
+                }
+            })
+            .catch(error => {
+                console.error('Помилка при отриманні даних користувача:', error);
+                reject(error);
+            });
+        });
     }
 });
 

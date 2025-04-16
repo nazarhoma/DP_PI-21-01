@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("Сторінка профілю завантажується...");
+    
     // Перевіряємо, чи користувач авторизований
     const token = localStorage.getItem('userToken');
     if (!token) {
@@ -8,7 +10,159 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Отримуємо дані користувача
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    let userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    console.log("Дані користувача з localStorage:", userData);
+    
+    // Оновлюємо дані користувача з сервера, якщо є ID
+    if (userData.id) {
+        // Отримуємо свіжі дані з сервера
+        fetchUserData(userData.id)
+            .then(updatedData => {
+                userData = updatedData;
+                updateProfileUI(userData);
+            })
+            .catch(error => {
+                console.error('Помилка при оновленні даних користувача:', error);
+                // Якщо не вдалося оновити дані, використовуємо дані з localStorage
+                updateProfileUI(userData);
+            });
+    } else {
+        // Якщо немає ID, використовуємо дані з localStorage
+        updateProfileUI(userData);
+    }
+    
+    // Функція для оновлення інтерфейсу профілю
+    function updateProfileUI(userData) {
+        // Заповнюємо дані профілю
+        document.getElementById('profile-fullname').textContent = formatFullName(userData);
+        document.getElementById('profile-email').textContent = maskEmail(userData.email);
+        
+        // Встановлюємо дату реєстрації
+        const registrationDate = new Date().toLocaleDateString('uk-UA');
+        document.getElementById('profile-registration-date').textContent = registrationDate;
+        
+        // Перевіряємо наявність додаткових даних профілю
+        if (userData.gender) {
+            let genderText = 'Не вказано';
+            if (userData.gender === 'male') genderText = 'Чоловіча';
+            else if (userData.gender === 'female') genderText = 'Жіноча';
+            else if (userData.gender === 'other') genderText = 'Інша';
+            document.getElementById('profile-gender').textContent = genderText;
+        }
+        
+        if (userData.age) {
+            document.getElementById('profile-age').textContent = userData.age;
+        }
+        
+        if (userData.education) {
+            document.getElementById('profile-education').textContent = userData.education;
+        }
+        
+        if (userData.native_language) {
+            document.getElementById('profile-language').textContent = userData.native_language;
+        }
+        
+        // Встановлюємо аватар користувача, якщо він є
+        console.log("Аватар користувача:", userData.avatar);
+        if (userData.avatar) {
+            const avatarUrl = getFullAvatarUrl(userData.avatar);
+            console.log('Завантаження аватару з:', avatarUrl);
+            
+            // Оновлюємо обидва зображення аватару
+            const profileAvatarImg = document.getElementById('profile-avatar-img');
+            const headerAvatarImg = document.querySelector('.profile-avatar');
+            
+            if (profileAvatarImg) profileAvatarImg.src = avatarUrl;
+            if (headerAvatarImg) headerAvatarImg.src = avatarUrl;
+        }
+        
+        // Отримуємо актуальну роль з сервера
+        if (userData.id) {
+            getUserRoleFromServer(userData.id)
+                .then(role => {
+                    // Оновлюємо роль у локальному сховищі
+                    userData.role = role;
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    
+                    // Відображаємо роль користувача
+                    const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
+                    document.getElementById('profile-role').textContent = roleText;
+                    
+                    // Оновлюємо UI елементи відповідно до ролі
+                    updateUIBasedOnRole(role);
+                })
+                .catch(error => {
+                    console.error('Помилка при отриманні ролі:', error);
+                    
+                    // У разі помилки використовуємо роль з localStorage
+                    const role = userData.role || 'student';
+                    const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
+                    document.getElementById('profile-role').textContent = roleText;
+                    
+                    // Оновлюємо UI елементи відповідно до ролі
+                    updateUIBasedOnRole(role);
+                });
+        } else {
+            // Відображаємо роль з localStorage, якщо немає ID
+            const role = userData.role || 'student';
+            const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
+            document.getElementById('profile-role').textContent = roleText;
+            
+            // Оновлюємо UI елементи відповідно до ролі
+            updateUIBasedOnRole(role);
+        }
+        
+        // Оновлюємо ім'я в хедері
+        const profileName = document.querySelector('.profile-name');
+        if (profileName) {
+            profileName.textContent = formatFullName(userData);
+        }
+    }
+    
+    // Функція для отримання повних даних користувача з сервера
+    function fetchUserData(userId) {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append('user_id', userId);
+            
+            fetch('http://localhost/get_user_data.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Оновлюємо існуючі дані користувача
+                    const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    
+                    // Зберігаємо повні дані користувача
+                    const updatedUserData = {
+                        ...currentUserData,
+                        id: data.user_data.id,
+                        name: data.user_data.username,
+                        email: data.user_data.email,
+                        role: data.user_data.role || 'student',
+                        first_name: data.user_data.first_name,
+                        last_name: data.user_data.last_name,
+                        avatar: data.user_data.avatar,
+                        gender: data.user_data.gender,
+                        age: data.user_data.age,
+                        education: data.user_data.education,
+                        native_language: data.user_data.native_language
+                    };
+                    
+                    localStorage.setItem('userData', JSON.stringify(updatedUserData));
+                    resolve(updatedUserData);
+                } else {
+                    reject(new Error(data.message || 'Не вдалося отримати дані користувача'));
+                }
+            })
+            .catch(error => {
+                console.error('Помилка при отриманні даних користувача:', error);
+                reject(error);
+            });
+        });
+    }
     
     // Функція для отримання актуальної ролі користувача з сервера
     function getUserRoleFromServer(userId) {
@@ -69,81 +223,59 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Заповнюємо дані профілю
-    document.getElementById('profile-fullname').textContent = formatFullName(userData);
-    document.getElementById('profile-email').textContent = maskEmail(userData.email);
-    
-    // Встановлюємо дату реєстрації (можна додати в userData при реєстрації)
-    const registrationDate = new Date().toLocaleDateString('uk-UA');
-    document.getElementById('profile-registration-date').textContent = registrationDate;
-    
-    // Перевіряємо наявність додаткових даних профілю
-    if (userData.gender) {
-        let genderText = 'Не вказано';
-        if (userData.gender === 'male') genderText = 'Чоловіча';
-        else if (userData.gender === 'female') genderText = 'Жіноча';
-        else if (userData.gender === 'other') genderText = 'Інша';
-        document.getElementById('profile-gender').textContent = genderText;
-    }
-    
-    if (userData.age) {
-        document.getElementById('profile-age').textContent = userData.age;
-    }
-    
-    if (userData.education) {
-        document.getElementById('profile-education').textContent = userData.education;
-    }
-    
-    if (userData.native_language) {
-        document.getElementById('profile-language').textContent = userData.native_language;
-    }
-    
-    // Встановлюємо аватар користувача, якщо він є
-    if (userData.avatar) {
-        document.getElementById('profile-avatar-img').src = userData.avatar;
-        document.querySelector('.profile-avatar').src = userData.avatar;
-    }
-    
-    // Отримуємо актуальну роль з сервера
-    if (userData.id) {
-        getUserRoleFromServer(userData.id)
-            .then(role => {
-                // Оновлюємо роль у локальному сховищі
-                userData.role = role;
-                localStorage.setItem('userData', JSON.stringify(userData));
-                
-                // Відображаємо роль користувача
-                const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
-                document.getElementById('profile-role').textContent = roleText;
-                
-                // Оновлюємо UI елементи відповідно до ролі
-                updateUIBasedOnRole(role);
-            })
-            .catch(error => {
-                console.error('Помилка при отриманні ролі:', error);
-                
-                // У разі помилки використовуємо роль з localStorage
-                const role = userData.role || 'student';
-                const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
-                document.getElementById('profile-role').textContent = roleText;
-                
-                // Оновлюємо UI елементи відповідно до ролі
-                updateUIBasedOnRole(role);
-            });
-    } else {
-        // Відображаємо роль з localStorage, якщо немає ID
-        const role = userData.role || 'student';
-        const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
-        document.getElementById('profile-role').textContent = roleText;
+    // Функція для отримання повного URL аватару
+    function getFullAvatarUrl(avatar) {
+        if (!avatar) return '';
         
-        // Оновлюємо UI елементи відповідно до ролі
-        updateUIBasedOnRole(role);
+        // Якщо аватар вже містить повний URL, повертаємо його
+        if (avatar.startsWith('http')) {
+            return avatar;
+        }
+        
+        // Створюємо абсолютний URL для аватару
+        const baseUrl = 'http://localhost';
+        
+        // Видаляємо початковий слеш, якщо він є
+        if (avatar.startsWith('/')) {
+            avatar = avatar.substring(1);
+        }
+        
+        const fullUrl = `${baseUrl}/${avatar}`;
+        console.log('Повний URL аватару:', fullUrl);
+        return fullUrl;
     }
     
-    // Оновлюємо ім'я в хедері
-    const profileName = document.querySelector('.profile-name');
-    if (profileName) {
-        profileName.textContent = formatFullName(userData);
+    // Оновлення UI елементів відповідно до ролі користувача
+    function updateUIBasedOnRole(role) {
+        const teachLink = document.querySelector('.teach-link');
+        const addCourseLink = document.querySelector('.add-course-link');
+        
+        if (role === 'mentor') {
+            // Ховаємо посилання на реєстрацію як ментор
+            if (teachLink) teachLink.style.display = 'none';
+            
+            // Показуємо посилання на додавання курсу
+            if (addCourseLink) addCourseLink.style.display = 'inline-block';
+        } else {
+            // Показуємо посилання на реєстрацію як ментор
+            if (teachLink) {
+                teachLink.style.display = 'inline-block';
+                
+                // Додаємо обробник для відкриття модального вікна верифікації
+                teachLink.addEventListener('click', openVerificationModal);
+            }
+            
+            // Ховаємо посилання на додавання курсу
+            if (addCourseLink) addCourseLink.style.display = 'none';
+        }
+    }
+    
+    // Відкриття модального вікна верифікації
+    function openVerificationModal() {
+        const modal = document.getElementById('verificationModal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
     }
     
     // Модальні вікна
@@ -344,28 +476,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 formData.append('user_id', userData.id);
                 formData.append('avatar', file);
                 
+                console.log('Відправка запиту для завантаження аватару...');
                 fetch('http://localhost/upload_avatar.php', {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
+                .then(response => {
+                    console.log('Статус відповіді:', response.status);
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Відповідь сервера:', data);
                     if (data.success) {
-                        // Оновлюємо аватар користувача в localStorage
-                        userData.avatar = data.avatar_url;
-                        localStorage.setItem('userData', JSON.stringify(userData));
+                        // Отримуємо URL аватара з відповіді сервера
+                        const avatarUrl = data.avatar_url || '';
+                        const fullAvatarUrl = getFullAvatarUrl(avatarUrl);
                         
-                        // Оновлюємо аватар в хедері
-                        document.querySelector('.profile-avatar').src = data.avatar_url;
+                        console.log('Аватар URL:', avatarUrl);
+                        console.log('Повний URL аватару:', fullAvatarUrl);
+                        
+                        // Оновлюємо аватар користувача в localStorage
+                        userData.avatar = avatarUrl;
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                        console.log('Збережені дані користувача:', JSON.parse(localStorage.getItem('userData')));
+                        
+                        // Оновлюємо аватар в хедері та на сторінці профілю
+                        const profileAvatarImg = document.getElementById('profile-avatar-img');
+                        const headerAvatarImg = document.querySelector('.profile-avatar');
+                        
+                        if (profileAvatarImg) profileAvatarImg.src = fullAvatarUrl;
+                        if (headerAvatarImg) headerAvatarImg.src = fullAvatarUrl;
                         
                         // Показуємо повідомлення про успіх
                         alert('Аватар успішно оновлено!');
                     } else {
                         // Показуємо повідомлення про помилку
                         alert('Помилка: ' + data.message);
+                        console.error('Помилка від сервера:', data.message);
                         
                         // Повертаємо попереднє зображення
-                        document.getElementById('profile-avatar-img').src = userData.avatar || 'img/default-avatar.png';
+                        const previousAvatar = userData.avatar ? getFullAvatarUrl(userData.avatar) : 'img/default-avatar.png';
+                        document.getElementById('profile-avatar-img').src = previousAvatar;
                     }
                 })
                 .catch(error => {
@@ -373,7 +524,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Помилка при завантаженні аватару. Спробуйте пізніше.');
                     
                     // Повертаємо попереднє зображення
-                    document.getElementById('profile-avatar-img').src = userData.avatar || 'img/default-avatar.png';
+                    const previousAvatar = userData.avatar ? getFullAvatarUrl(userData.avatar) : 'img/default-avatar.png';
+                    document.getElementById('profile-avatar-img').src = previousAvatar;
                 });
             }
         });
@@ -384,42 +536,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            
+            // Скидаємо аватар до дефолтного перед видаленням даних
+            const profileAvatarImg = document.getElementById('profile-avatar-img');
+            const headerAvatarImg = document.querySelector('.profile-avatar');
+            
+            if (profileAvatarImg) profileAvatarImg.src = 'img/default-avatar.png';
+            if (headerAvatarImg) headerAvatarImg.src = 'img/default-avatar.png';
+            
             localStorage.removeItem('userToken');
             localStorage.removeItem('userData');
             window.location.href = 'index.html';
         });
-    }
-    
-    // Оновлення UI елементів відповідно до ролі користувача
-    function updateUIBasedOnRole(role) {
-        const teachLink = document.querySelector('.teach-link');
-        const addCourseLink = document.querySelector('.add-course-link');
-        
-        if (role === 'mentor') {
-            // Ховаємо посилання на реєстрацію як ментор
-            if (teachLink) teachLink.style.display = 'none';
-            
-            // Показуємо посилання на додавання курсу
-            if (addCourseLink) addCourseLink.style.display = 'inline-block';
-        } else {
-            // Показуємо посилання на реєстрацію як ментор
-            if (teachLink) {
-                teachLink.style.display = 'inline-block';
-                
-                // Додаємо обробник для відкриття модального вікна верифікації
-                teachLink.addEventListener('click', openVerificationModal);
-            }
-            
-            // Ховаємо посилання на додавання курсу
-            if (addCourseLink) addCourseLink.style.display = 'none';
-        }
-    }
-    
-    // Відкриття модального вікна верифікації
-    function openVerificationModal() {
-        const modal = document.getElementById('verificationModal');
-        if (modal) {
-            modal.style.display = 'block';
-        }
     }
 }); 

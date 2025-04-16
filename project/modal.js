@@ -4,47 +4,79 @@ const closeModal = document.getElementById("closeModal");
 const confirmationModal = document.getElementById("confirmationModal");
 const closeConfirmationModal = document.getElementById("closeConfirmationModal");
 const closeModalConfirm = document.getElementById("closeModalConfirm");
+
 window.onload = function() {
-    contactModal.style.display = "none";
-    confirmationModal.style.display = "none";
-    closeModalConfirm.style.display = "none";
+    if (contactModal) contactModal.style.display = "none";
+    if (confirmationModal) confirmationModal.style.display = "none";
+    if (closeModalConfirm) closeModalConfirm.style.display = "none";
 }
-contactLink.onclick = function() {
-    contactModal.style.display = "block";
+
+if (contactLink) {
+    contactLink.onclick = function() {
+        contactModal.style.display = "block";
+    }
 }
-closeModal.onclick = function() {
-    contactModal.style.display = "none";
+
+if (closeModal) {
+    closeModal.onclick = function() {
+        contactModal.style.display = "none";
+    }
 }
+
 window.onclick = function(event) {
-    if (event.target === contactModal) {
-        closeModalConfirm.style.display = "block";
+    if (contactModal && event.target === contactModal) {
+        if (closeModalConfirm) closeModalConfirm.style.display = "block";
     }
-    if (event.target === confirmationModal || event.target === closeModalConfirm) {
-        confirmationModal.style.display = "none";
-        closeModalConfirm.style.display = "none";
+    if ((confirmationModal && event.target === confirmationModal) || 
+        (closeModalConfirm && event.target === closeModalConfirm)) {
+        if (confirmationModal) confirmationModal.style.display = "none";
+        if (closeModalConfirm) closeModalConfirm.style.display = "none";
     }
 }
-document.getElementById("contactForm").onsubmit = function(event) {
-    event.preventDefault();
-    contactModal.style.display = "none";
-    confirmationModal.style.display = "block";
+
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+    contactForm.onsubmit = function(event) {
+        event.preventDefault();
+        if (contactModal) contactModal.style.display = "none";
+        if (confirmationModal) confirmationModal.style.display = "block";
+    }
 }
-document.getElementById("confirmSend").onclick = function() {
-    confirmationModal.style.display = "none";
-    alert("Форма відправлена!");
+
+const confirmSend = document.getElementById("confirmSend");
+if (confirmSend) {
+    confirmSend.onclick = function() {
+        if (confirmationModal) confirmationModal.style.display = "none";
+        alert("Форма відправлена!");
+    }
 }
-document.getElementById("cancelSend").onclick = function() {
-    confirmationModal.style.display = "none";
-    contactModal.style.display = "block";
+
+const cancelSend = document.getElementById("cancelSend");
+if (cancelSend) {
+    cancelSend.onclick = function() {
+        if (confirmationModal) confirmationModal.style.display = "none";
+        if (contactModal) contactModal.style.display = "block";
+    }
 }
-document.getElementById("confirmClose").onclick = function() {
-    contactModal.style.display = "none";
-    closeModalConfirm.style.display = "none";
+
+const confirmClose = document.getElementById("confirmClose");
+if (confirmClose) {
+    confirmClose.onclick = function() {
+        if (contactModal) contactModal.style.display = "none";
+        if (closeModalConfirm) closeModalConfirm.style.display = "none";
+    }
 }
-document.getElementById("cancelClose").onclick = function() {
-    closeModalConfirm.style.display = "none";
-    contactModal.style.display = "block";
+
+const cancelClose = document.getElementById("cancelClose");
+if (cancelClose) {
+    cancelClose.onclick = function() {
+        if (closeModalConfirm) closeModalConfirm.style.display = "none";
+        if (contactModal) contactModal.style.display = "block";
+    }
 }
-document.getElementById("closeConfirmationModal").onclick = function() {
-    confirmationModal.style.display = "none";
+
+if (closeConfirmationModal) {
+    closeConfirmationModal.onclick = function() {
+        if (confirmationModal) confirmationModal.style.display = "none";
+    }
 }

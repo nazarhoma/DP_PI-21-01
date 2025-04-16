@@ -127,6 +127,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_result = $get_user->get_result();
             $user_data = $user_result->fetch_assoc();
             
+            // Додаємо повний URL до аватару, якщо він існує
+            if (isset($user_data['avatar']) && !empty($user_data['avatar'])) {
+                $avatar_path = $user_data['avatar'];
+                if (strpos($avatar_path, 'http') !== 0) { // Якщо не починається з http
+                    if (strpos($avatar_path, '/') !== 0) { // Додаємо слеш на початку, якщо його немає
+                        $avatar_path = '/' . $avatar_path;
+                    }
+                    $user_data['avatar_full_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $avatar_path;
+                }
+            }
+            
             $response['user_data'] = $user_data;
             $get_user->close();
         } else {
