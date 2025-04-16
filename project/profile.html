@@ -69,29 +69,58 @@
         <div class="profile-content">
             <div class="profile-info">
                 <div class="profile-avatar-large">
-                    <img src="img/default-avatar.png" alt="Аватар користувача">
+                    <img id="profile-avatar-img" src="img/default-avatar.png" alt="Аватар користувача">
                     <button class="change-avatar-btn">Змінити аватар</button>
+                    <input type="file" id="avatar-upload" accept="image/jpeg, image/png, image/gif" style="display: none;">
                 </div>
                 
                 <div class="profile-details">
-                    <div class="profile-field">
-                        <label>Ім'я користувача:</label>
-                        <p id="profile-username">Завантаження...</p>
+                    <div class="profile-row">
+                        <div class="profile-field">
+                            <label>Повне ім'я:</label>
+                            <p id="profile-fullname">Завантаження...</p>
+                        </div>
+                        
+                        <div class="profile-field">
+                            <label>Email:</label>
+                            <p id="profile-email">Завантаження...</p>
+                        </div>
                     </div>
                     
-                    <div class="profile-field">
-                        <label>Email:</label>
-                        <p id="profile-email">Завантаження...</p>
+                    <div class="profile-row">
+                        <div class="profile-field">
+                            <label>Дата реєстрації:</label>
+                            <p id="profile-registration-date">Завантаження...</p>
+                        </div>
+                        
+                        <div class="profile-field">
+                            <label>Роль:</label>
+                            <p id="profile-role">Завантаження...</p>
+                        </div>
                     </div>
                     
-                    <div class="profile-field">
-                        <label>Дата реєстрації:</label>
-                        <p id="profile-registration-date">Завантаження...</p>
+                    <div class="profile-row">
+                        <div class="profile-field gender-field">
+                            <label>Стать:</label>
+                            <p id="profile-gender">Не вказано</p>
+                        </div>
+                        
+                        <div class="profile-field age-field">
+                            <label>Вік:</label>
+                            <p id="profile-age">Не вказано</p>
+                        </div>
                     </div>
                     
-                    <div class="profile-field">
-                        <label>Роль:</label>
-                        <p id="profile-role">Завантаження...</p>
+                    <div class="profile-row">
+                        <div class="profile-field education-field">
+                            <label>Навчальний заклад:</label>
+                            <p id="profile-education">Не вказано</p>
+                        </div>
+                        
+                        <div class="profile-field language-field">
+                            <label>Рідна мова:</label>
+                            <p id="profile-language">Не вказано</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -150,6 +179,86 @@
         </div>
     </div>
 </footer>
+
+<!-- Модальне вікно для редагування профілю -->
+<div id="editProfileModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Редагувати профіль</h2>
+            <span class="close" id="closeEditProfileModal">&times;</span>
+        </div>
+        <form id="editProfileForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-first-name">Ім'я:</label>
+                    <input class="modal-input" type="text" id="edit-first-name" name="first_name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-last-name">Прізвище:</label>
+                    <input class="modal-input" type="text" id="edit-last-name" name="last_name">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-gender">Стать:</label>
+                    <select class="modal-input" id="edit-gender" name="gender">
+                        <option value="">Не вказано</option>
+                        <option value="male">Чоловіча</option>
+                        <option value="female">Жіноча</option>
+                        <option value="other">Інша</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-age">Вік:</label>
+                    <input class="modal-input" type="number" id="edit-age" name="age" min="1" max="120">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-education">Навчальний заклад:</label>
+                <input class="modal-input" type="text" id="edit-education" name="education">
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-language">Рідна мова:</label>
+                <input class="modal-input" type="text" id="edit-language" name="native_language">
+            </div>
+            
+            <button type="submit" class="modal-button">Зберегти зміни</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальне вікно для зміни паролю -->
+<div id="changePasswordModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Змінити пароль</h2>
+            <span class="close" id="closeChangePasswordModal">&times;</span>
+        </div>
+        <form id="changePasswordForm">
+            <div class="form-group">
+                <label for="current-password">Поточний пароль:</label>
+                <input class="modal-input" type="password" id="current-password" name="current_password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="new-password">Новий пароль:</label>
+                <input class="modal-input" type="password" id="new-password" name="new_password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password">Підтвердіть новий пароль:</label>
+                <input class="modal-input" type="password" id="confirm-password" name="confirm_password" required>
+            </div>
+            
+            <button type="submit" class="modal-button">Змінити пароль</button>
+        </form>
+    </div>
+</div>
 
 <div id="contactModal" class="modal">
     <div class="modal-content">

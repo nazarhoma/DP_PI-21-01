@@ -1897,3 +1897,39 @@ a {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
+
+/* Стилі для нової структури профілю */
+.profile-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.profile-row .profile-field {
+    flex: 0 0 48%;
+}
+
+@media (max-width: 600px) {
+    .profile-row .profile-field {
+        flex: 0 0 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* Оновлені стилі для полів профілю */
+.profile-field label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: 5px;
+}
+
+.profile-field p {
+    font-size: 16px;
+    color: #1F2937;
+    margin: 0;
+    padding: 0;
+    word-break: break-word;
+}

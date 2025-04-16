@@ -4,6 +4,7 @@ function checkAuth() {
     const profileSection = document.querySelector('.profile-section');
     const loginBtn = document.getElementById('logInButton');
     const signupBtn = document.getElementById('signUpButton');
+    const teachLink = document.querySelector('.teach-link');
     
     if (token) {
         // Користувач авторизований
@@ -23,6 +24,19 @@ function checkAuth() {
         if (profileName && userData.name) {
             profileName.textContent = userData.name;
         }
+        
+        // Показуємо посилання на реєстрацію як ментор для звичайних користувачів
+        if (teachLink && userData.role !== 'mentor') {
+            teachLink.style.display = 'inline-block';
+        } else if (teachLink && userData.role === 'mentor') {
+            teachLink.style.display = 'none';
+        }
+        
+        // Показуємо посилання на додавання курсу для менторів
+        const addCourseLink = document.querySelector('.add-course-link');
+        if (addCourseLink && userData.role === 'mentor') {
+            addCourseLink.style.display = 'inline-block';
+        }
     } else {
         // Користувач не авторизований
         if (profileSection) {
@@ -33,6 +47,17 @@ function checkAuth() {
         }
         if (signupBtn) {
             signupBtn.style.display = 'block';
+        }
+        
+        // Приховуємо кнопку "Викладати на Byway" для незареєстрованих користувачів
+        if (teachLink) {
+            teachLink.style.display = 'none';
+        }
+        
+        // Приховуємо посилання на додавання курсу
+        const addCourseLink = document.querySelector('.add-course-link');
+        if (addCourseLink) {
+            addCourseLink.style.display = 'none';
         }
     }
 }
