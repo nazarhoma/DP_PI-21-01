@@ -303,7 +303,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function openVerificationModal() {
         const modal = document.getElementById('verificationModal');
         if (modal) {
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
+            modal.classList.add('show');
         }
     }
     
@@ -313,20 +314,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Закриття модальних вікон
     document.getElementById('closeEditProfileModal').addEventListener('click', function() {
-        editProfileModal.style.display = 'none';
+        const modal = document.getElementById('editProfileModal');
+        modal.style.display = 'none';
+        modal.classList.remove('show');
     });
     
     document.getElementById('closeChangePasswordModal').addEventListener('click', function() {
-        changePasswordModal.style.display = 'none';
+        const modal = document.getElementById('changePasswordModal');
+        modal.style.display = 'none';
+        modal.classList.remove('show');
     });
     
     // Закриття модального вікна при кліку поза ним
     window.addEventListener('click', function(event) {
+        const editProfileModal = document.getElementById('editProfileModal');
+        const changePasswordModal = document.getElementById('changePasswordModal');
+        
         if (event.target === editProfileModal) {
             editProfileModal.style.display = 'none';
+            editProfileModal.classList.remove('show');
         }
         if (event.target === changePasswordModal) {
             changePasswordModal.style.display = 'none';
+            changePasswordModal.classList.remove('show');
         }
     });
     
@@ -334,16 +344,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const editProfileBtn = document.querySelector('.edit-profile-btn');
     if (editProfileBtn) {
         editProfileBtn.addEventListener('click', function() {
-            // Заповнюємо форму даними користувача
+            const modal = document.getElementById('editProfileModal');
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+            
+            // Заповнюємо форму поточними даними користувача
             document.getElementById('edit-first-name').value = userData.first_name || '';
             document.getElementById('edit-last-name').value = userData.last_name || '';
             document.getElementById('edit-gender').value = userData.gender || '';
             document.getElementById('edit-age').value = userData.age || '';
             document.getElementById('edit-education').value = userData.education || '';
             document.getElementById('edit-language').value = userData.native_language || '';
-            
-            // Відкриваємо модальне вікно
-            editProfileModal.style.display = 'block';
         });
     }
     
@@ -395,7 +406,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Профіль успішно оновлено!');
                     
                     // Закриваємо модальне вікно
-                    editProfileModal.style.display = 'none';
+                    const modal = document.getElementById('editProfileModal');
+                    modal.style.display = 'none';
+                    modal.classList.remove('show');
                 } else {
                     // Показуємо повідомлення про помилку
                     alert('Помилка: ' + data.message);
@@ -412,13 +425,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const changePasswordBtn = document.querySelector('.change-password-btn');
     if (changePasswordBtn) {
         changePasswordBtn.addEventListener('click', function() {
-            // Очищаємо форму
-            document.getElementById('current-password').value = '';
-            document.getElementById('new-password').value = '';
-            document.getElementById('confirm-password').value = '';
-            
-            // Відкриваємо модальне вікно
-            changePasswordModal.style.display = 'block';
+            const modal = document.getElementById('changePasswordModal');
+            modal.style.display = 'flex';
+            modal.classList.add('show');
         });
     }
     
@@ -455,7 +464,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Пароль успішно змінено!');
                     
                     // Закриваємо модальне вікно
-                    changePasswordModal.style.display = 'none';
+                    const modal = document.getElementById('changePasswordModal');
+                    modal.style.display = 'none';
+                    modal.classList.remove('show');
                 } else {
                     // Показуємо повідомлення про помилку
                     alert('Помилка: ' + data.message);

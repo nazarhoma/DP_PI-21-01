@@ -223,7 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function openVerificationModal() {
         const modal = document.getElementById('verificationModal');
         if (modal) {
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
+            modal.classList.add('show');
         }
     }
     
@@ -231,7 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeVerificationBtn = document.getElementById('closeVerificationModal');
     if (closeVerificationBtn) {
         closeVerificationBtn.addEventListener('click', function() {
-            document.getElementById('verificationModal').style.display = 'none';
+            const modal = document.getElementById('verificationModal');
+            modal.style.display = 'none';
+            modal.classList.remove('show');
         });
     }
     
@@ -327,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const verificationModal = document.getElementById('verificationModal');
         if (event.target === verificationModal) {
             verificationModal.style.display = 'none';
+            verificationModal.classList.remove('show');
         }
         
         // Існуючий код для інших модальних вікон
@@ -335,11 +339,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeModalConfirm = document.getElementById('closeModalConfirm');
         
         if (event.target === contactModal) {
-            closeModalConfirm.style.display = 'block';
+            closeModalConfirm.style.display = 'flex';
+            closeModalConfirm.classList.add('show');
         }
         if (event.target === confirmationModal || event.target === closeModalConfirm) {
             confirmationModal.style.display = 'none';
+            confirmationModal.classList.remove('show');
             closeModalConfirm.style.display = 'none';
+            closeModalConfirm.classList.remove('show');
         }
     }
 
