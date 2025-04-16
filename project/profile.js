@@ -12,34 +12,62 @@ document.addEventListener('DOMContentLoaded', function() {
     // Отримуємо дані користувача
     let userData = JSON.parse(localStorage.getItem('userData') || '{}');
     console.log("Дані користувача з localStorage:", userData);
+    console.log("Всі поля з localStorage:", Object.keys(userData));
     
-    // Оновлюємо дані користувача з сервера, якщо є ID
+    // Додаткова перевірка наявності розширених полів
+    if (!userData.first_name && !userData.last_name && !userData.gender) {
+        console.warn("Увага! Розширені дані профілю відсутні в localStorage.");
+    }
+    
+    // Завжди завантажуємо актуальні дані користувача з сервера, якщо є ID
     if (userData.id) {
+        console.log("Запит на отримання даних користувача з ID:", userData.id);
         // Отримуємо свіжі дані з сервера
         fetchUserData(userData.id)
             .then(updatedData => {
+                console.log("Отримано свіжі дані з сервера:", updatedData);
+                console.log("Поля у свіжих даних:", Object.keys(updatedData));
                 userData = updatedData;
                 updateProfileUI(userData);
             })
             .catch(error => {
                 console.error('Помилка при оновленні даних користувача:', error);
                 // Якщо не вдалося оновити дані, використовуємо дані з localStorage
+                console.log("Використовуємо дані з localStorage через помилку:", userData);
                 updateProfileUI(userData);
             });
     } else {
         // Якщо немає ID, використовуємо дані з localStorage
+        console.warn("Не знайдено ID користувача! Використовуємо дані з localStorage без оновлення.");
         updateProfileUI(userData);
     }
     
     // Функція для оновлення інтерфейсу профілю
     function updateProfileUI(userData) {
+        console.log("Оновлення інтерфейсу з даними:", userData);
+        
         // Заповнюємо дані профілю
-        document.getElementById('profile-fullname').textContent = formatFullName(userData);
-        document.getElementById('profile-email').textContent = maskEmail(userData.email);
+        const fullName = formatFullName(userData);
+        console.log("Форматоване повне ім'я:", fullName);
+        document.getElementById('profile-fullname').textContent = fullName;
+        
+        const maskedEmail = maskEmail(userData.email);
+        console.log("Замаскований email:", maskedEmail);
+        document.getElementById('profile-email').textContent = maskedEmail;
         
         // Встановлюємо дату реєстрації
-        const registrationDate = new Date().toLocaleDateString('uk-UA');
-        document.getElementById('profile-registration-date').textContent = registrationDate;
+        if (userData.registration_date) {
+            // Конвертуємо timestamp у локальну дату
+            const date = new Date(userData.registration_date);
+            const formattedDate = date.toLocaleDateString('uk-UA');
+            console.log("Дата реєстрації з БД:", userData.registration_date, "відформатована:", formattedDate);
+            document.getElementById('profile-registration-date').textContent = formattedDate;
+        } else {
+            // Якщо дата реєстрації не доступна, показуємо поточну дату
+            const currentDate = new Date().toLocaleDateString('uk-UA');
+            console.log("Дата реєстрації відсутня, використовуємо поточну:", currentDate);
+            document.getElementById('profile-registration-date').textContent = currentDate;
+        }
         
         // Перевіряємо наявність додаткових даних профілю
         if (userData.gender) {
@@ -47,26 +75,38 @@ document.addEventListener('DOMContentLoaded', function() {
             if (userData.gender === 'male') genderText = 'Чоловіча';
             else if (userData.gender === 'female') genderText = 'Жіноча';
             else if (userData.gender === 'other') genderText = 'Інша';
+            console.log("Стать з БД:", userData.gender, "відображається як:", genderText);
             document.getElementById('profile-gender').textContent = genderText;
+        } else {
+            console.log("Стать не вказана в даних");
         }
         
         if (userData.age) {
+            console.log("Вік з БД:", userData.age);
             document.getElementById('profile-age').textContent = userData.age;
+        } else {
+            console.log("Вік не вказаний в даних");
         }
         
         if (userData.education) {
+            console.log("Освіта з БД:", userData.education);
             document.getElementById('profile-education').textContent = userData.education;
+        } else {
+            console.log("Освіта не вказана в даних");
         }
         
         if (userData.native_language) {
+            console.log("Рідна мова з БД:", userData.native_language);
             document.getElementById('profile-language').textContent = userData.native_language;
+        } else {
+            console.log("Рідна мова не вказана в даних");
         }
         
         // Встановлюємо аватар користувача, якщо він є
-        console.log("Аватар користувача:", userData.avatar);
+        console.log("Аватар користувача з даних:", userData.avatar);
         if (userData.avatar) {
             const avatarUrl = getFullAvatarUrl(userData.avatar);
-            console.log('Завантаження аватару з:', avatarUrl);
+            console.log('Завантаження аватару з URL:', avatarUrl);
             
             // Оновлюємо обидва зображення аватару
             const profileAvatarImg = document.getElementById('profile-avatar-img');
@@ -74,54 +114,31 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (profileAvatarImg) profileAvatarImg.src = avatarUrl;
             if (headerAvatarImg) headerAvatarImg.src = avatarUrl;
+        } else {
+            console.log("Аватар не вказаний в даних, використовуємо дефолтний");
         }
         
-        // Отримуємо актуальну роль з сервера
-        if (userData.id) {
-            getUserRoleFromServer(userData.id)
-                .then(role => {
-                    // Оновлюємо роль у локальному сховищі
-                    userData.role = role;
-                    localStorage.setItem('userData', JSON.stringify(userData));
-                    
-                    // Відображаємо роль користувача
-                    const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
-                    document.getElementById('profile-role').textContent = roleText;
-                    
-                    // Оновлюємо UI елементи відповідно до ролі
-                    updateUIBasedOnRole(role);
-                })
-                .catch(error => {
-                    console.error('Помилка при отриманні ролі:', error);
-                    
-                    // У разі помилки використовуємо роль з localStorage
-                    const role = userData.role || 'student';
-                    const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
-                    document.getElementById('profile-role').textContent = roleText;
-                    
-                    // Оновлюємо UI елементи відповідно до ролі
-                    updateUIBasedOnRole(role);
-                });
-        } else {
-            // Відображаємо роль з localStorage, якщо немає ID
-            const role = userData.role || 'student';
-            const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
-            document.getElementById('profile-role').textContent = roleText;
+        // Оновлюємо роль
+        const role = userData.role || 'student';
+        const roleText = role === 'mentor' ? 'Ментор' : 'Студент';
+        console.log("Роль з даних:", role, "відображається як:", roleText);
+        document.getElementById('profile-role').textContent = roleText;
             
-            // Оновлюємо UI елементи відповідно до ролі
-            updateUIBasedOnRole(role);
-        }
+        // Оновлюємо UI елементи відповідно до ролі
+        updateUIBasedOnRole(role);
         
         // Оновлюємо ім'я в хедері
         const profileName = document.querySelector('.profile-name');
         if (profileName) {
-            profileName.textContent = formatFullName(userData);
+            profileName.textContent = fullName;
+            console.log("Оновлено ім'я в хедері:", fullName);
         }
     }
     
     // Функція для отримання повних даних користувача з сервера
     function fetchUserData(userId) {
         return new Promise((resolve, reject) => {
+            console.log("Запит даних користувача з сервера для ID:", userId);
             const formData = new FormData();
             formData.append('user_id', userId);
             
@@ -129,11 +146,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log("Отримано відповідь від сервера зі статусом:", response.status);
+                return response.json();
+            })
             .then(data => {
+                console.log("Розпарсені дані від сервера:", data);
                 if (data.success) {
+                    console.log("Отримано успішні дані з БД:", data.user_data);
+                    console.log("Поля в даних з сервера:", Object.keys(data.user_data));
+                    
                     // Оновлюємо існуючі дані користувача
                     const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    console.log("Поточні дані з localStorage перед оновленням:", currentUserData);
                     
                     // Зберігаємо повні дані користувача
                     const updatedUserData = {
@@ -148,12 +173,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         gender: data.user_data.gender,
                         age: data.user_data.age,
                         education: data.user_data.education,
-                        native_language: data.user_data.native_language
+                        native_language: data.user_data.native_language,
+                        registration_date: data.user_data.created_at
                     };
                     
+                    console.log("Оновлені дані для збереження в localStorage:", updatedUserData);
                     localStorage.setItem('userData', JSON.stringify(updatedUserData));
                     resolve(updatedUserData);
                 } else {
+                    console.error("Помилка від сервера:", data.message);
                     reject(new Error(data.message || 'Не вдалося отримати дані користувача'));
                 }
             })
@@ -213,13 +241,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Функція для форматування повного імені
     function formatFullName(userData) {
-        const firstName = userData.first_name || '';
-        const lastName = userData.last_name || '';
-        
-        if (firstName || lastName) {
-            return (firstName + ' ' + lastName).trim();
+        if (userData.first_name && userData.last_name) {
+            return `${userData.first_name} ${userData.last_name}`;
+        } else if (userData.first_name) {
+            return userData.first_name;
+        } else if (userData.name) {
+            return userData.name;
         } else {
-            return userData.name || 'Не вказано';
+            return 'Користувач';
         }
     }
     
@@ -549,4 +578,53 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = 'index.html';
         });
     }
+    
+    // Обробник збереження змін профілю
+    $(document).on('click', '#saveProfileChanges', function() {
+        const userId = userData.id;
+        const firstName = $('#edit-first-name').val();
+        const lastName = $('#edit-last-name').val();
+        const gender = $('#edit-gender').val();
+        const age = $('#edit-age').val();
+        const education = $('#edit-education').val();
+        const nativeLanguage = $('#edit-language').val();
+        
+        const formData = new FormData();
+        formData.append('user_id', userId);
+        formData.append('first_name', firstName);
+        formData.append('last_name', lastName);
+        formData.append('gender', gender);
+        formData.append('age', age);
+        formData.append('education', education);
+        formData.append('native_language', nativeLanguage);
+        
+        fetch('http://localhost/update_profile.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Профіль успішно оновлено:", data);
+                
+                // Оновлюємо дані користувача в localStorage
+                fetchUserData(userId).then(updatedData => {
+                    // Закриваємо модальне вікно
+                    $('#editProfileModal').modal('hide');
+                    
+                    // Оновлюємо інтерфейс з новими даними
+                    updateProfileUI(updatedData);
+                    
+                    showNotification('Профіль успішно оновлено!', 'success');
+                });
+            } else {
+                console.error('Помилка при оновленні профілю:', data.message);
+                showNotification('Помилка при оновленні профілю!', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Помилка при надсиланні даних:', error);
+            showNotification('Помилка з\'єднання з сервером!', 'error');
+        });
+    });
 }); 

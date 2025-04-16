@@ -127,40 +127,55 @@ document.addEventListener('DOMContentLoaded', () => {
             // Оновлюємо дані користувача з сервера, якщо є ID
             if (userData.id) {
                 // Отримуємо свіжі дані з сервера
-                fetchUserData(userData.id).catch(error => {
-                    console.error('Помилка при оновленні даних користувача:', error);
-                });
-            }
-            
-            const profileName = document.querySelector('.profile-name');
-            if (profileName && userData.name) {
-                profileName.textContent = userData.name;
-            }
-            
-            // Встановлюємо аватар, якщо він є
-            if (headerAvatarImg && userData.avatar) {
-                const avatarUrl = getFullAvatarUrl(userData.avatar);
-                headerAvatarImg.src = avatarUrl;
-            }
-            
-            // Якщо є ID користувача, отримуємо актуальну роль з сервера
-            if (userData.id) {
-                getUserRoleFromServer(userData.id)
-                    .then(role => {
-                        // Оновлюємо роль у локальному сховищі
-                        userData.role = role;
-                        localStorage.setItem('userData', JSON.stringify(userData));
+                fetchUserData(userData.id)
+                    .then(updatedData => {
+                        // Оновлюємо інтерфейс з актуальними даними
+                        const profileName = document.querySelector('.profile-name');
+                        if (profileName) {
+                            profileName.textContent = formatFullName(updatedData);
+                        }
                         
-                        // Оновлюємо UI відповідно до ролі
-                        updateUIBasedOnRole(role);
+                        // Встановлюємо аватар, якщо він є
+                        if (headerAvatarImg && updatedData.avatar) {
+                            const avatarUrl = getFullAvatarUrl(updatedData.avatar);
+                            headerAvatarImg.src = avatarUrl;
+                        }
+                        
+                        // Отримуємо актуальну роль та оновлюємо інтерфейс
+                        updateUIBasedOnRole(updatedData.role || 'student');
                     })
                     .catch(error => {
-                        console.error('Помилка при отриманні ролі:', error);
-                        // У разі помилки використовуємо роль з localStorage
+                        console.error('Помилка при оновленні даних користувача:', error);
+                        
+                        // У разі помилки використовуємо дані з localStorage
+                        const profileName = document.querySelector('.profile-name');
+                        if (profileName && userData.name) {
+                            profileName.textContent = formatFullName(userData);
+                        }
+                        
+                        // Встановлюємо аватар з localStorage, якщо він є
+                        if (headerAvatarImg && userData.avatar) {
+                            const avatarUrl = getFullAvatarUrl(userData.avatar);
+                            headerAvatarImg.src = avatarUrl;
+                        }
+                        
+                        // Оновлюємо UI відповідно до ролі з localStorage
                         updateUIBasedOnRole(userData.role || 'student');
                     });
             } else {
-                // Якщо немає ID, використовуємо роль з localStorage
+                // Якщо немає ID, використовуємо дані з localStorage
+                const profileName = document.querySelector('.profile-name');
+                if (profileName && userData.name) {
+                    profileName.textContent = formatFullName(userData);
+                }
+                
+                // Встановлюємо аватар з localStorage, якщо він є
+                if (headerAvatarImg && userData.avatar) {
+                    const avatarUrl = getFullAvatarUrl(userData.avatar);
+                    headerAvatarImg.src = avatarUrl;
+                }
+                
+                // Оновлюємо UI відповідно до ролі з localStorage
                 updateUIBasedOnRole(userData.role || 'student');
             }
         } else {
@@ -341,8 +356,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Оновлюємо існуючі дані користувача
+                    console.log("Отримано дані користувача з БД:", data.user_data);
+                    
+                    // Отримуємо поточні дані користувача, якщо вони є
                     const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    console.log("Поточні дані в localStorage:", currentUserData);
                     
                     // Зберігаємо повні дані користувача
                     const updatedUserData = {
@@ -357,26 +375,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         gender: data.user_data.gender,
                         age: data.user_data.age,
                         education: data.user_data.education,
-                        native_language: data.user_data.native_language
+                        native_language: data.user_data.native_language,
+                        registration_date: data.user_data.created_at
                     };
                     
+                    console.log("Оновлені дані для localStorage:", updatedUserData);
                     localStorage.setItem('userData', JSON.stringify(updatedUserData));
                     
-                    // Оновлюємо UI відповідно до нових даних
-                    const profileName = document.querySelector('.profile-name');
-                    if (profileName) {
-                        profileName.textContent = updatedUserData.name;
-                    }
-                    
-                    // Оновлюємо аватар, якщо він є
-                    const headerAvatarImg = document.querySelector('.profile-avatar');
-                    if (headerAvatarImg && updatedUserData.avatar) {
-                        const avatarUrl = getFullAvatarUrl(updatedUserData.avatar);
-                        headerAvatarImg.src = avatarUrl;
-                    }
-                    
+                    // Повертаємо оновлені дані користувача
                     resolve(updatedUserData);
                 } else {
+                    console.error("Помилка отримання даних:", data.message);
                     reject(new Error(data.message || 'Не вдалося отримати дані користувача'));
                 }
             })
@@ -385,6 +394,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 reject(error);
             });
         });
+    }
+
+    // Функція для форматування повного імені
+    function formatFullName(userData) {
+        if (userData.first_name && userData.last_name) {
+            return `${userData.first_name} ${userData.last_name}`;
+        } else if (userData.first_name) {
+            return userData.first_name;
+        } else if (userData.name) {
+            return userData.name;
+        } else {
+            return 'Користувач';
+        }
     }
 });
 

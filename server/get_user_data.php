@@ -55,6 +55,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Отримуємо дані користувача
         $user_data = $result->fetch_assoc();
         
+        // Додаємо логування для діагностики
+        error_log("Дані користувача з бази даних: " . print_r($user_data, true));
+        
+        // Перевіряємо, що всі необхідні поля присутні
+        $required_fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name', 
+                           'avatar', 'gender', 'age', 'education', 'native_language', 'created_at'];
+        
+        foreach ($required_fields as $field) {
+            if (!isset($user_data[$field])) {
+                error_log("Поле $field відсутнє в даних користувача");
+            } else if (empty($user_data[$field]) && $field != 'age') {  // age може бути 0
+                error_log("Поле $field порожнє в даних користувача");
+            }
+        }
+        
         // Відправляємо успішну відповідь
         echo json_encode([
             'success' => true,
