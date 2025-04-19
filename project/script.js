@@ -18,20 +18,49 @@ document.addEventListener('DOMContentLoaded', () => {
         searchBtn.style.display = 'block';
     });
 
+    // Ініціалізуємо кнопки прокрутки для блоку коментарів
+    function initializeCommentSlider() {
+        const commentsContainer = document.querySelector('.comments-list');
+        const leftButton = document.querySelector('.comments-button-left');
+        const rightButton = document.querySelector('.comments-button-right');
+        
+        if (commentsContainer && leftButton && rightButton) {
+            // Перевіряємо чи є карточки коментарів
+            const cards = commentsContainer.querySelectorAll('.comment-card');
+            if (cards.length === 0) {
+                // Якщо карточок немає, спробуємо ініціалізувати слайдер пізніше
+                setTimeout(initializeCommentSlider, 500);
+                return;
+            }
+            
+            const scrollAmount = cards[0].offsetWidth + 8;
+
+            leftButton.addEventListener('click', () => {
+                commentsContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            });
+
+            rightButton.addEventListener('click', () => {
+                commentsContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            });
+        }
+    }
+    
+    // Додаємо спостерігач за змінами в DOM для ініціалізації слайдера після завантаження коментарів
+    const commentsObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                // Перевіряємо чи додалися карточки коментарів
+                initializeCommentSlider();
+                break;
+            }
+        }
+    });
+    
     const commentsContainer = document.querySelector('.comments-list');
-    const leftButton = document.querySelector('.comments-button-left');
-    const rightButton = document.querySelector('.comments-button-right');
-    const card = document.querySelector('.comment-card');
-    if (commentsContainer && leftButton && rightButton && card) {
-        const scrollAmount = card.offsetWidth + 8;
-
-        leftButton.addEventListener('click', () => {
-            commentsContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        });
-
-        rightButton.addEventListener('click', () => {
-            commentsContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        });
+    if (commentsContainer) {
+        commentsObserver.observe(commentsContainer, { childList: true });
+        // Також спробуємо ініціалізувати слайдер відразу
+        initializeCommentSlider();
     }
 
     const courseList = document.querySelector('.courses-list');
@@ -139,6 +168,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (headerAvatarImg && updatedData.avatar) {
                             const avatarUrl = getFullAvatarUrl(updatedData.avatar);
                             headerAvatarImg.src = avatarUrl;
+                            headerAvatarImg.onerror = function() {
+                                console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
+                                this.src = 'img/default-avatar.png';
+                                this.onerror = null; // Запобігаємо зациклюванню
+                            };
+                        } else if (headerAvatarImg) {
+                            headerAvatarImg.src = 'img/default-avatar.png';
                         }
                         
                         // Отримуємо актуальну роль та оновлюємо інтерфейс
@@ -157,6 +193,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (headerAvatarImg && userData.avatar) {
                             const avatarUrl = getFullAvatarUrl(userData.avatar);
                             headerAvatarImg.src = avatarUrl;
+                            headerAvatarImg.onerror = function() {
+                                console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
+                                this.src = 'img/default-avatar.png';
+                                this.onerror = null; // Запобігаємо зациклюванню
+                            };
+                        } else if (headerAvatarImg) {
+                            headerAvatarImg.src = 'img/default-avatar.png';
                         }
                         
                         // Оновлюємо UI відповідно до ролі з localStorage
@@ -173,6 +216,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (headerAvatarImg && userData.avatar) {
                     const avatarUrl = getFullAvatarUrl(userData.avatar);
                     headerAvatarImg.src = avatarUrl;
+                    headerAvatarImg.onerror = function() {
+                        console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
+                        this.src = 'img/default-avatar.png';
+                        this.onerror = null; // Запобігаємо зациклюванню
+                    };
+                } else if (headerAvatarImg) {
+                    headerAvatarImg.src = 'img/default-avatar.png';
                 }
                 
                 // Оновлюємо UI відповідно до ролі з localStorage

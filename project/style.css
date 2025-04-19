@@ -2014,3 +2014,14 @@ a {
     padding: 0;
     word-break: break-word;
 }
+
+.review-stars {
+  display: flex;
+  margin-top: 5px;
+}
+
+.review-stars .star {
+  width: 16px;
+  height: 16px;
+  margin-right: 3px;
+}

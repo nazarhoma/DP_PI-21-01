@@ -112,10 +112,31 @@ document.addEventListener('DOMContentLoaded', function() {
             const profileAvatarImg = document.getElementById('profile-avatar-img');
             const headerAvatarImg = document.querySelector('.profile-avatar');
             
-            if (profileAvatarImg) profileAvatarImg.src = avatarUrl;
-            if (headerAvatarImg) headerAvatarImg.src = avatarUrl;
+            if (profileAvatarImg) {
+                profileAvatarImg.src = avatarUrl;
+                profileAvatarImg.onerror = function() {
+                    console.log("Помилка завантаження аватару. Використовую запасний аватар.");
+                    this.src = 'media/default-avatar.png';
+                    this.onerror = null; // Запобігаємо зациклюванню
+                };
+            }
+            
+            if (headerAvatarImg) {
+                headerAvatarImg.src = avatarUrl;
+                headerAvatarImg.onerror = function() {
+                    console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
+                    this.src = 'media/default-avatar.png';
+                    this.onerror = null; // Запобігаємо зациклюванню
+                };
+            }
         } else {
             console.log("Аватар не вказаний в даних, використовуємо дефолтний");
+            // Встановлюємо запасний аватар для обох зображень
+            const profileAvatarImg = document.getElementById('profile-avatar-img');
+            const headerAvatarImg = document.querySelector('.profile-avatar');
+            
+            if (profileAvatarImg) profileAvatarImg.src = 'media/default-avatar.png';
+            if (headerAvatarImg) headerAvatarImg.src = 'media/default-avatar.png';
         }
         
         // Оновлюємо роль

@@ -1,6 +1,7 @@
 const allCoursesUrl = 'http://localhost/get_all_courses.php';
 const topCoursesUrl = 'http://localhost/get_top_courses.php';
 const instructorsJsonUrl = 'instructors.json';
+const topReviewsUrl = 'http://localhost/get_top_reviews.php';
 const coursesPerPage = 12;
 let currentPage = 1;
 let totalCourses = 0;
@@ -13,8 +14,13 @@ function createCourseCard(course) {
 
     // Створюємо HTML для зірок рейтингу
     let starsHTML = '';
+    // Додаємо золоті зірки для рейтингу
     for (let i = 0; i < course.rating; i++) {
         starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
+    }
+    // Додаємо сірі зірки до загальної кількості 5
+    for (let i = course.rating; i < 5; i++) {
+        starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
     }
 
     card.innerHTML = `
@@ -181,6 +187,60 @@ async function loadInstructors() {
     }
 }
 
+function createReviewCard(review) {
+    const card = document.createElement('article');
+    card.className = 'comment-card';
+
+    // Створюємо HTML для зірок рейтингу
+    let starsHTML = '';
+    // Додаємо золоті зірки для рейтингу
+    for (let i = 0; i < review.rating; i++) {
+        starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
+    }
+    // Додаємо сірі зірки до загальної кількості 5
+    for (let i = review.rating; i < 5; i++) {
+        starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+    }
+
+    card.innerHTML = `
+        <img class="quotes" src="img/quotes.png" alt="Цитата">
+        <p class="comment-text">"${review.text}"</p>
+        <div class="comment-info">
+            <img class="customer-img" src="${review.avatar}" alt="Фото клієнта">
+            <div class="customer-info">
+                <h2 class="customer-name">${review.name}</h2>
+                <div class="stars review-stars">${starsHTML}</div>
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
+async function loadTopReviews() {
+    try {
+        const response = await fetch(topReviewsUrl);
+        const data = await response.json();
+        
+        if (data.success) {
+            const reviewsList = document.querySelector('.comments-list');
+            if (reviewsList) {
+                reviewsList.innerHTML = '';
+                // Обмежуємо кількість відгуків до 5
+                const reviews = data.reviews.slice(0, 5);
+                reviews.forEach(review => {
+                    const card = createReviewCard(review);
+                    reviewsList.appendChild(card);
+                });
+            }
+        } else {
+            console.error('Помилка отримання відгуків:', data.message);
+        }
+    } catch (error) {
+        console.error('Помилка завантаження відгуків:', error);
+    }
+}
+
 function initializeCoursesPage() {
     const isCoursesPage = document.querySelector('.courses-pagination');
     
@@ -198,6 +258,12 @@ function initializeCoursesPage() {
     
     if (instructorsSection) {
         loadInstructors();
+    }
+
+    const reviewsSection = document.querySelector('.top-comments');
+    
+    if (reviewsSection) {
+        loadTopReviews();
     }
 }
 
