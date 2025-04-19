@@ -1,4 +1,5 @@
-const jsonUrl = 'courses.json';
+const allCoursesUrl = 'http://localhost/get_all_courses.php';
+const topCoursesUrl = 'http://localhost/get_top_courses.php';
 const instructorsJsonUrl = 'instructors.json';
 const coursesPerPage = 12;
 let currentPage = 1;
@@ -10,17 +11,23 @@ function createCourseCard(course) {
     const card = document.createElement('article');
     card.className = 'course-card jcsb';
 
+    // Створюємо HTML для зірок рейтингу
+    let starsHTML = '';
+    for (let i = 0; i < course.rating; i++) {
+        starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
+    }
+
     card.innerHTML = `
         <img class="course-image" src="${course.image}" alt="${course.title}">
         <div class="course-details">
           <h3 class="course-title">${course.title}</h3>
           <p class="course-author">Автор: ${course.author}</p>
           <div class="course-rating">
-            <div class="stars">${'\n'.repeat(course.rating).split('\n').map(() => `<img class="star" src="img/star.png" alt="Зірка">`).join('')}</div>
+            <div class="stars">${starsHTML}</div>
             <span class="rating-info">(${course.reviews} відгуків)</span>
           </div>
           <p class="course-info">${course.info}</p>
-          <p class="course-price">$${course.price}</p>
+          <p class="course-price">$${course.price.toFixed(2)}</p>
         </div>
       `;
 
@@ -31,6 +38,10 @@ function renderCourses(page = 1) {
     const start = (page - 1) * coursesPerPage;
     const end = start + coursesPerPage;
     const coursesList = document.querySelector('.courses-list');
+    
+    // Перевіряємо, що є список курсів
+    if (!coursesList) return;
+    
     coursesList.innerHTML = '';
 
     const pageCourses = coursesData.slice(start, end);
@@ -43,8 +54,11 @@ function renderCourses(page = 1) {
 }
 
 function renderPagination() {
-    const totalPages = Math.ceil(totalCourses / coursesPerPage);
     const pagination = document.querySelector('.pagination');
+    if (!pagination) return;
+    
+    const totalPages = Math.ceil(totalCourses / coursesPerPage);
+    
     pagination.innerHTML = '';
 
     const prevButton = document.createElement('button');
@@ -83,14 +97,42 @@ function renderPagination() {
     pagination.appendChild(nextButton);
 }
 
-async function loadCourses() {
+async function loadAllCourses() {
     try {
-        const response = await fetch(jsonUrl);
-        coursesData = await response.json();
-        totalCourses = coursesData.length;
-        renderCourses();
+        const response = await fetch(allCoursesUrl);
+        const data = await response.json();
+        
+        if (data.success) {
+            coursesData = data.courses;
+            totalCourses = coursesData.length;
+            renderCourses();
+        } else {
+            console.error('Помилка отримання курсів:', data.message);
+        }
     } catch (error) {
         console.error('Помилка завантаження курсів:', error);
+    }
+}
+
+async function loadTopCourses() {
+    try {
+        const response = await fetch(topCoursesUrl);
+        const data = await response.json();
+        
+        if (data.success) {
+            const topCoursesList = document.querySelector('.top-courses .courses-list');
+            if (topCoursesList) {
+                topCoursesList.innerHTML = '';
+                data.courses.forEach(course => {
+                    const card = createCourseCard(course);
+                    topCoursesList.appendChild(card);
+                });
+            }
+        } else {
+            console.error('Помилка отримання найкращих курсів:', data.message);
+        }
+    } catch (error) {
+        console.error('Помилка завантаження найкращих курсів:', error);
     }
 }
 
@@ -126,17 +168,39 @@ async function loadInstructors() {
         const response = await fetch(instructorsJsonUrl);
         const instructorsData = await response.json();
         const instructorsList = document.querySelector('.instructors-list');
-
-        instructorsData.forEach(instructor => {
-            const card = createInstructorCard(instructor);
-            instructorsList.appendChild(card);
-        });
+        
+        if (instructorsList) {
+            instructorsList.innerHTML = '';
+            instructorsData.forEach(instructor => {
+                const card = createInstructorCard(instructor);
+                instructorsList.appendChild(card);
+            });
+        }
     } catch (error) {
         console.error('Помилка завантаження інструкторів:', error);
     }
 }
 
+function initializeCoursesPage() {
+    const isCoursesPage = document.querySelector('.courses-pagination');
+    
+    if (isCoursesPage) {
+        loadAllCourses();
+    }
+
+    const topCoursesSection = document.querySelector('.top-courses');
+    
+    if (topCoursesSection) {
+        loadTopCourses();
+    }
+
+    const instructorsSection = document.querySelector('.top-instructors');
+    
+    if (instructorsSection) {
+        loadInstructors();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    loadCourses();
-    loadInstructors();
+    initializeCoursesPage();
 });
