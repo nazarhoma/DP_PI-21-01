@@ -2025,3 +2025,25 @@ a {
   height: 16px;
   margin-right: 3px;
 }
+
+.password-requirements {
+    text-align: left;
+    margin-top: 5px;
+    color: #6B7280;
+    font-style: italic;
+}
+
+.password-requirements small {
+    font-size: 12px;
+}
+
+.password-match {
+    text-align: left;
+    margin-top: 5px;
+    color: #E53E3E;
+    font-style: italic;
+}
+
+.password-match small {
+    font-size: 12px;
+}
