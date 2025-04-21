@@ -1,6 +1,6 @@
 const allCoursesUrl = 'http://localhost/get_all_courses.php';
 const topCoursesUrl = 'http://localhost/get_top_courses.php';
-const instructorsJsonUrl = 'instructors.json';
+const topInstructorsUrl = 'http://localhost/get_top_instructors.php';
 const topReviewsUrl = 'http://localhost/get_top_reviews.php';
 const coursesPerPage = 12;
 let currentPage = 1;
@@ -154,9 +154,12 @@ function createInstructorCard(instructor) {
     const card = document.createElement('article');
     card.className = 'instructor-card';
 
+    // Отримуємо повний URL для аватарки інструктора
+    const avatarUrl = getFullAvatarUrl(instructor.image);
+
     card.innerHTML = `
         <div class="instructor">
-          <img class="instructor-img" src="${instructor.image}" alt="Фото інструктора">
+          <img class="instructor-img" src="${avatarUrl}" alt="Фото інструктора">
           <div class="instructor-info">
             <div class="instructor-title">
               <h3 class="instructor-name">${instructor.name}</h3>
@@ -179,16 +182,18 @@ function createInstructorCard(instructor) {
 
 async function loadInstructors() {
     try {
-        const response = await fetch(instructorsJsonUrl);
-        const instructorsData = await response.json();
+        const response = await fetch(topInstructorsUrl);
+        const data = await response.json();
         const instructorsList = document.querySelector('.instructors-list');
         
-        if (instructorsList) {
+        if (instructorsList && data.success) {
             instructorsList.innerHTML = '';
-            instructorsData.forEach(instructor => {
+            data.instructors.forEach(instructor => {
                 const card = createInstructorCard(instructor);
                 instructorsList.appendChild(card);
             });
+        } else {
+            console.error('Помилка отримання інструкторів:', data.message);
         }
     } catch (error) {
         console.error('Помилка завантаження інструкторів:', error);
