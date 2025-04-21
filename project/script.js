@@ -65,24 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const courseList = document.querySelector('.courses-list');
     if (courseList) {
-        function manageRowVisibility() {
-            const courseList = document.querySelector('.courses-list');
-            const cards = Array.from(courseList.children);
-            const containerWidth = courseList.clientWidth;
-            const cardStyle = getComputedStyle(cards[0]);
-            const cardWidth = cards[0].offsetWidth + parseInt(cardStyle.marginRight) + parseInt(cardStyle.marginLeft);
-            const cardsPerRow = Math.floor(containerWidth / cardWidth);
-            cards.forEach((card, index) => {
-                const rowNumber = Math.floor(index / cardsPerRow);
-                if (rowNumber > 0) {
-                    card.style.display = index >= cardsPerRow && index < cardsPerRow * 2 && cards.slice(cardsPerRow, cardsPerRow * 2).length < cardsPerRow
-                        ? 'none'
-                        : 'flex';
-                }
-            });
-        }
-        window.addEventListener('load', manageRowVisibility);
-        window.addEventListener('resize', manageRowVisibility);
+        // Видалено функцію manageRowVisibility, оскільки вона створює проблему з пробілами в сітці
+        // Тепер використовується CSS Grid в файлі jsonLoader.js
     }
 
     function goToLogin() {
@@ -249,28 +233,126 @@ document.addEventListener('DOMContentLoaded', () => {
         const teachLink = document.querySelector('.teach-link');
         const addCourseLink = document.querySelector('.add-course-link');
         
+        // Верхній банер - кнопка "Почати шлях інструктора"
+        const bannerButton = document.querySelector('.banner-button');
+        const instructorPathButton = document.getElementById('instructorPathButton');
+        
+        // Нижній банер "Стань інструктором" та його кнопка
+        const firstLastBanner = document.querySelector('.last-banners .last-banner:first-child');
+        const lastBannerButton = document.querySelector('.last-banner-button');
+        const startCareerButton = document.getElementById('startCareerButton');
+        
+        // Перевіряємо, чи авторизований користувач
+        const token = localStorage.getItem('userToken');
+        
+        if (!token) {
+            console.log("updateUIBasedOnRole: користувач не авторизований");
+            
+            // Для неавторизованих користувачів встановлюємо прямі посилання на login.html
+            if (bannerButton) {
+                bannerButton.href = "login.html";
+            }
+            
+            if (lastBannerButton) {
+                lastBannerButton.href = "login.html";
+            }
+            
+            // Приховуємо посилання на реєстрацію як ментор
+            if (teachLink) teachLink.style.display = 'none';
+            
+            // Приховуємо посилання на додавання курсу
+            if (addCourseLink) addCourseLink.style.display = 'none';
+            
+            return; // Припиняємо виконання функції
+        }
+        
+        console.log("updateUIBasedOnRole: користувач авторизований, роль:", role);
+        
         if (role === 'mentor') {
             // Ховаємо посилання на реєстрацію як ментор
             if (teachLink) teachLink.style.display = 'none';
             
             // Показуємо посилання на додавання курсу
             if (addCourseLink) addCourseLink.style.display = 'inline-block';
+            
+            // Змінюємо верхню кнопку банера для менторів
+            if (bannerButton) {
+                bannerButton.href = 'new-course.html';
+                if (bannerButton.querySelector('.button-text')) {
+                    bannerButton.querySelector('.button-text').textContent = 'Створити новий курс';
+                }
+            }
+            
+            // Приховуємо нижній банер "Стань інструктором" для менторів
+            if (firstLastBanner) {
+                firstLastBanner.style.display = 'none';
+            }
         } else {
             // Показуємо посилання на реєстрацію як ментор
             if (teachLink) {
                 teachLink.style.display = 'inline-block';
                 
                 // Додаємо обробник для відкриття модального вікна верифікації
-                teachLink.addEventListener('click', openVerificationModal);
+                const newTeachLink = teachLink.cloneNode(true);
+                teachLink.parentNode.replaceChild(newTeachLink, teachLink);
+                newTeachLink.addEventListener('click', openVerificationModal);
             }
             
             // Ховаємо посилання на додавання курсу
             if (addCourseLink) addCourseLink.style.display = 'none';
+            
+            // Змінюємо верхню кнопку банера для звичайних користувачів
+            if (bannerButton) {
+                bannerButton.removeAttribute('href'); // Видаляємо пряме посилання
+                if (bannerButton.querySelector('.button-text')) {
+                    bannerButton.querySelector('.button-text').textContent = 'Почати шлях інструктора';
+                }
+                
+                // Очищуємо всі існуючі обробники
+                const newBannerButton = bannerButton.cloneNode(true);
+                bannerButton.parentNode.replaceChild(newBannerButton, bannerButton);
+                
+                // Додаємо обробник для модального вікна
+                newBannerButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openVerificationModal();
+                });
+            }
+            
+            // Показуємо нижній банер "Стань інструктором" для звичайних користувачів
+            if (firstLastBanner) {
+                firstLastBanner.style.display = 'flex';
+            }
+            
+            // Налаштовуємо кнопку в нижньому банері
+            if (lastBannerButton) {
+                lastBannerButton.removeAttribute('href'); // Видаляємо пряме посилання
+                
+                // Очищуємо всі існуючі обробники
+                const newLastBannerButton = lastBannerButton.cloneNode(true);
+                lastBannerButton.parentNode.replaceChild(newLastBannerButton, lastBannerButton);
+                
+                // Додаємо обробник для модального вікна
+                newLastBannerButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openVerificationModal();
+                });
+            }
         }
     }
     
     // Відкриття модального вікна верифікації
     function openVerificationModal() {
+        // Перевіряємо, чи користувач авторизований
+        const token = localStorage.getItem('userToken');
+        if (!token) {
+            // Якщо користувач не авторизований, перенаправляємо на сторінку входу
+            console.log("Користувач не авторизований, перенаправляємо на login.html");
+            window.location.href = "login.html";
+            return;
+        }
+        
+        // Якщо користувач авторизований, відкриваємо модальне вікно
         const modal = document.getElementById('verificationModal');
         if (modal) {
             modal.style.display = 'flex';
