@@ -14,13 +14,21 @@ function createCourseCard(course) {
 
     // Створюємо HTML для зірок рейтингу
     let starsHTML = '';
-    // Додаємо золоті зірки для рейтингу
-    for (let i = 0; i < course.rating; i++) {
-        starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
-    }
-    // Додаємо сірі зірки до загальної кількості 5
-    for (let i = course.rating; i < 5; i++) {
-        starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+    
+    // Якщо відгуків 0, всі зірки сірі
+    if (course.reviews == 0) {
+        for (let i = 0; i < 5; i++) {
+            starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+        }
+    } else {
+        // Додаємо золоті зірки для рейтингу
+        for (let i = 0; i < course.rating; i++) {
+            starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
+        }
+        // Додаємо сірі зірки до загальної кількості 5
+        for (let i = course.rating; i < 5; i++) {
+            starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+        }
     }
 
     card.innerHTML = `
@@ -187,6 +195,26 @@ async function loadInstructors() {
     }
 }
 
+// Функція для отримання повного URL аватару
+function getFullAvatarUrl(avatar) {
+    if (!avatar) return '';
+    
+    // Якщо аватар вже містить повний URL, повертаємо його
+    if (avatar.startsWith('http')) {
+        return avatar;
+    }
+    
+    // Створюємо абсолютний URL для аватару
+    const baseUrl = 'http://localhost';
+    
+    // Видаляємо початковий слеш, якщо він є
+    if (avatar.startsWith('/')) {
+        avatar = avatar.substring(1);
+    }
+    
+    return `${baseUrl}/${avatar}`;
+}
+
 function createReviewCard(review) {
     const card = document.createElement('article');
     card.className = 'comment-card';
@@ -202,11 +230,14 @@ function createReviewCard(review) {
         starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
     }
 
+    // Отримуємо повний URL для аватарки
+    const avatarUrl = getFullAvatarUrl(review.avatar);
+
     card.innerHTML = `
         <img class="quotes" src="img/quotes.png" alt="Цитата">
         <p class="comment-text">"${review.text}"</p>
         <div class="comment-info">
-            <img class="customer-img" src="${review.avatar}" alt="Фото клієнта">
+            <img class="customer-img" src="${avatarUrl}" alt="Фото клієнта">
             <div class="customer-info">
                 <h2 class="customer-name">${review.name}</h2>
                 <div class="stars review-stars">${starsHTML}</div>
