@@ -29,17 +29,125 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("Поля у свіжих даних:", Object.keys(updatedData));
                 userData = updatedData;
                 updateProfileUI(userData);
+                
+                // Завантажуємо курси користувача після оновлення даних
+                loadUserCourses(userData.id);
             })
             .catch(error => {
                 console.error('Помилка при оновленні даних користувача:', error);
                 // Якщо не вдалося оновити дані, використовуємо дані з localStorage
                 console.log("Використовуємо дані з localStorage через помилку:", userData);
                 updateProfileUI(userData);
+                
+                // Все одно спробуємо завантажити курси
+                loadUserCourses(userData.id);
             });
     } else {
         // Якщо немає ID, використовуємо дані з localStorage
         console.warn("Не знайдено ID користувача! Використовуємо дані з localStorage без оновлення.");
         updateProfileUI(userData);
+    }
+    
+    // Функція для завантаження курсів користувача
+    function loadUserCourses(userId) {
+        console.log("Завантаження курсів для користувача з ID:", userId);
+        
+        // Створюємо об'єкт FormData для відправки на сервер
+        const formData = new FormData();
+        formData.append('user_id', userId);
+        
+        // Робимо запит на сервер для отримання курсів користувача
+        fetch('http://localhost/get_user_courses.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Відповідь від сервера про курси:", data);
+            
+            if (data.success && data.courses && data.courses.length > 0) {
+                displayUserCourses(data.courses);
+            } else {
+                // Якщо курсів немає або сталася помилка, показуємо відповідне повідомлення
+                console.log("Курси не знайдені або сталася помилка:", data.message);
+                const coursesSection = document.querySelector('.courses-list');
+                if (coursesSection) {
+                    coursesSection.innerHTML = '<p class="no-courses">У вас поки немає записаних курсів</p>';
+                }
+            }
+        })
+        .catch(error => {
+            console.error("Помилка при завантаженні курсів:", error);
+            const coursesSection = document.querySelector('.courses-list');
+            if (coursesSection) {
+                coursesSection.innerHTML = '<p class="no-courses">Помилка завантаження курсів. Спробуйте оновити сторінку.</p>';
+            }
+        });
+    }
+    
+    // Функція для відображення курсів користувача
+    function displayUserCourses(courses) {
+        console.log("Відображення курсів користувача:", courses);
+        
+        const coursesSection = document.querySelector('.courses-list');
+        if (!coursesSection) {
+            console.error("Не знайдено контейнер для курсів!");
+            return;
+        }
+        
+        // Очищуємо контейнер перед додаванням нових курсів
+        coursesSection.innerHTML = '';
+        
+        // Перебираємо курси та створюємо картки для кожного
+        courses.forEach(course => {
+            // Створюємо елемент картки курсу
+            const courseCard = document.createElement('article');
+            courseCard.className = 'course-card jcsb';
+            
+            // Визначаємо відображення статусу курсу
+            let statusText = '';
+            let statusClass = '';
+            
+            switch(course.status) {
+                case 'active':
+                    statusText = 'Активний';
+                    statusClass = 'status-active';
+                    break;
+                case 'completed':
+                    statusText = 'Завершений';
+                    statusClass = 'status-completed';
+                    break;
+                case 'dropped':
+                    statusText = 'Призупинено';
+                    statusClass = 'status-dropped';
+                    break;
+                default:
+                    statusText = 'Активний';
+                    statusClass = 'status-active';
+            }
+            
+            // Додаємо HTML вміст картки
+            courseCard.innerHTML = `
+                <div class="course-image-container">
+                    <img class="course-image" src="${course.image}" alt="${course.title}">
+                    <span class="course-status ${statusClass}">${statusText}</span>
+                </div>
+                <div class="course-details">
+                    <h3 class="course-title">${course.title}</h3>
+                    <p class="course-author">Автор: ${course.author_fullname || course.author}</p>
+                    <div class="course-progress">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${course.progress || 0}%"></div>
+                        </div>
+                        <span class="progress-text">${course.progress || 0}% завершено</span>
+                    </div>
+                    <a href="course.html?id=${course.id}" class="continue-btn">Продовжити навчання</a>
+                </div>
+            `;
+            
+            // Додаємо картку до контейнера
+            coursesSection.appendChild(courseCard);
+        });
     }
     
     // Функція для оновлення інтерфейсу профілю
