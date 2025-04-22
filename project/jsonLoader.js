@@ -11,6 +11,12 @@ let coursesData = [];
 function createCourseCard(course) {
     const card = document.createElement('article');
     card.className = 'course-card jcsb';
+    card.setAttribute('data-course-id', course.id);
+    
+    // Додаємо обробник кліку для переходу на сторінку курсу
+    card.addEventListener('click', function() {
+        window.location.href = `course.html?id=${course.id}`;
+    });
 
     // Створюємо HTML для зірок рейтингу
     let starsHTML = '';
@@ -44,6 +50,9 @@ function createCourseCard(course) {
           <p class="course-price">$${course.price.toFixed(2)}</p>
         </div>
       `;
+
+    // Додаємо стиль курсору, щоб показати, що на карточку можна натиснути
+    card.style.cursor = 'pointer';
 
     return card;
 }

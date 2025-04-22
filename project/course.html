@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <title>Перегляд курсу</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header class="header">
+  <div class="logo-section">
+    <a href="index.html">
+      <img class="logo" src="img/logo.png" alt="Логотип Byway">
+    </a>
+    <span class="brand-name">Byway</span>
+  </div>
+  <a href="category.html" class="categories-link">Категорії</a>
+  <div class="search-bar">
+    <img class="magnifying-glass" src="img/search.png" alt="Пошук">
+    <form class="form-search" method="get">
+      <input
+              class="search-bar-input"
+              type="text"
+              name="query"
+              placeholder="Пошук курсів"
+              aria-label="Пошук курсів">
+    </form>
+  </div>
+  <div class="group">
+    <button class="search-btn" aria-label="Відкрити пошук">
+      <img class="search-btn-img" src="img/search.png" alt="Пошук">
+    </button>
+    <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
+    <nav class="nav-menu">
+      <a href="category.html" class="categories-link">Категорії</a>
+      <span class="teach-link" style="display: none;">Викладати на Byway</span>
+      <a href="new-course.html" class="add-course-link" style="display: none;">Додати новий курс</a>
+      <div class="user-actions">
+        <a class="cart-link">
+          <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
+        </a>
+        <div class="profile-section" style="display: none;">
+          <div class="profile-dropdown">
+            <img class="profile-avatar" src="img/default-avatar.png" alt="Аватар користувача">
+            <span class="profile-name">Користувач</span>
+            <div class="profile-menu">
+              <a href="profile.html" class="profile-menu-item">Мій профіль</a>
+              <a href="#" class="profile-menu-item">Мої курси</a>
+              <a href="#" class="profile-menu-item">Налаштування</a>
+              <a href="#" class="profile-menu-item logout">Вийти</a>
+            </div>
+          </div>
+        </div>
+        <button class="login-btn" id="logInButton">Увійти</button>
+        <button class="signup-btn" id="signUpButton">Зареєструватися</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="main-container">
+  <section class="course-detail">
+    <div class="course-detail-container">
+      <div class="course-detail-header">
+        <div class="course-detail-info">
+          <div class="course-detail-category">
+            <a href="#" class="course-category-link">Категорія курсу</a>
+          </div>
+          <h1 class="course-detail-title">Назва курсу</h1>
+          <p class="course-detail-description">Детальний опис курсу буде відображатися тут. Курс містить важливу інформацію, що допоможе студентам опанувати нові знання та навички.</p>
+          <div class="course-meta">
+            <div class="course-rating">
+              <div class="stars">
+                <img class="star" src="img/star.png" alt="Зірка">
+                <img class="star" src="img/star.png" alt="Зірка">
+                <img class="star" src="img/star.png" alt="Зірка">
+                <img class="star" src="img/star.png" alt="Зірка">
+                <img class="star" src="img/star.png" alt="Зірка">
+              </div>
+              <span class="ratings-info">5.0</span>
+              <span class="reviews-count">(10 відгуків)</span>
+            </div>
+            <div class="course-students">
+              <img src="img/users.png" alt="Студенти" class="students-icon">
+              <span class="students-count">100 студентів</span>
+            </div>
+          </div>
+          <div class="course-instructor">
+            <img src="img/default-avatar.png" alt="Фото викладача" class="instructor-avatar">
+            <div class="instructor-details">
+              <span class="instructor-label">Інструктор</span>
+              <span class="instructor-name">Ім'я Прізвище</span>
+            </div>
+          </div>
+        </div>
+        <div class="course-detail-image">
+          <img src="img/default-image-course.png" alt="Зображення курсу" class="course-img">
+        </div>
+      </div>
+
+      <div class="course-tabs">
+        <div class="tabs-nav">
+          <button class="tab-btn active" data-tab="overview">Огляд</button>
+          <button class="tab-btn" data-tab="syllabus">Навчальний план</button>
+          <button class="tab-btn" data-tab="reviews">Відгуки</button>
+        </div>
+        
+        <div class="tab-content">
+          <!-- Вкладка "Огляд" -->
+          <div class="tab-pane active" id="overview">
+            <div class="course-detail-content">
+              <div class="course-main-content">
+                <div class="course-about">
+                  <h2 class="section-title">Про курс</h2>
+                  <p class="course-about-text">Детальний опис курсу, його цілі та очікувані результати навчання. Тут розповідається про те, що студенти вивчать, які навички здобудуть, і як ці знання можна застосувати на практиці.</p>
+                </div>
+
+                <div class="course-what-learn">
+                  <h2 class="section-title">Чого ви навчитесь</h2>
+                  <ul class="learn-list">
+                    <li class="learn-item">Отримаєте базові знання з предмету</li>
+                    <li class="learn-item">Зможете застосовувати теоретичні знання на практиці</li>
+                    <li class="learn-item">Розвинете важливі професійні навички</li>
+                    <li class="learn-item">Підготуєтесь до успішної кар'єри в галузі</li>
+                  </ul>
+                </div>
+                
+                <div class="course-resources">
+                  <h2 class="section-title">Ресурси курсу</h2>
+                  <div class="resources-list">
+                    <!-- Ресурси курсу будуть додані динамічно через JavaScript -->
+                    <div class="no-resources">Ресурси для цього курсу не додано.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="course-sidebar">
+                <div class="course-purchase-card">
+                  <div class="course-price">₴299.99</div>
+                  <button class="add-to-cart-btn">Додати до кошика</button>
+                  <button class="buy-now-btn">Купити зараз</button>
+                  <div class="course-includes">
+                    <h3 class="sidebar-title">Курс включає:</h3>
+                    <ul class="includes-list">
+                      <li class="includes-item">
+                        <img src="img/video.png" alt="Відео" class="includes-icon">
+                        <span class="lessons-count">10 годин відеоматеріалів</span>
+                      </li>
+                      <li class="includes-item">
+                        <img src="img/article.png" alt="Статті" class="includes-icon">
+                        <span class="article-count">15 статей</span>
+                      </li>
+                      <li class="includes-item">
+                        <img src="img/download.png" alt="Завантаження" class="includes-icon">
+                        <span class="resources-count">20 ресурсів для завантаження</span>
+                      </li>
+                      <li class="includes-item">
+                        <img src="img/certificate.png" alt="Сертифікат" class="includes-icon">
+                        <span>Сертифікат про закінчення</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="course-details-list">
+                    <div class="course-detail-item">
+                      <span class="detail-label">Рівень складності:</span>
+                      <span class="detail-value">Початковий</span>
+                    </div>
+                    <div class="course-detail-item">
+                      <span class="detail-label">Тривалість:</span>
+                      <span class="detail-value">4 тижні</span>
+                    </div>
+                    <div class="course-detail-item">
+                      <span class="detail-label">Мова:</span>
+                      <span class="detail-value">Українська</span>
+                    </div>
+                    <div class="course-detail-item">
+                      <span class="detail-label">Категорія:</span>
+                      <span class="detail-value">Програмування</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Вкладка "Навчальний план" -->
+          <div class="tab-pane" id="syllabus">
+            <div class="course-syllabus">
+              <h2 class="section-title">Навчальний план</h2>
+              <div class="syllabus-overview">
+                <div class="syllabus-stat">
+                  <div class="stat-value"><span id="sections-count">0</span> Розділів</div>
+                </div>
+                <div class="syllabus-stat">
+                  <div class="stat-value"><span id="lessons-count">0</span> Уроків</div>
+                </div>
+                <div class="syllabus-stat">
+                  <div class="stat-value"><span id="total-duration">0 год</span> Загальна тривалість</div>
+                </div>
+              </div>
+              <div class="syllabus-sections">
+                <!-- Розділи курсу будуть додані динамічно через JavaScript -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- Вкладка "Відгуки" -->
+          <div class="tab-pane" id="reviews">
+            <div class="course-reviews">
+              <h2 class="section-title">Відгуки студентів</h2>
+              <div class="reviews-summary">
+                <div class="reviews-average">
+                  <span class="review-average-score">4.8</span>
+                  <div class="stars">
+                    <img class="star" src="img/star.png" alt="Зірка">
+                    <img class="star" src="img/star.png" alt="Зірка">
+                    <img class="star" src="img/star.png" alt="Зірка">
+                    <img class="star" src="img/star.png" alt="Зірка">
+                    <img class="star" src="img/star.png" alt="Зірка">
+                  </div>
+                  <span class="review-total">На основі 10 відгуків</span>
+                </div>
+                <div class="reviews-breakdown">
+                  <div class="review-bar">
+                    <span class="review-star">5 зірок</span>
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 80%"></div>
+                    </div>
+                    <span class="review-percent">80%</span>
+                  </div>
+                  <div class="review-bar">
+                    <span class="review-star">4 зірки</span>
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 15%"></div>
+                    </div>
+                    <span class="review-percent">15%</span>
+                  </div>
+                  <div class="review-bar">
+                    <span class="review-star">3 зірки</span>
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 5%"></div>
+                    </div>
+                    <span class="review-percent">5%</span>
+                  </div>
+                  <div class="review-bar">
+                    <span class="review-star">2 зірки</span>
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%"></div>
+                    </div>
+                    <span class="review-percent">0%</span>
+                  </div>
+                  <div class="review-bar">
+                    <span class="review-star">1 зірка</span>
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%"></div>
+                    </div>
+                    <span class="review-percent">0%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="reviews-list">
+                <!-- Відгуки будуть додані динамічно через JavaScript -->
+                <div class="review-item">
+                  <div class="review-header">
+                    <img src="img/default-avatar.png" alt="Аватар користувача" class="review-avatar">
+                    <div class="review-user-info">
+                      <div class="review-user-name">Ім'я Користувача</div>
+                      <div class="review-date">15 квітня 2025</div>
+                    </div>
+                    <div class="review-rating">
+                      <div class="stars">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                        <img class="star" src="img/star.png" alt="Зірка">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="review-content">
+                    <p>Чудовий курс! Дуже корисний та інформативний матеріал. Викладач пояснює зрозуміло і доступно.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="related-courses">
+    <header class="related-courses-header">
+      <h2 class="related-courses-title">Схожі курси</h2>
+    </header>
+    <div class="courses-list">
+      <!-- Динамічні курси будуть завантажені сюди через JavaScript -->
+    </div>
+  </section>
+
+  <footer class="footer m1">
+    <div class="footer-information">
+      <div class="footer-byway">
+        <img class="footer-logo" src="img/full-logo.png" alt="Логотип сайту">
+        <p class="footer-byway-info">Ми надаємо можливості для навчання через доступну та захоплюючу онлайн-освіту.
+          <br> Byway — провідна онлайн-платформа для навчання, яка пропонує високоякісні, гнучкі та доступні освітні послуги.</p>
+      </div>
+      <div class="footer-block">
+        <h3 class="footer-title">Отримати допомогу</h3>
+        <ul class="footer-info-list">
+          <li><a class="footer-info" id="contactLink" style="cursor: pointer">Зв'язатися з нами</a></li>
+          <li><a href="#" class="footer-info">Останні статті</a></li>
+          <li><a href="#" class="footer-info">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-block">
+        <h3 class="footer-title">Програми</h3>
+        <ul class="footer-info-list">
+          <li><a href="#" class="footer-info">Мистецтво та дизайн</a></li>
+          <li><a href="#" class="footer-info">Бізнес</a></li>
+          <li><a href="#" class="footer-info">ІТ та програмування</a></li>
+          <li><a href="#" class="footer-info">Мови</a></li>
+          <li><a href="#" class="footer-info">Програмування</a></li>
+        </ul>
+      </div>
+      <div class="footer-contactus">
+        <div class="footer-block">
+          <h3 class="footer-title">Зв'язатися з нами</h3>
+          <p class="footer-info">Адреса: 123 Main Street, Anytown, CA 12345</p>
+          <p class="footer-info">Тел: +(123) 456-7890</p>
+          <p class="footer-info">Ел. пошта: <a href="mailto:bywayedu@webkul.in" class="footer-info">bywayedu@webkul.in</a></p>
+        </div>
+        <div class="footer-social">
+          <img class="footer-social-logo" src="img/social-logo.png" alt="Іконки соціальних мереж">
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<div id="contactModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-title">
+      <h2>Зв'язатися з нами</h2>
+      <span class="close" id="closeModal">&times;</span>
+    </div>
+    <form id="contactForm">
+      <label for="name">Ім'я:</label>
+      <input class="modal-input" type="text" id="name" name="name" required><br>
+
+      <label for="email">Електронна адреса:</label>
+      <input class="modal-input" type="email" id="email" name="email" required><br>
+
+      <label for="message">Повідомлення:</label><br>
+      <textarea class="modal-input" id="message" name="message" rows="4" required></textarea><br>
+
+      <button type="submit" class="modal-button">Відправити</button>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="modal.js"></script>
+<script src="course.js"></script>
+</body>
+</html> 
