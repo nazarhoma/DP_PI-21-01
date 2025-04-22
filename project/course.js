@@ -214,7 +214,7 @@ function displayCourseDetails(courseData) {
     // Зображення курсу
     const courseImage = document.querySelector('.course-img');
     if (courseImage) {
-        courseImage.src = courseData.image || 'img/default-image-course.png';
+        courseImage.src = formatImageUrl(courseData.image) || 'img/default-image-course.png';
         courseImage.alt = courseData.title;
     }
     
@@ -222,6 +222,32 @@ function displayCourseDetails(courseData) {
     const coursePrice = document.querySelector('.course-price');
     if (coursePrice) {
         coursePrice.textContent = `₴${courseData.price}`;
+    }
+    
+    // Кількість студентів
+    const studentsCount = document.querySelector('.students-count');
+    if (studentsCount) {
+        studentsCount.textContent = `${courseData.students_count || 0} студентів`;
+    }
+    
+    // Рейтинг курсу
+    const ratingElement = document.querySelector('.ratings-info');
+    if (ratingElement) {
+        const rating = parseFloat(courseData.average_rating) || 0;
+        ratingElement.textContent = rating.toFixed(1);
+    }
+    
+    // Зірочки рейтингу
+    const starsContainer = document.querySelector('.course-rating .stars');
+    if (starsContainer) {
+        const rating = parseFloat(courseData.average_rating) || 0;
+        starsContainer.innerHTML = generateStars(rating);
+    }
+    
+    // Кількість відгуків
+    const reviewsCount = document.querySelector('.reviews-count');
+    if (reviewsCount) {
+        reviewsCount.textContent = `(${courseData.reviews_count || 0} відгуків)`;
     }
     
     // Дані про курс
@@ -297,7 +323,8 @@ function displayMentorDetails(mentorData) {
     // Аватар викладача
     const instructorAvatar = document.querySelector('.instructor-avatar');
     if (instructorAvatar) {
-        instructorAvatar.src = mentorData.avatar || 'img/default-avatar.png';
+        const avatarUrl = mentorData.avatar ? formatImageUrl(mentorData.avatar) : 'img/default-avatar.png';
+        instructorAvatar.src = avatarUrl;
         instructorAvatar.alt = formatMentorName(mentorData);
     }
 }
@@ -313,6 +340,29 @@ function formatMentorName(mentorData) {
     } else {
         return mentorData.username || 'Невідомий викладач';
     }
+}
+
+// Функція для форматування URL зображень
+function formatImageUrl(imageUrl) {
+    if (!imageUrl) return 'img/default-avatar.png';
+    
+    // Якщо URL вже містить http або https, повертаємо як є
+    if (imageUrl.startsWith('http')) {
+        return imageUrl;
+    }
+    
+    // Якщо URL починається з /, видаляємо його
+    if (imageUrl.startsWith('/')) {
+        imageUrl = imageUrl.substring(1);
+    }
+    
+    // Якщо URL починається з img/, повертаємо як є
+    if (imageUrl.startsWith('img/')) {
+        return imageUrl;
+    }
+    
+    // Додаємо базовий URL
+    return `http://localhost/${imageUrl}`;
 }
 
 // Функція для завантаження відгуків про курс
@@ -409,6 +459,12 @@ function updateReviewStats(stats) {
         reviewsCount.textContent = `(${stats.total} відгуків)`;
     }
     
+    // Оновлюємо зірки рейтингу
+    const reviewStars = document.querySelector('.reviews-average .stars');
+    if (reviewStars) {
+        reviewStars.innerHTML = generateStars(stats.average);
+    }
+    
     // Оновлюємо розподіл за зірками
     for (let i = 5; i >= 1; i--) {
         const percent = (stats.distribution[i] / stats.total * 100) || 0;
@@ -433,9 +489,12 @@ function createReviewItem(review) {
     const date = new Date(review.created_at);
     const formattedDate = `${date.getDate()} ${getMonthName(date.getMonth())} ${date.getFullYear()}`;
     
+    // Форматуємо посилання на аватарку
+    const avatarUrl = review.avatar ? formatImageUrl(review.avatar) : 'img/default-avatar.png';
+    
     reviewItem.innerHTML = `
         <div class="review-header">
-            <img src="${review.avatar || 'img/default-avatar.png'}" alt="Аватар користувача" class="review-avatar">
+            <img src="${avatarUrl}" alt="Аватар користувача" class="review-avatar">
             <div class="review-user-info">
                 <div class="review-user-name">${review.username || 'Анонімний користувач'}</div>
                 <div class="review-date">${formattedDate}</div>
@@ -456,11 +515,26 @@ function createReviewItem(review) {
 
 // Функція для генерації зірок рейтингу
 function generateStars(rating) {
+    // Переконуємося, що rating є числом
+    const ratingValue = parseFloat(rating) || 0;
     let stars = '';
+    
+    // Округлюємо до найближчої 0.5
+    const roundedRating = Math.round(ratingValue * 2) / 2;
+    
     for (let i = 1; i <= 5; i++) {
-        const starType = i <= rating ? 'star' : 'gstar';
-        stars += `<img class="star" src="img/${starType}.png" alt="Зірка">`;
+        if (i <= Math.floor(roundedRating)) {
+            // Повна зірка
+            stars += '<img class="star" src="img/star.png" alt="Зірка">';
+        } else if (i - 0.5 === roundedRating) {
+            // Половина зірки (можна додати іконку половини зірки, якщо вона є)
+            stars += '<img class="star" src="img/star.png" alt="Зірка">';
+        } else {
+            // Порожня зірка
+            stars += '<img class="star" src="img/gstar.png" alt="Порожня зірка">';
+        }
     }
+    
     return stars;
 }
 
@@ -524,17 +598,23 @@ function createCourseCard(course) {
     const courseCard = document.createElement('article');
     courseCard.className = 'course-card';
     
+    // Форматуємо посилання на зображення курсу
+    const courseImage = course.image ? formatImageUrl(course.image) : 'img/default-image-course.png';
+    
+    // Форматуємо рейтинг
+    const rating = parseFloat(course.average_rating) || 0;
+    
     courseCard.innerHTML = `
         <a href="course.html?id=${course.id}" class="course-link">
-            <img class="course-image" src="${course.image || 'img/default-image-course.png'}" alt="${course.title}">
+            <img class="course-image" src="${courseImage}" alt="${course.title}">
             <div class="course-details">
                 <h3 class="course-title">${course.title}</h3>
                 <p class="course-author">${course.mentor_name || 'Невідомий викладач'}</p>
                 <div class="course-rating">
                     <div class="stars">
-                        ${generateStars(course.average_rating || 5)}
+                        ${generateStars(rating)}
                     </div>
-                    <span class="ratings-info">${course.average_rating?.toFixed(1) || '5.0'}</span>
+                    <span class="ratings-info">${rating.toFixed(1)}</span>
                 </div>
                 <div class="course-info">
                     <p class="course-price">₴${course.price}</p>
