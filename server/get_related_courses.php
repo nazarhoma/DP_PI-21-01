@@ -4,7 +4,15 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
+// Виведення помилок
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include 'connect.php';
+
+// Встановлюємо менш строгий SQL режим для групування
+$conn->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
 
 $response = array();
 
@@ -19,7 +27,7 @@ $courseId = intval($_GET['id']);
 
 try {
     // Спочатку отримуємо категорію курсу
-    $category_sql = "SELECT category FROM courses WHERE id = ?";
+    $category_sql = "SELECT category_id FROM courses WHERE id = ?";
     $stmt = $conn->prepare($category_sql);
     $stmt->bind_param("i", $courseId);
     $stmt->execute();
@@ -27,16 +35,16 @@ try {
     
     if ($category_result->num_rows > 0) {
         $category_row = $category_result->fetch_assoc();
-        $category = $category_row['category'];
+        $category_id = $category_row['category_id'];
         
         // Запит для отримання схожих курсів з тієї ж категорії, крім поточного курсу
         $related_sql = "SELECT 
                             c.id, 
                             c.title, 
-                            c.description, 
-                            c.image, 
+                            c.short_description as description, 
+                            c.image_url as image, 
                             c.price, 
-                            c.category,
+                            cat.name as category,
                             u.first_name, 
                             u.last_name,
                             CONCAT(u.first_name, ' ', u.last_name) as mentor_name,
@@ -46,14 +54,16 @@ try {
                             courses c
                         LEFT JOIN 
                             users u ON c.mentor_id = u.id
+                        LEFT JOIN
+                            categories cat ON c.category_id = cat.id
                         WHERE 
-                            c.category = ? AND c.id != ?
+                            c.category_id = ? AND c.id != ?
                         ORDER BY 
                             average_rating DESC, reviews_count DESC
                         LIMIT 4";
         
         $stmt = $conn->prepare($related_sql);
-        $stmt->bind_param("si", $category, $courseId);
+        $stmt->bind_param("ii", $category_id, $courseId);
         $stmt->execute();
         $related_result = $stmt->get_result();
         
@@ -91,10 +101,10 @@ try {
             $popular_sql = "SELECT 
                                 c.id, 
                                 c.title, 
-                                c.description, 
-                                c.image, 
+                                c.short_description as description, 
+                                c.image_url as image, 
                                 c.price, 
-                                c.category,
+                                cat.name as category,
                                 u.first_name, 
                                 u.last_name,
                                 CONCAT(u.first_name, ' ', u.last_name) as mentor_name,
@@ -104,14 +114,16 @@ try {
                                 courses c
                             LEFT JOIN 
                                 users u ON c.mentor_id = u.id
+                            LEFT JOIN
+                                categories cat ON c.category_id = cat.id
                             WHERE 
-                                c.id != ? AND c.category != ?
+                                c.id != ? AND (c.category_id != ? OR c.category_id IS NULL)
                             ORDER BY 
                                 average_rating DESC, reviews_count DESC
                             LIMIT ?";
             
             $stmt = $conn->prepare($popular_sql);
-            $stmt->bind_param("isi", $courseId, $category, $remaining);
+            $stmt->bind_param("iii", $courseId, $category_id, $remaining);
             $stmt->execute();
             $popular_result = $stmt->get_result();
             

@@ -19,7 +19,7 @@ $courseId = intval($_GET['course_id']);
 
 try {
     // Спочатку отримуємо загальну інформацію про курс
-    $course_sql = "SELECT title, resources_files FROM courses WHERE id = ?";
+    $course_sql = "SELECT title FROM courses WHERE id = ?";
     $stmt = $conn->prepare($course_sql);
     $stmt->bind_param("i", $courseId);
     $stmt->execute();
@@ -34,10 +34,10 @@ try {
     $course_data = $course_result->fetch_assoc();
     
     // Запит для отримання розділів курсу
-    $sections_sql = "SELECT id, title, description, order_number 
+    $sections_sql = "SELECT id, title, description, order_num as order_number
                     FROM course_sections 
                     WHERE course_id = ? 
-                    ORDER BY order_number ASC";
+                    ORDER BY order_num ASC";
     
     $stmt = $conn->prepare($sections_sql);
     $stmt->bind_param("i", $courseId);
@@ -52,43 +52,53 @@ try {
         while ($section = $sections_result->fetch_assoc()) {
             $section_id = $section['id'];
             
-            // Запит для отримання уроків розділу
-            $lessons_sql = "SELECT id, title, content_type, content_url, duration, order_number 
-                           FROM course_lessons 
-                           WHERE section_id = ? 
-                           ORDER BY order_number ASC";
+            // Запит для отримання ресурсів розділу
+            $resources_sql = "SELECT id, title, resource_type as content_type, 
+                             resource_url as content_url, duration_minutes as duration, 
+                             order_num as order_number  
+                             FROM section_resources 
+                             WHERE section_id = ? 
+                             ORDER BY order_num ASC";
             
-            $lessons_stmt = $conn->prepare($lessons_sql);
-            $lessons_stmt->bind_param("i", $section_id);
-            $lessons_stmt->execute();
-            $lessons_result = $lessons_stmt->get_result();
+            $resources_stmt = $conn->prepare($resources_sql);
+            $resources_stmt->bind_param("i", $section_id);
+            $resources_stmt->execute();
+            $resources_result = $resources_stmt->get_result();
             
             $lessons = array();
             $section_duration_seconds = 0;
             $lessons_count = 0;
             
-            if ($lessons_result->num_rows > 0) {
-                while ($lesson = $lessons_result->fetch_assoc()) {
-                    // Перетворюємо тривалість уроку з формату "mm:ss" в секунди
+            if ($resources_result->num_rows > 0) {
+                while ($resource = $resources_result->fetch_assoc()) {
+                    // Перетворюємо тривалість ресурсу з хвилин в секунди
                     $duration_seconds = 0;
-                    if (!empty($lesson['duration'])) {
-                        $duration_parts = explode(':', $lesson['duration']);
-                        if (count($duration_parts) == 2) {
-                            $duration_seconds = intval($duration_parts[0]) * 60 + intval($duration_parts[1]);
-                        } elseif (count($duration_parts) == 3) {
-                            $duration_seconds = intval($duration_parts[0]) * 3600 + intval($duration_parts[1]) * 60 + intval($duration_parts[2]);
-                        }
+                    if (!empty($resource['duration'])) {
+                        $duration_seconds = intval($resource['duration']) * 60;
                         $section_duration_seconds += $duration_seconds;
                     }
                     
+                    // Форматуємо тривалість для відображення
+                    $duration_formatted = '';
+                    if (!empty($resource['duration'])) {
+                        $duration_minutes = intval($resource['duration']);
+                        if ($duration_minutes >= 60) {
+                            $hours = floor($duration_minutes / 60);
+                            $minutes = $duration_minutes % 60;
+                            $duration_formatted = $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
+                        } else {
+                            $duration_formatted = '0:' . str_pad($duration_minutes, 2, '0', STR_PAD_LEFT);
+                        }
+                    }
+                    
                     $lessons[] = array(
-                        'id' => $lesson['id'],
-                        'title' => $lesson['title'],
-                        'content_type' => $lesson['content_type'],
-                        'content_url' => $lesson['content_url'],
-                        'duration' => $lesson['duration'],
+                        'id' => $resource['id'],
+                        'title' => $resource['title'],
+                        'content_type' => $resource['content_type'],
+                        'content_url' => $resource['content_url'],
+                        'duration' => $duration_formatted,
                         'duration_seconds' => $duration_seconds,
-                        'order_number' => $lesson['order_number']
+                        'order_number' => $resource['order_number']
                     );
                     
                     $lessons_count++;
@@ -137,14 +147,26 @@ try {
         $total_duration_formatted .= $total_duration_minutes . ' хв';
     }
     
-    // Парсимо ресурси курсу, якщо вони є
+    // Отримуємо додаткові ресурси курсу з таблиці section_resources
+    $additional_resources_sql = "SELECT sr.id, sr.title, sr.resource_type, sr.resource_url 
+                                FROM section_resources sr 
+                                JOIN course_sections cs ON sr.section_id = cs.id 
+                                WHERE cs.course_id = ? AND sr.resource_type = 'document'";
+    
+    $additional_resources_stmt = $conn->prepare($additional_resources_sql);
+    $additional_resources_stmt->bind_param("i", $courseId);
+    $additional_resources_stmt->execute();
+    $additional_resources_result = $additional_resources_stmt->get_result();
+    
     $resources = array();
-    if (!empty($course_data['resources_files'])) {
-        $resources = json_decode($course_data['resources_files'], true);
-        
-        // Якщо json_decode поверне null, значить формат неправильний - створюємо порожній масив
-        if ($resources === null) {
-            $resources = array();
+    if ($additional_resources_result->num_rows > 0) {
+        while ($resource = $additional_resources_result->fetch_assoc()) {
+            $resources[] = array(
+                'id' => $resource['id'],
+                'title' => $resource['title'],
+                'type' => $resource['resource_type'],
+                'url' => $resource['resource_url']
+            );
         }
     }
     

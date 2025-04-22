@@ -4,7 +4,15 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
+// Включаємо виведення помилок
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include 'connect.php';
+
+// Встановлюємо менш строгий SQL режим для групування
+$conn->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
 
 $response = array();
 $courses = array();
@@ -15,13 +23,13 @@ try {
     $sql = "SELECT 
                 c.id, 
                 c.title, 
-                c.description, 
-                c.image, 
+                c.short_description as description, 
+                c.image_url as image, 
                 c.price, 
-                c.duration, 
-                c.level, 
-                c.language, 
-                c.category,
+                c.duration_hours as duration, 
+                dl.name as level, 
+                l.name as language, 
+                cat.name as category,
                 u.first_name, 
                 u.last_name,
                 u.id as mentor_id,
@@ -33,16 +41,27 @@ try {
             LEFT JOIN 
                 users u ON c.mentor_id = u.id
             LEFT JOIN 
+                difficulty_levels dl ON c.level_id = dl.id
+            LEFT JOIN
+                languages l ON c.language_id = l.id
+            LEFT JOIN
+                categories cat ON c.category_id = cat.id
+            LEFT JOIN 
                 course_reviews cr ON c.id = cr.course_id
             GROUP BY 
-                c.id, c.title, c.description, c.image, c.price, c.duration, c.level, c.language, c.category,
-                u.first_name, u.last_name, u.id
+                c.id
             ORDER BY 
                 positive_reviews DESC, 
                 avg_rating DESC
             LIMIT 4";
 
+    // Виконуємо запит
     $result = $conn->query($sql);
+    
+    // Перевіряємо чи виникла помилка
+    if ($result === false) {
+        throw new Exception("Помилка SQL: " . $conn->error);
+    }
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -68,7 +87,7 @@ try {
                     $level_text = "Для всіх рівнів";
             }
 
-            $info = $row['duration'] . ". " . $level_text;
+            $info = $row['duration'] . " год. " . $level_text;
 
             // Перевіряємо наявність зображення
             $image = !empty($row['image']) ? $row['image'] : 'img/default-image-course.png';

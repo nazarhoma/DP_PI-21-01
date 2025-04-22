@@ -5,8 +5,16 @@ header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
 
+// Виведення помилок
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Підключення до бази даних
 require_once 'connect.php';
+
+// Встановлюємо менш строгий SQL режим для групування
+$conn->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
 
 // Перевіряємо метод запиту
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -23,10 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Підготовлений запит для отримання курсів користувача
     $query = "
         SELECT 
-            c.id, c.title, c.description, c.image, c.price, c.duration, c.level, c.language, c.category,
+            c.id, c.title, c.short_description as description, c.image_url as image, 
+            c.price, c.duration_hours as duration, 
+            dl.name as level, l.name as language, cat.name as category,
             u.username as author,
             CONCAT(COALESCE(u.first_name, ''), ' ', COALESCE(u.last_name, '')) as author_fullname,
-            ce.progress,
+            ce.progress_percentage as progress,
             ce.status,
             COALESCE(AVG(cr.rating), 0) as rating,
             COUNT(DISTINCT cr.id) as reviews
@@ -34,15 +44,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             courses c
         JOIN 
             course_enrollments ce ON c.id = ce.course_id
-        JOIN 
+        LEFT JOIN 
             users u ON c.mentor_id = u.id
+        LEFT JOIN 
+            difficulty_levels dl ON c.level_id = dl.id
+        LEFT JOIN
+            languages l ON c.language_id = l.id
+        LEFT JOIN
+            categories cat ON c.category_id = cat.id
         LEFT JOIN 
             course_reviews cr ON c.id = cr.course_id
         WHERE 
             ce.user_id = ?
         GROUP BY 
-            c.id, c.title, c.description, c.image, c.price, c.duration, c.level, c.language, c.category,
-            u.username, u.first_name, u.last_name, ce.progress, ce.status
+            c.id, c.title, c.short_description, c.image_url, c.price, c.duration_hours,
+            dl.name, l.name, cat.name,
+            u.username, u.first_name, u.last_name, ce.progress_percentage, ce.status
     ";
     
     $stmt = $conn->prepare($query);

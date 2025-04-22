@@ -6,6 +6,14 @@ header("Content-Type: application/json");
 
 include 'connect.php';
 
+// Виведення помилок
+ini_set('display_errors', 1); 
+ini_set('display_startup_errors', 1); 
+error_reporting(E_ALL);
+
+// Встановлюємо менш строгий SQL режим для групування
+$conn->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
+
 $response = array();
 $courses = array();
 
@@ -14,13 +22,13 @@ try {
     $sql = "SELECT 
                 c.id, 
                 c.title, 
-                c.description, 
-                c.image, 
+                c.short_description AS description, 
+                c.image_url AS image, 
                 c.price, 
-                c.duration, 
-                c.level, 
-                c.language, 
-                c.category,
+                c.duration_hours AS duration, 
+                dl.name AS level,
+                l.name AS language,
+                cat.name AS category,
                 u.first_name, 
                 u.last_name,
                 u.id as mentor_id,
@@ -30,6 +38,12 @@ try {
                 courses c
             LEFT JOIN 
                 users u ON c.mentor_id = u.id
+            LEFT JOIN
+                difficulty_levels dl ON c.level_id = dl.id
+            LEFT JOIN
+                languages l ON c.language_id = l.id
+            LEFT JOIN
+                categories cat ON c.category_id = cat.id
             ORDER BY 
                 c.id ASC";
 
@@ -59,7 +73,7 @@ try {
                     $level_text = "Для всіх рівнів";
             }
 
-            $info = $row['duration'] . ". " . $level_text;
+            $info = $row['duration'] . " год. " . $level_text;
 
             // Перевіряємо наявність зображення
             $image = !empty($row['image']) ? $row['image'] : 'img/default-image-course.png';

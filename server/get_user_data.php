@@ -5,25 +5,7 @@ header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
 
-// Підключення до бази даних
-$servername = "localhost"; 
-$username = "root";  
-$password = "";      
-$dbname = "byway";   
-
-// Створення з'єднання
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Перевірка з'єднання
-if ($conn->connect_error) {
-    die(json_encode([
-        'success' => false,
-        'message' => "Помилка з'єднання з базою даних: " . $conn->connect_error
-    ]));
-}
-
-// Встановлюємо кодування
-$conn->set_charset("utf8mb4");
+include 'connect.php';
 
 // Перевіряємо метод запиту
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         SELECT 
             id, username, email, role, first_name, last_name, 
             avatar, gender, age, education, native_language,
-            created_at
+            created_at, updated_at
         FROM users 
         WHERE id = ?
     ");
@@ -60,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Перевіряємо, що всі необхідні поля присутні
         $required_fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name', 
-                           'avatar', 'gender', 'age', 'education', 'native_language', 'created_at'];
+                           'avatar', 'gender', 'age', 'education', 'native_language', 'created_at', 'updated_at'];
         
         foreach ($required_fields as $field) {
             if (!isset($user_data[$field])) {
