@@ -66,7 +66,116 @@
     <section class="new-course-section">
         <div class="new-course-header">
             <h1 class="new-course-title">Додати новий курс</h1>
-            <p class="new-course-description">Ця сторінка знаходиться в розробці. Незабаром тут з'явиться форма для створення нових курсів.</p>
+            <p class="new-course-description">Заповніть форму для створення нового курсу на платформі Byway</p>
+        </div>
+        
+        <div class="new-course-form-container">
+            <form id="createCourseForm" class="create-course-form" enctype="multipart/form-data">
+                <!-- Основна інформація про курс -->
+                <div class="form-group form-section">
+                    <h2 class="form-section-title">Основна інформація</h2>
+                    
+                    <div class="form-field">
+                        <label for="courseTitle">Назва курсу*</label>
+                        <input type="text" id="courseTitle" name="title" placeholder="Введіть назву курсу" required>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="courseShortDescription">Короткий опис*</label>
+                        <textarea id="courseShortDescription" name="short_description" placeholder="Короткий опис курсу (до 150 символів)" maxlength="150" required></textarea>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="courseLongDescription">Детальний опис*</label>
+                        <textarea id="courseLongDescription" name="long_description" placeholder="Детальний опис курсу" rows="6" required></textarea>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="courseImageURL">Зображення курсу</label>
+                        <input type="file" id="courseImageURL" name="image_url" accept="image/*">
+                        <p class="field-hint">Рекомендований розмір: 1280x720 пікселів</p>
+                    </div>
+                </div>
+                
+                <!-- Категорія та класифікація -->
+                <div class="form-group form-section">
+                    <h2 class="form-section-title">Категорія та класифікація</h2>
+                    
+                    <div class="form-field">
+                        <label for="courseCategory">Категорія*</label>
+                        <select id="courseCategory" name="category_id" required>
+                            <option value="">Виберіть категорію</option>
+                            <!-- Категорії будуть завантажені через JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="courseLanguage">Мова викладання*</label>
+                        <select id="courseLanguage" name="language_id" required>
+                            <option value="">Виберіть мову</option>
+                            <!-- Мови будуть завантажені через JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="courseDifficulty">Рівень складності*</label>
+                        <select id="courseDifficulty" name="level_id" required>
+                            <option value="">Виберіть рівень</option>
+                            <!-- Рівні складності будуть завантажені через JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Деталі курсу -->
+                <div class="form-group form-section">
+                    <h2 class="form-section-title">Деталі курсу</h2>
+                    
+                    <div class="form-field">
+                        <label for="coursePrice">Ціна курсу (₴)*</label>
+                        <input type="number" id="coursePrice" name="price" min="0" step="0.01" placeholder="0.00" required>
+                        <p class="field-hint">Встановіть 0, якщо курс безкоштовний</p>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="courseDuration">Тривалість (години)*</label>
+                        <input type="number" id="courseDuration" name="duration_hours" min="1" placeholder="0" required>
+                    </div>
+                </div>
+                
+                <!-- Секції курсу -->
+                <div class="form-group form-section">
+                    <h2 class="form-section-title">Структура курсу</h2>
+                    <p class="section-description">Додайте секції вашого курсу. Ви зможете додати ресурси до кожної секції після створення курсу.</p>
+                    
+                    <div id="courseSections">
+                        <!-- Перша секція -->
+                        <div class="course-section" data-section-index="0">
+                            <div class="section-header">
+                                <h3>Секція 1</h3>
+                                <button type="button" class="remove-section-btn" style="display: none;">Видалити</button>
+                            </div>
+                            
+                            <div class="form-field">
+                                <label for="sectionTitle_0">Назва секції*</label>
+                                <input type="text" id="sectionTitle_0" name="sections[0][title]" placeholder="Назва секції" required>
+                            </div>
+                            
+                            <div class="form-field">
+                                <label for="sectionDescription_0">Опис секції</label>
+                                <textarea id="sectionDescription_0" name="sections[0][description]" placeholder="Опис секції" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="addSectionBtn" class="add-button">+ Додати секцію</button>
+                </div>
+                
+                <!-- Кнопки управління -->
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn">Скасувати</button>
+                    <button type="submit" class="submit-btn">Створити курс</button>
+                </div>
+            </form>
         </div>
     </section>
 </div>
@@ -152,5 +261,6 @@
 
 <script src="modal.js"></script>
 <script src="script.js"></script>
+<script src="create-course.js"></script>
 </body>
 </html> 
