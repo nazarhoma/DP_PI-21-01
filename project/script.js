@@ -14,9 +14,35 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.focus();
     });
     searchInput.addEventListener('blur', () => {
-        searchBar.style.display = 'none';
-        searchBtn.style.display = 'block';
+        if (searchInput.value.trim() === '') {
+            searchBar.style.display = 'none';
+            searchBtn.style.display = 'block';
+        }
     });
+    
+    // Приховуємо пошукову форму при натисканні Escape
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            if (searchBar && searchBtn) {
+                searchBar.style.display = 'none';
+                searchBtn.style.display = 'block';
+            }
+        }
+    });
+    
+    // Додаємо обробник пошуку
+    const searchForm = document.querySelector('.form-search');
+    if (searchForm) {
+        searchForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const query = searchInput.value.trim();
+            
+            if (query) {
+                // Перенаправляємо на сторінку пошуку з параметром
+                window.location.href = `search-results.html?query=${encodeURIComponent(query)}`;
+            }
+        });
+    }
 
     // Ініціалізуємо кнопки прокрутки для блоку коментарів
     function initializeCommentSlider() {
