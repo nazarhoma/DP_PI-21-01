@@ -138,5 +138,27 @@
 
 <script src="script.js"></script>
 <script src="search.js"></script>
+<script src="modal.js"></script>
+
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Зв'язатися з нами</h2>
+            <span class="close" id="closeModal">&times;</span>
+        </div>
+        <form id="contactForm">
+            <label for="name">Ім'я:</label>
+            <input class="modal-input" type="text" id="name" name="name" required><br>
+
+            <label for="email">Електронна адреса:</label>
+            <input class="modal-input" type="email" id="email" name="email" required><br>
+
+            <label for="message">Повідомлення:</label><br>
+            <textarea class="modal-input" id="message" name="message" rows="4" required></textarea><br>
+
+            <button type="submit" class="modal-button">Відправити</button>
+        </form>
+    </div>
+</div>
 </body>
 </html> 

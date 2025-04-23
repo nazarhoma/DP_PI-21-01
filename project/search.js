@@ -160,20 +160,18 @@ function createCourseCard(course) {
     
     cardElement.innerHTML = `
         <a href="course.html?id=${course.id}" class="course-card-link">
-            <div class="course-card-image-container">
-                <img src="${course.image}" alt="${course.title}" class="course-card-image">
+            <div class="course-image-container">
+                <img src="${course.image}" alt="${course.title}" class="course-image">
             </div>
-            <div class="course-card-content">
-                <h3 class="course-card-title">${course.title}</h3>
-                <p class="course-card-author">${course.author}</p>
-                <div class="course-card-rating">
+            <div class="course-details">
+                <h3 class="course-title">${course.title}</h3>
+                <p class="course-author">${course.author}</p>
+                <div class="course-rating">
                     <div class="stars">${ratingStars}</div>
                     <span class="rating-count">(${course.reviews})</span>
                 </div>
-                <p class="course-card-info">${course.info}</p>
-                <div class="course-price-container">
-                    <span class="course-price">${formatPrice(course.price)}</span>
-                </div>
+                <p class="course-info">${course.info}</p>
+                <span class="course-price">${formatPrice(course.price)}</span>
             </div>
         </a>
     `;
@@ -199,10 +197,21 @@ function createInstructorCard(instructor) {
     
     const ratingStars = generateRatingStars(instructor.rating);
     
+    // Перевіряємо, чи є у зображенні http:// або https:// на початку
+    let imageUrl = instructor.image;
+    if (imageUrl && !imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+        // Якщо це відносний шлях, додаємо http://localhost/
+        if (!imageUrl.startsWith('/')) {
+            imageUrl = 'http://localhost/' + imageUrl;
+        } else {
+            imageUrl = 'http://localhost' + imageUrl;
+        }
+    }
+    
     cardElement.innerHTML = `
         <a href="profile.html?id=${instructor.id}" class="instructor-card-link">
             <div class="instructor-card-image-container">
-                <img src="${instructor.image}" alt="${instructor.name}" class="instructor-card-image">
+                <img src="${imageUrl}" alt="${instructor.name}" class="instructor-card-image">
             </div>
             <div class="instructor-card-content">
                 <h3 class="instructor-card-name">${instructor.name}</h3>

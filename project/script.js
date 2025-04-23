@@ -8,13 +8,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchBtn = document.querySelector('.search-btn');
     const searchBar = document.querySelector('.search-bar');
     const searchInput = document.querySelector('.search-bar-input');
+    
+    // Перевіряємо розмір екрану перед додаванням слухачів подій
+    function isMobileDevice() {
+        return window.innerWidth <= 768;
+    }
+    
+    // Функція для оновлення видимості пошукового рядка при зміні розміру вікна
+    function updateSearchBarVisibility() {
+        if (!isMobileDevice()) {
+            // На великих екранах пошук завжди видимий
+            searchBar.style.display = 'flex';
+            searchBtn.style.display = 'none';
+        } else {
+            // На мобільних пристроях пошук схований
+            searchBar.style.display = 'none';
+            searchBtn.style.display = 'block';
+        }
+    }
+    
+    // Викликаємо при завантаженні
+    updateSearchBarVisibility();
+    
+    // І також при зміні розміру вікна
+    window.addEventListener('resize', updateSearchBarVisibility);
+    
+    // Додаємо слухачі лише для мобільних пристроїв
     searchBtn.addEventListener('click', () => {
-        searchBar.style.display = 'flex';
-        searchBtn.style.display = 'none';
-        searchInput.focus();
+        if (isMobileDevice()) {
+            searchBar.style.display = 'flex';
+            searchBtn.style.display = 'none';
+            searchInput.focus();
+        }
     });
+    
     searchInput.addEventListener('blur', () => {
-        if (searchInput.value.trim() === '') {
+        if (isMobileDevice() && searchInput.value.trim() === '') {
             searchBar.style.display = 'none';
             searchBtn.style.display = 'block';
         }
@@ -22,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Приховуємо пошукову форму при натисканні Escape
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
+        if (event.key === 'Escape' && isMobileDevice()) {
             if (searchBar && searchBtn) {
                 searchBar.style.display = 'none';
                 searchBtn.style.display = 'block';
