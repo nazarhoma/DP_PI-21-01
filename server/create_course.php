@@ -67,7 +67,7 @@ $durationHours = intval($_POST['duration_hours']);
 $mentorId = intval($_POST['mentor_id']);
 
 // Перевіримо наявність директорії для зображень курсів і зображення за замовчуванням
-$defaultImageDir = dirname(dirname(__FILE__)) . '/project/img/courses/';
+$defaultImageDir = '../project/img/courses/';
 $defaultImagePath = $defaultImageDir . 'default-course.jpg';
 
 // Створюємо директорію, якщо не існує
@@ -160,24 +160,11 @@ if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] == 0) {
     $fileName = 'course_' . time() . '_' . bin2hex(random_bytes(8)) . '.jpg';
     
     // Визначення шляху для збереження файлу
-    // Використовуємо кілька варіантів для XAMPP
-    $documentRoot = $_SERVER['DOCUMENT_ROOT'];
-    
-    // Якщо ми в директорії /project (відносно кореня сайту)
-    if (strpos($_SERVER['PHP_SELF'], '/server/') !== false) {
-        // Якщо скрипт в папці server, то картинки в ../project/img/courses/
-        $projectPath = dirname(dirname(__FILE__)) . '/project/';
-        $uploadDir = $projectPath . 'img/courses/';
-    } else {
-        // Стандартне розташування
-        $uploadDir = $documentRoot . '/img/courses/';
-    }
+    // Змінюємо шлях збереження на прямий шлях до директорії проекту
+    $uploadDir = '../project/img/courses/';
     
     // Логування інформації про шлях
     error_log("Upload directory: " . $uploadDir);
-    error_log("DOCUMENT_ROOT: " . $documentRoot);
-    error_log("PHP_SELF: " . $_SERVER['PHP_SELF']);
-    error_log("__FILE__: " . __FILE__);
     
     // Створення директорії, якщо не існує
     if (!file_exists($uploadDir)) {
@@ -192,7 +179,7 @@ if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] == 0) {
     
     // Збереження файлу
     if (move_uploaded_file($_FILES['image_url']['tmp_name'], $uploadPath)) {
-        // URL для доступу до зображення у браузері
+        // URL шлях для використання в HTML/JavaScript - без слеша на початку
         $imageUrl = 'img/courses/' . $fileName;
         error_log("File uploaded successfully. Image URL: " . $imageUrl);
     } else {

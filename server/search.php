@@ -151,7 +151,7 @@ try {
                     $name = $row['username'] ?: "Невідомий інструктор";
                 }
                 
-                $image = !empty($row['avatar']) ? $row['avatar'] : 'img/default-avatar.png';
+                $image = !empty($row['avatar']) ? $row['avatar'] : 'img/avatars/default-avatar.png';
                 $rating = $row['avg_rating'] > 0 ? $row['avg_rating'] : 4.5;
                 $students = $row['students_count'] > 0 ? $row['students_count'] : 0;
                 

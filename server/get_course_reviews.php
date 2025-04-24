@@ -56,7 +56,7 @@ try {
             }
             
             // Перевіряємо наявність аватару
-            $avatar = !empty($row['avatar']) ? $row['avatar'] : 'img/default-avatar.png';
+            $avatar = !empty($row['avatar']) ? $row['avatar'] : 'img/avatars/default-avatar.png';
             
             $reviews[] = array(
                 'id' => $row['id'],

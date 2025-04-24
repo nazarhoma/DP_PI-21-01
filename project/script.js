@@ -472,23 +472,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функція для отримання повного URL аватару
     function getFullAvatarUrl(avatar) {
-        if (!avatar) return '';
+        if (!avatar || avatar === '') {
+            // Якщо аватар не вказано, повертаємо дефолтний
+            return 'img/avatars/default-avatar.png';
+        }
         
         // Якщо аватар вже містить повний URL, повертаємо його
         if (avatar.startsWith('http')) {
             return avatar;
         }
         
-        // Змінюємо базовий URL для Ajax запитів
-        const baseUrl = '';
-        
         // Видаляємо початковий слеш, якщо він є
         if (avatar.startsWith('/')) {
             avatar = avatar.substring(1);
         }
         
-        const fullUrl = `${baseUrl}/${avatar}`;
-        return fullUrl;
+        // Повертаємо шлях до аватару як є
+        return avatar;
     }
 
     // Обробник виходу з системи

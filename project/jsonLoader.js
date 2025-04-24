@@ -213,22 +213,23 @@ async function loadInstructors() {
 
 // Функція для отримання повного URL аватару
 function getFullAvatarUrl(avatar) {
-    if (!avatar) return '';
+    if (!avatar || avatar === '') {
+        // Якщо аватар не вказано, повертаємо дефолтний
+        return 'img/avatars/default-avatar.png';
+    }
     
     // Якщо аватар вже містить повний URL, повертаємо його
     if (avatar.startsWith('http')) {
         return avatar;
     }
     
-    // Створюємо абсолютний URL для аватару
-    const baseUrl = '/server/';
-    
     // Видаляємо початковий слеш, якщо він є
     if (avatar.startsWith('/')) {
         avatar = avatar.substring(1);
     }
     
-    return `${baseUrl}/${avatar}`;
+    // Повертаємо шлях до аватару як є
+    return avatar;
 }
 
 function createReviewCard(review) {

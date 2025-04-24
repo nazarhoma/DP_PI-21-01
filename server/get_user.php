@@ -47,8 +47,8 @@ try {
     if ($result->num_rows > 0) {
         $userData = $result->fetch_assoc();
         
-        // Перевіряємо наявність аватару
-        $avatar = !empty($userData['avatar']) ? $userData['avatar'] : 'img/default-avatar.png';
+        // Перевіряємо і форматуємо аватар
+        $avatar = !empty($userData['avatar']) ? $userData['avatar'] : 'img/avatars/default-avatar.png';
         
         // Формуємо відповідь
         $response = array(

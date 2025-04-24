@@ -314,18 +314,22 @@ async function loadMentorDetails(mentorId) {
 
 // Функція для відображення даних викладача
 function displayMentorDetails(mentorData) {
-    // Ім'я викладача
-    const instructorName = document.querySelector('.instructor-name');
-    if (instructorName) {
-        instructorName.textContent = formatMentorName(mentorData);
+    const mentorNameElement = document.querySelector('.instructor-name');
+    const mentorRoleElement = document.querySelector('.instructor-role');
+    const mentorAvatarElement = document.querySelector('.instructor-avatar');
+    
+    if (mentorNameElement) {
+        mentorNameElement.textContent = formatMentorName(mentorData);
     }
     
-    // Аватар викладача
-    const instructorAvatar = document.querySelector('.instructor-avatar');
-    if (instructorAvatar) {
-        const avatarUrl = mentorData.avatar ? formatImageUrl(mentorData.avatar) : 'img/default-avatar.png';
-        instructorAvatar.src = avatarUrl;
-        instructorAvatar.alt = formatMentorName(mentorData);
+    if (mentorRoleElement) {
+        mentorRoleElement.textContent = mentorData.role || 'Викладач';
+    }
+    
+    if (mentorAvatarElement) {
+        const avatarUrl = mentorData.avatar ? formatImageUrl(mentorData.avatar) : 'img/avatars/default-avatar.png';
+        mentorAvatarElement.src = avatarUrl;
+        mentorAvatarElement.alt = `Фото ${formatMentorName(mentorData)}`;
     }
 }
 
@@ -344,8 +348,8 @@ function formatMentorName(mentorData) {
 
 // Функція для форматування URL зображення
 function formatImageUrl(imageUrl) {
-    if (!imageUrl) {
-        return 'img/default-avatar.png';
+    if (!imageUrl || imageUrl === '') {
+        return 'img/avatars/default-avatar.png';
     }
     
     // Якщо URL вже повний, залишаємо як є
@@ -487,7 +491,7 @@ function createReviewItem(review) {
     const formattedDate = `${date.getDate()} ${getMonthName(date.getMonth())} ${date.getFullYear()}`;
     
     // Форматуємо посилання на аватарку
-    const avatarUrl = review.avatar ? formatImageUrl(review.avatar) : 'img/default-avatar.png';
+    const avatarUrl = review.avatar ? formatImageUrl(review.avatar) : 'img/avatars/default-avatar.png';
     
     reviewItem.innerHTML = `
         <div class="review-header">

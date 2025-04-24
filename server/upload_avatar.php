@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Налаштування для завантаження файлу
-    $upload_dir = 'img/avatars/';
+    $upload_dir = '../project/img/avatars/';
     $upload_dir = str_replace('\\', '/', $upload_dir);
     
     error_log("Upload directory: " . $upload_dir);
@@ -113,12 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         chmod($avatar_path, 0644);
         
         // Оновлюємо шлях до аватару в базі даних
-        // Використовуємо шлях без http://localhost/
+        // URL шлях для використання в HTML/JavaScript
         $avatar_url = 'img/avatars/' . $avatar_name;
         error_log("File upload successful, saving in DB with path: " . $avatar_url);
-        
-        // Більше не потрібно формувати повний URL
-        error_log("Avatar URL: " . $avatar_url);
         
         $update_stmt = $conn->prepare("UPDATE users SET avatar = ? WHERE id = ?");
         $update_stmt->bind_param("si", $avatar_url, $user_id);

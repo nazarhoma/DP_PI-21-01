@@ -243,8 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const profileAvatarImg = document.getElementById('profile-avatar-img');
             const headerAvatarImg = document.querySelector('.profile-avatar');
             
-            if (profileAvatarImg) profileAvatarImg.src = 'img/default-avatar.png';
-            if (headerAvatarImg) headerAvatarImg.src = 'img/default-avatar.png';
+            if (profileAvatarImg) profileAvatarImg.src = 'img/avatars/default-avatar.png';
+            if (headerAvatarImg) headerAvatarImg.src = 'img/avatars/default-avatar.png';
         }
         
         // Оновлюємо роль

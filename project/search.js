@@ -200,7 +200,7 @@ function createInstructorCard(instructor) {
     // Використовуємо шлях до зображення як є, без модифікацій
     let imageUrl = instructor.image;
     if (!imageUrl) {
-        imageUrl = 'img/default-avatar.png';
+        imageUrl = 'img/avatars/default-avatar.png';
     }
     
     // Видаляємо початковий слеш, якщо він є
