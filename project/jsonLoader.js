@@ -6,6 +6,8 @@ const coursesPerPage = 12;
 let currentPage = 1;
 let totalCourses = 0;
 let coursesData = [];
+// Змінюємо базовий URL
+const baseUrl = '';
 
 // Функція для створення картки курсу
 function createCourseCard(course) {

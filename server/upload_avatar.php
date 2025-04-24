@@ -40,12 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Налаштування для завантаження файлу
-    // Використовуємо документ_рут веб-сервера
-    $server_root = $_SERVER['DOCUMENT_ROOT'];
-    $upload_dir = $server_root . '/img/avatars/';
+    $upload_dir = 'img/avatars/';
     $upload_dir = str_replace('\\', '/', $upload_dir);
     
-    error_log("Server root: " . $server_root);
     error_log("Upload directory: " . $upload_dir);
     
     // Перевіряємо і створюємо директорію, якщо потрібно
@@ -116,13 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         chmod($avatar_path, 0644);
         
         // Оновлюємо шлях до аватару в базі даних
-        // Використовуємо шлях відносно кореня веб-сервера
-        $avatar_url = '/img/avatars/' . $avatar_name;
+        // Використовуємо шлях без http://localhost/
+        $avatar_url = 'img/avatars/' . $avatar_name;
         error_log("File upload successful, saving in DB with path: " . $avatar_url);
         
-        // Формуємо повний URL для зручності
-        $full_url = 'http://' . $_SERVER['HTTP_HOST'] . $avatar_url;
-        error_log("Full URL: " . $full_url);
+        // Більше не потрібно формувати повний URL
+        error_log("Avatar URL: " . $avatar_url);
         
         $update_stmt = $conn->prepare("UPDATE users SET avatar = ? WHERE id = ?");
         $update_stmt->bind_param("si", $avatar_url, $user_id);
@@ -131,8 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response['success'] = true;
             $response['message'] = "Аватар успішно оновлено";
             $response['avatar_url'] = $avatar_url;
-            $response['full_url'] = $full_url;
-            error_log("Returning full URL: " . $response['full_url']);
         } else {
             $response['success'] = false;
             $response['message'] = "Помилка при оновленні аватару в базі даних: " . $conn->error;

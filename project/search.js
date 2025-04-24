@@ -197,15 +197,15 @@ function createInstructorCard(instructor) {
     
     const ratingStars = generateRatingStars(instructor.rating);
     
-    // Перевіряємо, чи є у зображенні http:// або https:// на початку
+    // Використовуємо шлях до зображення як є, без модифікацій
     let imageUrl = instructor.image;
-    if (imageUrl && !imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
-        // Якщо це відносний шлях, додаємо http://localhost/
-        if (!imageUrl.startsWith('/')) {
-            imageUrl = '/server/' + imageUrl;
-        } else {
-            imageUrl = '/server/' + imageUrl;
-        }
+    if (!imageUrl) {
+        imageUrl = 'img/default-avatar.png';
+    }
+    
+    // Видаляємо початковий слеш, якщо він є
+    if (imageUrl.startsWith('/')) {
+        imageUrl = imageUrl.substring(1);
     }
     
     cardElement.innerHTML = `

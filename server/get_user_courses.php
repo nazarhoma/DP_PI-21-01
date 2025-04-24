@@ -75,13 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $row['rating'] = (int) $row['rating'];
             if ($row['rating'] === 0) $row['rating'] = 4; // Якщо рейтинг відсутній, встановлюємо за замовчуванням 4
             
-            // Перевіряємо шлях до зображення та додаємо базовий URL, якщо потрібно
-            if (!empty($row['image']) && !str_starts_with($row['image'], 'http')) {
-                // Якщо шлях не починається з http, додаємо доменне ім'я
-                $row['image'] = 'http://localhost/' . ltrim($row['image'], '/');
-            } else if (empty($row['image'])) {
-                // Якщо зображення відсутнє, встановлюємо зображення за замовчуванням
-                $row['image'] = 'http://localhost/img/default-image-course.png';
+            // Перевіряємо і встановлюємо шлях до зображення
+            if (!empty($row['image'])) {
+                // Використовуємо шлях як є, без додавання http://localhost/
+                $row['image'] = ltrim($row['image'], '/');
+            } else {
+                // Якщо зображення немає, встановлюємо дефолтне
+                $row['image'] = 'img/default-image-course.png';
             }
             
             // Перевіряємо і форматуємо повне ім'я автора

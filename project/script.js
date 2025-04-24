@@ -209,11 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             headerAvatarImg.src = avatarUrl;
                             headerAvatarImg.onerror = function() {
                                 console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
-                                this.src = 'img/default-avatar.png';
+                                this.src = 'img/avatars/default-avatar.png';
                                 this.onerror = null; // Запобігаємо зациклюванню
                             };
                         } else if (headerAvatarImg) {
-                            headerAvatarImg.src = 'img/default-avatar.png';
+                            headerAvatarImg.src = 'img/avatars/default-avatar.png';
                         }
                         
                         // Отримуємо актуальну роль та оновлюємо інтерфейс
@@ -234,11 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             headerAvatarImg.src = avatarUrl;
                             headerAvatarImg.onerror = function() {
                                 console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
-                                this.src = 'img/default-avatar.png';
+                                this.src = 'img/avatars/default-avatar.png';
                                 this.onerror = null; // Запобігаємо зациклюванню
                             };
                         } else if (headerAvatarImg) {
-                            headerAvatarImg.src = 'img/default-avatar.png';
+                            headerAvatarImg.src = 'img/avatars/default-avatar.png';
                         }
                         
                         // Оновлюємо UI відповідно до ролі з localStorage
@@ -257,11 +257,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     headerAvatarImg.src = avatarUrl;
                     headerAvatarImg.onerror = function() {
                         console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
-                        this.src = 'img/default-avatar.png';
+                        this.src = 'img/avatars/default-avatar.png';
                         this.onerror = null; // Запобігаємо зациклюванню
                     };
                 } else if (headerAvatarImg) {
-                    headerAvatarImg.src = 'img/default-avatar.png';
+                    headerAvatarImg.src = 'img/avatars/default-avatar.png';
                 }
                 
                 // Оновлюємо UI відповідно до ролі з localStorage
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Скидаємо аватар до дефолтного
             if (headerAvatarImg) {
-                headerAvatarImg.src = 'img/default-avatar.png';
+                headerAvatarImg.src = 'img/avatars/default-avatar.png';
             }
             
             // Приховуємо кнопку "Викладати на Byway" для незареєстрованих користувачів
@@ -479,8 +479,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return avatar;
         }
         
-        // Створюємо абсолютний URL для аватару
-        const baseUrl = '/server/';
+        // Змінюємо базовий URL для Ajax запитів
+        const baseUrl = '';
         
         // Видаляємо початковий слеш, якщо він є
         if (avatar.startsWith('/')) {
@@ -500,7 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Скидаємо аватар до дефолтного перед видаленням даних
             const headerAvatarImg = document.querySelector('.profile-avatar');
             if (headerAvatarImg) {
-                headerAvatarImg.src = 'img/default-avatar.png';
+                headerAvatarImg.src = 'img/avatars/default-avatar.png';
             }
             
             localStorage.removeItem('userToken');

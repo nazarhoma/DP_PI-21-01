@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 profileAvatarImg.src = avatarUrl;
                 profileAvatarImg.onerror = function() {
                     console.log("Помилка завантаження аватару. Використовую запасний аватар.");
-                    this.src = 'img/default-avatar.png';
+                    this.src = 'img/avatars/default-avatar.png';
                     this.onerror = null; // Запобігаємо зациклюванню
                 };
             }
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headerAvatarImg.src = avatarUrl;
                 headerAvatarImg.onerror = function() {
                     console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
-                    this.src = 'img/default-avatar.png';
+                    this.src = 'img/avatars/default-avatar.png';
                     this.onerror = null; // Запобігаємо зациклюванню
                 };
             }
@@ -383,24 +383,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Функція для отримання повного URL аватару
     function getFullAvatarUrl(avatar) {
-        if (!avatar) return '';
-        
-        // Якщо аватар вже містить повний URL, повертаємо його
-        if (avatar.startsWith('http')) {
-            return avatar;
+        if (!avatar || avatar === '') {
+            // Якщо аватар не вказано, повертаємо дефолтний
+            return 'img/avatars/default-avatar.png';
         }
         
-        // Створюємо абсолютний URL для аватару
-        const baseUrl = '/server/';
-        
-        // Видаляємо початковий слеш, якщо він є
-        if (avatar.startsWith('/')) {
-            avatar = avatar.substring(1);
-        }
-        
-        const fullUrl = `${baseUrl}/${avatar}`;
-        console.log('Повний URL аватару:', fullUrl);
-        return fullUrl;
+        // Повертаємо шлях до аватару як є без модифікацій
+        return avatar;
     }
     
     // Оновлення UI елементів відповідно до ролі користувача
@@ -684,7 +673,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.error('Помилка від сервера:', data.message);
                         
                         // Повертаємо попереднє зображення
-                        const previousAvatar = userData.avatar ? getFullAvatarUrl(userData.avatar) : 'img/default-avatar.png';
+                        const previousAvatar = userData.avatar ? getFullAvatarUrl(userData.avatar) : 'img/avatars/default-avatar.png';
                         document.getElementById('profile-avatar-img').src = previousAvatar;
                     }
                 })
@@ -693,7 +682,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Помилка при завантаженні аватару. Спробуйте пізніше.');
                     
                     // Повертаємо попереднє зображення
-                    const previousAvatar = userData.avatar ? getFullAvatarUrl(userData.avatar) : 'img/default-avatar.png';
+                    const previousAvatar = userData.avatar ? getFullAvatarUrl(userData.avatar) : 'img/avatars/default-avatar.png';
                     document.getElementById('profile-avatar-img').src = previousAvatar;
                 });
             }
@@ -710,8 +699,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const profileAvatarImg = document.getElementById('profile-avatar-img');
             const headerAvatarImg = document.querySelector('.profile-avatar');
             
-            if (profileAvatarImg) profileAvatarImg.src = 'img/default-avatar.png';
-            if (headerAvatarImg) headerAvatarImg.src = 'img/default-avatar.png';
+            if (profileAvatarImg) profileAvatarImg.src = 'img/avatars/default-avatar.png';
+            if (headerAvatarImg) headerAvatarImg.src = 'img/avatars/default-avatar.png';
             
             localStorage.removeItem('userToken');
             localStorage.removeItem('userData');

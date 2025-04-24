@@ -342,11 +342,13 @@ function formatMentorName(mentorData) {
     }
 }
 
-// Функція для форматування URL зображень
+// Функція для форматування URL зображення
 function formatImageUrl(imageUrl) {
-    if (!imageUrl) return 'img/default-avatar.png';
+    if (!imageUrl) {
+        return 'img/default-avatar.png';
+    }
     
-    // Якщо URL вже містить http або https, повертаємо як є
+    // Якщо URL вже повний, залишаємо як є
     if (imageUrl.startsWith('http')) {
         return imageUrl;
     }
@@ -356,13 +358,8 @@ function formatImageUrl(imageUrl) {
         imageUrl = imageUrl.substring(1);
     }
     
-    // Якщо URL починається з img/, повертаємо як є
-    if (imageUrl.startsWith('img/')) {
-        return imageUrl;
-    }
-    
-    // Додаємо базовий URL
-    return `http://localhost/${imageUrl}`;
+    // Повертаємо шлях як є, без додавання http://localhost/
+    return imageUrl;
 }
 
 // Функція для завантаження відгуків про курс
