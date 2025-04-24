@@ -3,7 +3,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
     const formData = new FormData(this);
 
-    fetch('http://localhost/login.php', {
+    fetch('/server/login.php', {
         method: 'POST',
         body: formData,
     })
@@ -88,7 +88,7 @@ function fetchUserData(userId) {
         const formData = new FormData();
         formData.append('user_id', userId);
         
-        fetch('http://localhost/get_user_data.php', {
+        fetch('/server/get_user_data.php', {
             method: 'POST',
             body: formData
         })

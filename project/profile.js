@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('user_id', userId);
         
         // Робимо запит на сервер для отримання курсів користувача
-        fetch('http://localhost/get_user_courses.php', {
+        fetch('/server/get_user_courses.php', {
             method: 'POST',
             body: formData
         })
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 profileAvatarImg.src = avatarUrl;
                 profileAvatarImg.onerror = function() {
                     console.log("Помилка завантаження аватару. Використовую запасний аватар.");
-                    this.src = 'media/default-avatar.png';
+                    this.src = 'img/default-avatar.png';
                     this.onerror = null; // Запобігаємо зациклюванню
                 };
             }
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headerAvatarImg.src = avatarUrl;
                 headerAvatarImg.onerror = function() {
                     console.log("Помилка завантаження аватару в хедері. Використовую запасний аватар.");
-                    this.src = 'media/default-avatar.png';
+                    this.src = 'img/default-avatar.png';
                     this.onerror = null; // Запобігаємо зациклюванню
                 };
             }
@@ -243,8 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const profileAvatarImg = document.getElementById('profile-avatar-img');
             const headerAvatarImg = document.querySelector('.profile-avatar');
             
-            if (profileAvatarImg) profileAvatarImg.src = 'media/default-avatar.png';
-            if (headerAvatarImg) headerAvatarImg.src = 'media/default-avatar.png';
+            if (profileAvatarImg) profileAvatarImg.src = 'img/default-avatar.png';
+            if (headerAvatarImg) headerAvatarImg.src = 'img/default-avatar.png';
         }
         
         // Оновлюємо роль
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData();
             formData.append('user_id', userId);
             
-            fetch('http://localhost/get_user_data.php', {
+            fetch('/server/get_user_data.php', {
                 method: 'POST',
                 body: formData
             })
@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData();
             formData.append('user_id', userId);
             
-            fetch('http://localhost/get_user_role.php', {
+            fetch('/server/get_user_role.php', {
                 method: 'POST',
                 body: formData
             })
@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Створюємо абсолютний URL для аватару
-        const baseUrl = 'http://localhost';
+        const baseUrl = '/server/';
         
         // Видаляємо початковий слеш, якщо він є
         if (avatar.startsWith('/')) {
@@ -497,7 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('user_id', userData.id);
             
             // Надсилаємо дані на сервер
-            fetch('http://localhost/update_profile.php', {
+            fetch('/server/update_profile.php', {
                 method: 'POST',
                 body: formData
             })
@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('new_password', newPassword);
             
             // Надсилаємо дані на сервер
-            fetch('http://localhost/change_password.php', {
+            fetch('/server/change_password.php', {
                 method: 'POST',
                 body: formData
             })
@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 formData.append('avatar', file);
                 
                 console.log('Відправка запиту для завантаження аватару...');
-                fetch('http://localhost/upload_avatar.php', {
+                fetch('/server/upload_avatar.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -738,7 +738,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('education', education);
         formData.append('native_language', nativeLanguage);
         
-        fetch('http://localhost/update_profile.php', {
+        fetch('/server/update_profile.php', {
             method: 'POST',
             body: formData
         })

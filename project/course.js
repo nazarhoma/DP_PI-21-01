@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadCourseDetails(courseId) {
     try {
         // Запит на сервер для отримання даних курсу
-        const response = await fetch(`http://localhost/get_course.php?id=${courseId}`);
+        const response = await fetch(`/server/get_course.php?id=${courseId}`);
         
         if (!response.ok) {
             throw new Error('Помилка при завантаженні даних курсу');
@@ -51,7 +51,7 @@ async function loadCourseDetails(courseId) {
 async function loadCourseSyllabus(courseId) {
     try {
         // Запит на сервер для отримання навчального плану
-        const response = await fetch(`http://localhost/get_course_syllabus.php?course_id=${courseId}`);
+        const response = await fetch(`/server/get_course_syllabus.php?course_id=${courseId}`);
         
         if (!response.ok) {
             throw new Error('Помилка при завантаженні навчального плану');
@@ -369,7 +369,7 @@ function formatImageUrl(imageUrl) {
 async function loadCourseReviews(courseId) {
     try {
         // Запит на сервер для отримання відгуків
-        const response = await fetch(`http://localhost/get_course_reviews.php?course_id=${courseId}`);
+        const response = await fetch(`/server/get_course_reviews.php?course_id=${courseId}`);
         
         if (!response.ok) {
             throw new Error('Помилка при завантаженні відгуків');
@@ -551,7 +551,7 @@ function getMonthName(month) {
 async function loadRelatedCourses(courseId) {
     try {
         // Запит на сервер для отримання схожих курсів
-        const response = await fetch(`http://localhost/get_related_courses.php?id=${courseId}`);
+        const response = await fetch(`/server/get_related_courses.php?id=${courseId}`);
         
         if (!response.ok) {
             throw new Error('Помилка при завантаженні схожих курсів');

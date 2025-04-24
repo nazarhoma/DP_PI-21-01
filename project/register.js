@@ -62,7 +62,7 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
 
     const formData = new FormData(this);
 
-    fetch('http://localhost/register.php', {
+    fetch('/server/register.php', {
         method: 'POST',
         body: formData
     })

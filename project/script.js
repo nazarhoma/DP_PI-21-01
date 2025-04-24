@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData();
             formData.append('user_id', userId);
             
-            fetch('http://localhost/get_user_role.php', {
+            fetch('/server/get_user_role.php', {
                 method: 'POST',
                 body: formData
             })
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData();
             formData.append('user_id', userData.id);
             
-            fetch('http://localhost/update_role.php', {
+            fetch('/server/update_role.php', {
                 method: 'POST',
                 body: formData
             })
@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Створюємо абсолютний URL для аватару
-        const baseUrl = 'http://localhost';
+        const baseUrl = '/server/';
         
         // Видаляємо початковий слеш, якщо він є
         if (avatar.startsWith('/')) {
@@ -543,7 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData();
             formData.append('user_id', userId);
             
-            fetch('http://localhost/get_user_data.php', {
+            fetch('/server/get_user_data.php', {
                 method: 'POST',
                 body: formData
             })

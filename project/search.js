@@ -202,9 +202,9 @@ function createInstructorCard(instructor) {
     if (imageUrl && !imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
         // Якщо це відносний шлях, додаємо http://localhost/
         if (!imageUrl.startsWith('/')) {
-            imageUrl = 'http://localhost/' + imageUrl;
+            imageUrl = '/server/' + imageUrl;
         } else {
-            imageUrl = 'http://localhost' + imageUrl;
+            imageUrl = '/server/' + imageUrl;
         }
     }
     

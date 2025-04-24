@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function loadCategories() {
     try {
-        const response = await fetch('http://localhost/get_categories.php');
+        const response = await fetch('/server/get_categories.php');
         if (!response.ok) {
             throw new Error('Не вдалося завантажити категорії');
         }
@@ -68,7 +68,7 @@ async function loadCategories() {
  */
 async function loadLanguages() {
     try {
-        const response = await fetch('http://localhost/get_languages.php');
+        const response = await fetch('/server/get_languages.php');
         if (!response.ok) {
             throw new Error('Не вдалося завантажити мови');
         }
@@ -101,7 +101,7 @@ async function loadLanguages() {
  */
 async function loadDifficultyLevels() {
     try {
-        const response = await fetch('http://localhost/get_difficulty_levels.php');
+        const response = await fetch('/server/get_difficulty_levels.php');
         if (!response.ok) {
             throw new Error('Не вдалося завантажити рівні складності');
         }
@@ -284,7 +284,7 @@ async function submitCourseForm(event) {
         showLoading();
         
         // Відправляємо дані на сервер
-        const response = await fetch('http://localhost/create_course.php', {
+        const response = await fetch('/server/create_course.php', {
             method: 'POST',
             body: formData
         });

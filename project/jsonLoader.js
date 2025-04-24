@@ -1,7 +1,7 @@
-const allCoursesUrl = 'http://localhost/get_all_courses.php';
-const topCoursesUrl = 'http://localhost/get_top_courses.php';
-const topInstructorsUrl = 'http://localhost/get_top_instructors.php';
-const topReviewsUrl = 'http://localhost/get_top_reviews.php';
+const allCoursesUrl = '/server/get_all_courses.php';
+const topCoursesUrl = '/server/get_top_courses.php';
+const topInstructorsUrl = '/server/get_top_instructors.php';
+const topReviewsUrl = '/server/get_top_reviews.php';
 const coursesPerPage = 12;
 let currentPage = 1;
 let totalCourses = 0;
@@ -219,7 +219,7 @@ function getFullAvatarUrl(avatar) {
     }
     
     // Створюємо абсолютний URL для аватару
-    const baseUrl = 'http://localhost';
+    const baseUrl = '/server/';
     
     // Видаляємо початковий слеш, якщо він є
     if (avatar.startsWith('/')) {
