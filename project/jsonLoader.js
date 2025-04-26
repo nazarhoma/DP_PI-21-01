@@ -189,15 +189,12 @@ function createInstructorCard(instructor) {
     // Отримуємо повний URL для аватарки інструктора
     const avatarUrl = getFullAvatarUrl(instructor.image);
     
-    // Перевіряємо, чи є студенти (може бути undefined, null, 0)
-    const hasStudents = instructor.students !== undefined && instructor.students !== null && instructor.students > 0;
+    // Завжди використовуємо жовту зірку
+    const starImg = 'img/star.png';
+    const starAlt = 'Зірка';
     
-    // Якщо студентів немає - зірка сіра, інакше - золота
-    const starImg = !hasStudents ? 'img/gstar.png' : 'img/star.png';
-    const starAlt = !hasStudents ? 'Сіра зірка' : 'Зірка';
-    
-    // Записуємо у змінну для відображення кількість студентів (може бути undefined)
-    const studentsCount = instructor.students || 0;
+    // Використовуємо реальні значення
+    const studentsCount = instructor.students !== undefined ? instructor.students : 0;
 
     card.innerHTML = `
         <div class="instructor">

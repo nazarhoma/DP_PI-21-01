@@ -55,16 +55,31 @@ async function loadSearchResults() {
         // Показуємо індикатор завантаження
         showLoadingIndicator();
         
+        // Обробляємо пошуковий запит - видаляємо зайві пробіли
+        const cleanQuery = query.trim().replace(/\s+/g, ' ');
+        
+        console.log('Виконую пошук:', cleanQuery);
+        
         // Робимо запит на сервер
-        const response = await fetch(`/server/search.php?query=${encodeURIComponent(query)}`);
+        const response = await fetch(`/server/search.php?query=${encodeURIComponent(cleanQuery)}`);
         
         if (!response.ok) {
-            throw new Error('Помилка при виконанні пошукового запиту');
+            console.error('HTTP помилка при пошуку:', response.status, response.statusText);
+            throw new Error(`Помилка при виконанні пошукового запиту: ${response.status} ${response.statusText}`);
         }
         
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch (jsonError) {
+            console.error('Помилка при розборі JSON:', jsonError);
+            const responseText = await response.text();
+            console.error('Відповідь сервера:', responseText);
+            throw new Error('Помилка в форматі відповіді сервера');
+        }
         
         if (!data.success) {
+            console.error('Помилка у відповіді сервера:', data.message);
             throw new Error(data.message || 'Помилка при виконанні пошуку');
         }
         
@@ -76,7 +91,7 @@ async function loadSearchResults() {
     } catch (error) {
         console.error('Помилка пошуку:', error);
         hideLoadingIndicator();
-        displayNoResults('Помилка при виконанні пошуку. Спробуйте пізніше.');
+        displayNoResults(`Помилка при виконанні пошуку: ${error.message}. Спробуйте пізніше.`);
     }
 }
 
@@ -264,15 +279,12 @@ function createInstructorCard(instructor) {
     // Отримуємо повний URL для аватарки інструктора
     const avatarUrl = getFullAvatarUrl(instructor.image);
     
-    // Перевіряємо, чи є студенти (може бути undefined, null, 0)
-    const hasStudents = instructor.students !== undefined && instructor.students !== null && instructor.students > 0;
+    // Завжди використовуємо жовту зірку
+    const starImg = 'img/star.png';
+    const starAlt = 'Зірка';
     
-    // Якщо студентів немає - зірка сіра, інакше - золота
-    const starImg = !hasStudents ? 'img/gstar.png' : 'img/star.png';
-    const starAlt = !hasStudents ? 'Сіра зірка' : 'Зірка';
-    
-    // Записуємо у змінну для відображення кількість студентів (може бути undefined)
-    const studentsCount = instructor.students || 0;
+    // Використовуємо реальні значення
+    const studentsCount = instructor.students !== undefined ? instructor.students : 0;
 
     card.innerHTML = `
         <div class="instructor">
