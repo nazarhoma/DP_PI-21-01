@@ -241,7 +241,7 @@ function displayCourseDetails(courseData) {
     const starsContainer = document.querySelector('.course-rating .stars');
     if (starsContainer) {
         const rating = parseFloat(courseData.average_rating) || 0;
-        starsContainer.innerHTML = generateStars(rating);
+        starsContainer.innerHTML = generateStars(rating, courseData.reviews_count || 0);
     }
     
     // Кількість відгуків
@@ -463,7 +463,7 @@ function updateReviewStats(stats) {
     // Оновлюємо зірки рейтингу
     const reviewStars = document.querySelector('.reviews-average .stars');
     if (reviewStars) {
-        reviewStars.innerHTML = generateStars(stats.average);
+        reviewStars.innerHTML = generateStars(stats.average, stats.total);
     }
     
     // Оновлюємо розподіл за зірками
@@ -502,7 +502,7 @@ function createReviewItem(review) {
             </div>
             <div class="review-rating">
                 <div class="stars">
-                    ${generateStars(review.rating)}
+                    ${generateStars(review.rating, review.reviews_count)}
                 </div>
             </div>
         </div>
@@ -515,7 +515,16 @@ function createReviewItem(review) {
 }
 
 // Функція для генерації зірок рейтингу
-function generateStars(rating) {
+function generateStars(rating, reviewsCount = 1) {
+    // Якщо кількість відгуків дорівнює 0, всі зірки мають бути сірими
+    if (reviewsCount === 0) {
+        let stars = '';
+        for (let i = 0; i < 5; i++) {
+            stars += '<img class="star" src="img/gstar.png" alt="Порожня зірка">';
+        }
+        return stars;
+    }
+
     // Переконуємося, що rating є числом
     const ratingValue = parseFloat(rating) || 0;
     let stars = '';
@@ -605,6 +614,9 @@ function createCourseCard(course) {
     // Форматуємо рейтинг
     const rating = parseFloat(course.average_rating) || 0;
     
+    // Форматуємо ціну
+    const priceText = course.price === 0 ? 'Безкоштовно' : `₴${course.price}`;
+    
     courseCard.innerHTML = `
         <a href="course.html?id=${course.id}" class="course-link">
             <img class="course-image" src="${courseImage}" alt="${course.title}">
@@ -613,12 +625,12 @@ function createCourseCard(course) {
                 <p class="course-author">${course.mentor_name || 'Невідомий викладач'}</p>
                 <div class="course-rating">
                     <div class="stars">
-                        ${generateStars(rating)}
+                        ${generateStars(rating, course.reviews_count || 0)}
                     </div>
                     <span class="ratings-info">${rating.toFixed(1)}</span>
                 </div>
                 <div class="course-info">
-                    <p class="course-price">₴${course.price}</p>
+                    <p class="course-price">${priceText}</p>
                 </div>
             </div>
         </a>

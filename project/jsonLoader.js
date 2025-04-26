@@ -23,22 +23,43 @@ function createCourseCard(course) {
     // Створюємо HTML для зірок рейтингу
     let starsHTML = '';
     
-    // Якщо відгуків 0, всі зірки сірі
-    if (course.reviews == 0) {
+    // Перевіряємо, чи є відгуки (може бути undefined, null, 0)
+    const hasReviews = course.reviews !== undefined && course.reviews !== null && course.reviews > 0;
+    
+    if (!hasReviews) {
+        // Якщо відгуків немає (0 або undefined), відображаємо 5 сірих зірок
         for (let i = 0; i < 5; i++) {
             starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
         }
     } else {
+        // Відгуки є, відображаємо золоті зірки відповідно до рейтингу
+        const rating = Math.round(course.rating || 0); // Округлення рейтингу, за замовчуванням 0
+        
         // Додаємо золоті зірки для рейтингу
-        for (let i = 0; i < course.rating; i++) {
+        for (let i = 0; i < rating; i++) {
             starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
         }
+        
         // Додаємо сірі зірки до загальної кількості 5
-        for (let i = course.rating; i < 5; i++) {
+        for (let i = rating; i < 5; i++) {
             starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
         }
     }
 
+    // Форматуємо ціну
+    let priceText;
+    if (course.price === 0) {
+        priceText = 'Безкоштовно';
+    } else {
+        // Форматуємо ціну в гривнях
+        const priceUAH = course.price * 1;
+        priceText = `${priceUAH.toFixed(2)} ₴`;
+    }
+    
+    // Записуємо у змінну для відображення кількість відгуків (може бути undefined)
+    const reviewsCount = course.reviews || 0;
+    
+    // Створюємо HTML структуру картки
     card.innerHTML = `
         <img class="course-image" src="${course.image}" alt="${course.title}">
         <div class="course-details">
@@ -46,10 +67,10 @@ function createCourseCard(course) {
           <p class="course-author">Автор: ${course.author}</p>
           <div class="course-rating">
             <div class="stars">${starsHTML}</div>
-            <span class="rating-info">(${course.reviews} відгуків)</span>
+            <span class="rating-info">(${reviewsCount} відгуків)</span>
           </div>
           <p class="course-info">${course.info}</p>
-          <p class="course-price">$${course.price.toFixed(2)}</p>
+          <p class="course-price">${priceText}</p>
         </div>
       `;
 
@@ -167,6 +188,16 @@ function createInstructorCard(instructor) {
 
     // Отримуємо повний URL для аватарки інструктора
     const avatarUrl = getFullAvatarUrl(instructor.image);
+    
+    // Перевіряємо, чи є студенти (може бути undefined, null, 0)
+    const hasStudents = instructor.students !== undefined && instructor.students !== null && instructor.students > 0;
+    
+    // Якщо студентів немає - зірка сіра, інакше - золота
+    const starImg = !hasStudents ? 'img/gstar.png' : 'img/star.png';
+    const starAlt = !hasStudents ? 'Сіра зірка' : 'Зірка';
+    
+    // Записуємо у змінну для відображення кількість студентів (може бути undefined)
+    const studentsCount = instructor.students || 0;
 
     card.innerHTML = `
         <div class="instructor">
@@ -179,10 +210,10 @@ function createInstructorCard(instructor) {
             <hr class="instructor-line">
             <div class="instructors-rating">
               <div class="instructor-rating">
-                <img class="star" src="img/star.png" alt="Зірка">
+                <img class="star" src="${starImg}" alt="${starAlt}">
                 <span class="ratings-info">${instructor.rating}</span>
               </div>
-              <span class="instructor-students">${instructor.students} студентів</span>
+              <span class="instructor-students">${studentsCount} студентів</span>
             </div>
           </div>
         </div>
@@ -238,13 +269,29 @@ function createReviewCard(review) {
 
     // Створюємо HTML для зірок рейтингу
     let starsHTML = '';
-    // Додаємо золоті зірки для рейтингу
-    for (let i = 0; i < review.rating; i++) {
-        starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
-    }
-    // Додаємо сірі зірки до загальної кількості 5
-    for (let i = review.rating; i < 5; i++) {
-        starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+    
+    // Перевіряємо, чи є відгуки (врахування різних можливих назв поля)
+    const hasReviews = (review.reviews !== undefined && review.reviews !== null && review.reviews > 0) || 
+                       (review.reviews_count !== undefined && review.reviews_count !== null && review.reviews_count > 0);
+    
+    if (!hasReviews) {
+        // Якщо відгуків немає, всі зірки сірі
+        for (let i = 0; i < 5; i++) {
+            starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+        }
+    } else {
+        // Відгуки є, відображаємо золоті зірки відповідно до рейтингу
+        const rating = Math.round(review.rating || 0); // Округлення рейтингу, за замовчуванням 0
+        
+        // Додаємо золоті зірки для рейтингу
+        for (let i = 0; i < rating; i++) {
+            starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
+        }
+        
+        // Додаємо сірі зірки до загальної кількості 5
+        for (let i = rating; i < 5; i++) {
+            starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+        }
     }
 
     // Отримуємо повний URL для аватарки

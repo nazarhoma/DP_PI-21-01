@@ -151,124 +151,161 @@ function displaySearchResults(data) {
  * Створює HTML-елемент картки курсу
  */
 function createCourseCard(course) {
-    const cardElement = document.createElement('article');
-    cardElement.className = 'course-card';
-    cardElement.style.opacity = '0';
-    cardElement.style.transform = 'translateY(20px)';
+    const card = document.createElement('article');
+    card.className = 'course-card jcsb';
+    card.setAttribute('data-course-id', course.id);
     
-    const ratingStars = generateRatingStars(course.rating);
+    // Додаємо обробник кліку для переходу на сторінку курсу
+    card.addEventListener('click', function() {
+        window.location.href = `course.html?id=${course.id}`;
+    });
+
+    // Створюємо HTML для зірок рейтингу
+    let starsHTML = '';
     
-    cardElement.innerHTML = `
-        <a href="course.html?id=${course.id}" class="course-card-link">
-            <div class="course-image-container">
-                <img src="${course.image}" alt="${course.title}" class="course-image">
-            </div>
-            <div class="course-details">
-                <h3 class="course-title">${course.title}</h3>
-                <p class="course-author">${course.author}</p>
-                <div class="course-rating">
-                    <div class="stars">${ratingStars}</div>
-                    <span class="rating-count">(${course.reviews})</span>
-                </div>
-                <p class="course-info">${course.info}</p>
-                <span class="course-price">${formatPrice(course.price)}</span>
-            </div>
-        </a>
-    `;
+    // Перевіряємо, чи є відгуки (може бути undefined, null, 0)
+    const hasReviews = course.reviews !== undefined && course.reviews !== null && course.reviews > 0;
+    
+    if (!hasReviews) {
+        // Якщо відгуків немає (0 або undefined), відображаємо 5 сірих зірок
+        for (let i = 0; i < 5; i++) {
+            starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+        }
+    } else {
+        // Відгуки є, відображаємо золоті зірки відповідно до рейтингу
+        const rating = Math.round(course.rating || 0); // Округлення рейтингу, за замовчуванням 0
+        
+        // Додаємо золоті зірки для рейтингу
+        for (let i = 0; i < rating; i++) {
+            starsHTML += '<img class="star" src="img/star.png" alt="Зірка">';
+        }
+        
+        // Додаємо сірі зірки до загальної кількості 5
+        for (let i = rating; i < 5; i++) {
+            starsHTML += '<img class="star" src="img/gstar.png" alt="Сіра зірка">';
+        }
+    }
+
+    // Форматуємо ціну
+    let priceText;
+    if (course.price === 0) {
+        priceText = 'Безкоштовно';
+    } else {
+        // Форматуємо ціну в гривнях
+        const priceUAH = course.price * 1;
+        priceText = `${priceUAH.toFixed(2)} ₴`;
+    }
+    
+    // Записуємо у змінну для відображення кількість відгуків (може бути undefined)
+    const reviewsCount = course.reviews || 0;
+    
+    // Створюємо HTML структуру картки
+    card.innerHTML = `
+        <img class="course-image" src="${course.image}" alt="${course.title}">
+        <div class="course-details">
+          <h3 class="course-title">${course.title}</h3>
+          <p class="course-author">Автор: ${course.author}</p>
+          <div class="course-rating">
+            <div class="stars">${starsHTML}</div>
+            <span class="rating-info">(${reviewsCount} відгуків)</span>
+          </div>
+          <p class="course-info">${course.info}</p>
+          <p class="course-price">${priceText}</p>
+        </div>
+      `;
+
+    // Додаємо стиль курсору, щоб показати, що на карточку можна натиснути
+    card.style.cursor = 'pointer';
+
+    // Додаємо анімацію появи
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
     
     // Анімація появи з затримкою
     setTimeout(() => {
-        cardElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        cardElement.style.opacity = '1';
-        cardElement.style.transform = 'translateY(0)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
     }, 100);
+
+    return card;
+}
+
+/**
+ * Функція для отримання повного URL аватару
+ */
+function getFullAvatarUrl(avatar) {
+    if (!avatar || avatar === '') {
+        // Якщо аватар не вказано, повертаємо дефолтний
+        return 'img/avatars/default-avatar.png';
+    }
     
-    return cardElement;
+    // Якщо аватар вже містить повний URL, повертаємо його
+    if (avatar.startsWith('http')) {
+        return avatar;
+    }
+    
+    // Видаляємо початковий слеш, якщо він є
+    if (avatar.startsWith('/')) {
+        avatar = avatar.substring(1);
+    }
+    
+    // Повертаємо шлях до аватару як є
+    return avatar;
 }
 
 /**
  * Створює HTML-елемент картки інструктора
  */
 function createInstructorCard(instructor) {
-    const cardElement = document.createElement('article');
-    cardElement.className = 'instructor-card';
-    cardElement.style.opacity = '0';
-    cardElement.style.transform = 'translateY(20px)';
+    const card = document.createElement('article');
+    card.className = 'instructor-card';
+
+    // Отримуємо повний URL для аватарки інструктора
+    const avatarUrl = getFullAvatarUrl(instructor.image);
     
-    const ratingStars = generateRatingStars(instructor.rating);
+    // Перевіряємо, чи є студенти (може бути undefined, null, 0)
+    const hasStudents = instructor.students !== undefined && instructor.students !== null && instructor.students > 0;
     
-    // Використовуємо шлях до зображення як є, без модифікацій
-    let imageUrl = instructor.image;
-    if (!imageUrl) {
-        imageUrl = 'img/avatars/default-avatar.png';
-    }
+    // Якщо студентів немає - зірка сіра, інакше - золота
+    const starImg = !hasStudents ? 'img/gstar.png' : 'img/star.png';
+    const starAlt = !hasStudents ? 'Сіра зірка' : 'Зірка';
     
-    // Видаляємо початковий слеш, якщо він є
-    if (imageUrl.startsWith('/')) {
-        imageUrl = imageUrl.substring(1);
-    }
-    
-    cardElement.innerHTML = `
-        <a href="profile.html?id=${instructor.id}" class="instructor-card-link">
-            <div class="instructor-card-image-container">
-                <img src="${imageUrl}" alt="${instructor.name}" class="instructor-card-image">
+    // Записуємо у змінну для відображення кількість студентів (може бути undefined)
+    const studentsCount = instructor.students || 0;
+
+    card.innerHTML = `
+        <div class="instructor">
+          <img class="instructor-img" src="${avatarUrl}" alt="Фото інструктора">
+          <div class="instructor-info">
+            <div class="instructor-title">
+              <h3 class="instructor-name">${instructor.name}</h3>
+              <p class="instructor-role">${instructor.role}</p>
             </div>
-            <div class="instructor-card-content">
-                <h3 class="instructor-card-name">${instructor.name}</h3>
-                <p class="instructor-card-role">${instructor.role}</p>
-                <div class="instructor-card-rating">
-                    <div class="stars">${ratingStars}</div>
-                    <span class="rating-text">${instructor.rating.toFixed(1)}</span>
-                </div>
-                <p class="instructor-card-info">
-                    <span class="students-count">${instructor.students} студентів</span>
-                    <span class="courses-count">${instructor.courses_count} курсів</span>
-                </p>
+            <hr class="instructor-line">
+            <div class="instructors-rating">
+              <div class="instructor-rating">
+                <img class="star" src="${starImg}" alt="${starAlt}">
+                <span class="ratings-info">${instructor.rating}</span>
+              </div>
+              <span class="instructor-students">${studentsCount} студентів</span>
             </div>
-        </a>
-    `;
+          </div>
+        </div>
+      `;
+
+    // Додаємо анімацію появи
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
     
     // Анімація появи з затримкою
     setTimeout(() => {
-        cardElement.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        cardElement.style.opacity = '1';
-        cardElement.style.transform = 'translateY(0)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
     }, 100);
-    
-    return cardElement;
-}
 
-/**
- * Генерує HTML для зірок рейтингу
- */
-function generateRatingStars(rating) {
-    let starsHTML = '';
-    const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.5;
-    
-    // Додаємо заповнені зірки
-    for (let i = 0; i < fullStars; i++) {
-        starsHTML += '<img src="img/star.png" alt="Зірка" class="star">';
-    }
-    
-    
-    // Додаємо пусті зірки
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-    for (let i = 0; i < emptyStars; i++) {
-        starsHTML += '<img src="img/gstar.png" alt="Сіра зірка" class="star">';
-    }
-    
-    return starsHTML;
-}
-
-/**
- * Форматує ціну для відображення
- */
-function formatPrice(price) {
-    if (price === 0) {
-        return 'Безкоштовно';
-    }
-    return `${price.toFixed(2)} грн`;
+    return card;
 }
 
 /**
@@ -325,4 +362,14 @@ function hideLoadingIndicator() {
     if (loadingIndicator) {
         loadingIndicator.style.display = 'none';
     }
+}
+
+/**
+ * Форматує ціну для відображення
+ */
+function formatPrice(price) {
+    if (price === 0) {
+        return 'Безкоштовно';
+    }
+    return `${price.toFixed(2)} грн`;
 } 
