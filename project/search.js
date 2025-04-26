@@ -56,7 +56,7 @@ async function loadSearchResults() {
         showLoadingIndicator();
         
         // Робимо запит на сервер
-        const response = await fetch(`http://localhost/search.php?query=${encodeURIComponent(query)}`);
+        const response = await fetch(`/server/search.php?query=${encodeURIComponent(query)}`);
         
         if (!response.ok) {
             throw new Error('Помилка при виконанні пошукового запиту');

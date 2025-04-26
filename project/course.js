@@ -293,7 +293,7 @@ function updateCourseDetail(label, value) {
 async function loadMentorDetails(mentorId) {
     try {
         // Запит на сервер для отримання даних викладача
-        const response = await fetch(`http://localhost/get_user.php?id=${mentorId}`);
+        const response = await fetch(`/server/get_user.php?id=${mentorId}`);
         
         if (!response.ok) {
             throw new Error('Помилка при завантаженні даних викладача');
