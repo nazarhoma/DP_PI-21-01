@@ -2862,6 +2862,7 @@ a {
   color: #6b7280;
   position: relative;
   transition: color 0.3s;
+  text-decoration: none;
 }
 
 .tab-btn.active {
@@ -2879,12 +2880,158 @@ a {
   background-color: #4f46e5;
 }
 
-.tab-pane {
-  display: none;
+.course-sections {
+  margin-top: 30px;
 }
 
-.tab-pane.active {
-  display: block;
+.course-section {
+  margin-bottom: 50px;
+  padding-top: 20px;
+}
+
+/* Хлібні крихти */
+.course-breadcrumb {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.course-breadcrumb a {
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.course-breadcrumb a:hover {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+
+/* Стилі для розділу інструктора */
+.course-instructor-details {
+  background-color: #f9fafb;
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.instructor-profile {
+  margin-top: 20px;
+}
+
+.instructor-profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.instructor-profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.instructor-profile-info {
+  flex: 1;
+}
+
+.instructor-profile-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 5px;
+  color: #111827;
+}
+
+.instructor-profile-title {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0 0 20px;
+}
+
+.instructor-profile-stats {
+  display: flex;
+  gap: 30px;
+  margin-top: 15px;
+}
+
+.instructor-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Стилі для відгуків користувачів */
+.learner-reviews {
+  margin-top: 40px;
+}
+
+.learner-reviews-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #374151;
+}
+
+.view-more-reviews {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.view-more-reviews-btn {
+  background-color: transparent;
+  border: 1px solid #4f46e5;
+  color: #4f46e5;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.view-more-reviews-btn:hover {
+  background-color: rgba(79, 70, 229, 0.1);
+}
+
+/* Медіа-запити для адаптивності */
+@media (max-width: 768px) {
+  .instructor-profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .instructor-profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .instructor-profile-info {
+    width: 100%;
+  }
+  
+  .instructor-profile-stats {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .tabs-nav {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 5px;
+  }
+  
+  .tab-btn {
+    padding: 12px 15px;
+  }
 }
 
 /* Стилі для навчального плану */
@@ -2985,6 +3132,7 @@ a {
   font-size: 0.95rem;
   line-height: 1.5;
 }
+
 .lessons-list {
   list-style: none;
   padding: 0;
@@ -3035,337 +3183,88 @@ a {
   color: #e53935;
 }
 
-/* Стилі для сторінки результатів пошуку */
-.search-results-container {
-    padding: 40px 0;
-    max-width: 1200px;
-    margin: 0 auto;
-    animation: fadeIn 0.5s ease-out;
-    min-height: 50vh;
+/* Стилі для елементів відгуків */
+.review-item {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5rem 0;
+  margin-bottom: 1rem;
 }
 
-@keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
+.review-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
 }
 
-.search-results-header {
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.search-results-title {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #333;
-    font-weight: 700;
-}
-
-.search-query {
-    color: #0077cc;
-    font-weight: 600;
-}
-
-.no-results-message {
-    font-size: 18px;
-    color: #666;
-    margin: 40px 0;
-    text-align: center;
-}
-
-.loading-indicator {
+.review-header {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin: 40px 0;
+  margin-bottom: 1rem;
 }
 
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(0, 119, 204, 0.2);
+.review-avatar {
+  width: 50px;
+  height: 50px;
     border-radius: 50%;
-    border-top-color: #0077cc;
-    animation: spin 1s linear infinite;
-    margin-bottom: 10px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.section-header {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-
-.search-courses-section,
-.search-instructors-section {
-    margin-bottom: 50px;
-}
-
-.search-courses-section .section-title,
-.search-instructors-section .section-title {
-    font-size: 22px;
-    color: #333;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-.instructors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
-}
-
-
-
-/* Стилі для карток інструкторів у результатах пошуку */
-.instructor-card {
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%;
-}
-
-.instructor-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-}
-
-.instructor-card-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    height: 100%;
-}
-
-.instructor-card-image-container {
-    position: relative;
-    overflow: hidden;
-    height: 180px;
-    background: #f5f5f5;
-}
-
-.instructor-card-image {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+  margin-right: 1rem;
 }
 
-.instructor-card:hover .instructor-card-image {
-    transform: scale(1.05);
+.review-user-info {
+  flex: 1;
 }
 
-.instructor-card-content {
-    padding: 15px;
-}
-
-.instructor-card-name {
-    font-size: 18px;
+.review-user-name {
     font-weight: 600;
-    margin-bottom: 5px;
+  font-size: 1rem;
     color: #333;
+  margin-bottom: 0.2rem;
 }
 
-.instructor-card-role {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 10px;
+.review-date {
+  font-size: 0.85rem;
+  color: #757575;
 }
 
-.instructor-card-rating {
+.review-rating .stars {
     display: flex;
-    align-items: center;
-    margin-bottom: 10px;
 }
 
-.instructor-card-rating .stars {
-    display: flex;
-    margin-right: 5px;
+.review-content p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #4a4a4a;
 }
 
-.instructor-card-rating .star {
-    width: 16px;
-    height: 16px;
-}
-
-.instructor-card-rating .rating-text {
-    font-weight: 600;
-    color: #f39c12;
-}
-
-.instructor-card-info {
-    display: flex;
-    justify-content: space-between;
-    color: #666;
-    font-size: 12px;
-}
-
-.instructor-card-info .students-count,
-.instructor-card-info .courses-count {
-    display: flex;
-    align-items: center;
-}
-
-@media (max-width: 768px) {
-    .courses-grid,
-    .instructors-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+/* Стилі для контейнера помилок */
+.error-container {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin: 2rem 0;
     }
     
-    .search-results-title {
-        font-size: 24px;
-    }
-    
-    .section-title {
-        font-size: 20px;
-    }
+.error-container h2 {
+  color: #e53935;
+  margin-bottom: 1rem;
 }
 
-@media (max-width: 480px) {
-    .courses-grid,
-    .instructors-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .instructor-card-image-container {
-        height: 150px;
-    }
-    
-    .courses-grid .course-card-image-container {
-        height: 140px;
-    }
+.error-container p {
+  color: #616161;
+  margin-bottom: 1.5rem;
 }
 
-.courses-count-text,
-.instructors-count-text {
-    font-size: 18px;
-    color: #666;
-    font-weight: normal;
-}
-
-.search-footer {
-    margin-top: 40px;
-    border-top: 1px solid #eee;
-    padding-top: 30px;
-    text-align: center;
-}
-
-.search-advice {
-    font-size: 16px;
-    color: #666;
-    line-height: 1.5;
-}
-
-.categories-link-inline {
-    color: #0077cc;
+.back-to-home {
+  display: inline-block;
+  background-color: #4f46e5;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.2s ease;
+  transition: background-color 0.3s;
 }
 
-.categories-link-inline:hover {
-    color: #005fa3;
-    text-decoration: underline;
-}
-
-/* Додаткова анімація для спінера */
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.7; }
-}
-
-.loading-indicator .spinner {
-    animation: spin 1s linear infinite, pulse 2s ease infinite;
-}
-
-.loading-indicator p {
-    color: #666;
-    margin-top: 10px;
-    font-size: 16px;
-}
-
-/* Покращення для курсів та менторів */
-.courses-grid .course-card,
-.instructors-grid .instructor-card {
-    will-change: transform;
-}
-
-@media (max-width: 768px) {
-    .search-results-container {
-        padding: 20px 15px;
-    }
-    
-    .search-results-title {
-        font-size: 24px;
-        margin-bottom: 15px;
-    }
-    
-    .section-title {
-        font-size: 20px;
-    }
-    
-    .courses-grid,
-    .instructors-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 15px;
-    }
-    
-    .search-footer {
-        margin-top: 30px;
-        padding-top: 20px;
-    }
-    
-    .search-advice {
-        font-size: 14px;
-    }
-    
-    .courses-count-text,
-    .instructors-count-text {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .search-results-container {
-        padding: 15px 10px;
-    }
-    
-    .courses-grid,
-    .instructors-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .search-results-title {
-        font-size: 22px;
-    }
-    
-    .instructor-card-image-container {
-        height: 150px;
-    }
-    
-    .courses-grid .course-card-image-container {
-        height: 140px;
-    }
-}
-
-/* Стилі для сторінки результатів пошуку */
-.search-results-container {
-    padding: 40px 0;
-    max-width: 1200px;
-    margin: 0 auto;
-    animation: fadeIn 0.5s ease-out;
+.back-to-home:hover {
+  background-color: #3c31cc;
 }
