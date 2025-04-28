@@ -6,8 +6,21 @@ if(!isset($_GET['id'])) {
     exit;
 }
 $id = intval($_GET['id']);
-$sql = "SELECT id,first_name,last_name,username,avatar,title,students_count,reviews_count,courses_count
-        FROM users WHERE id=?";
+$sql = "SELECT 
+    u.id,
+    u.first_name,
+    u.last_name,
+    u.username,
+    u.avatar,
+    (SELECT COUNT(DISTINCT ce.user_id) FROM course_enrollments ce 
+        JOIN courses c ON ce.course_id = c.id 
+        WHERE c.mentor_id = u.id) AS students_count,
+    (SELECT COUNT(*) FROM course_reviews r 
+        JOIN courses c ON r.course_id = c.id 
+        WHERE c.mentor_id = u.id) AS reviews_count,
+    (SELECT COUNT(*) FROM courses WHERE mentor_id = u.id) AS courses_count
+FROM users u
+WHERE u.id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i',$id);
 $stmt->execute();

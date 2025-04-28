@@ -30,18 +30,29 @@ async function loadCourseDetails(id){
   const c=await r.json();
   if(c.error)return;
   document.title=`${c.title}|Byway`;
-  document.querySelector('.course-category-link').textContent=c.category;
-  document.querySelector('.course-detail-title').textContent=c.title;
-  document.querySelector('.course-detail-description').textContent=c.description;
-  document.querySelector('.course-about-text').textContent=c.description;
-  const img=document.querySelector('.course-img');
-  img.src=c.image||img.src;
-  img.alt=c.title;
-  document.querySelector('.course-price').textContent=`₴${c.price}`;
-  document.querySelector('.students-count').textContent=`${c.students_count} студентів`;
-  document.querySelector('.ratings-info').textContent=+c.average_rating.toFixed(1);
-  document.querySelector('.course-rating .stars').innerHTML=generateStars(+c.average_rating);
-  document.querySelector('.reviews-count').textContent=`(${c.reviews_count} відгуків)`;
+  const catEl = document.querySelector('.course-category-link');
+  if (catEl) catEl.textContent=c.category;
+  const titleEl = document.querySelector('.course-detail-title');
+  if (titleEl) titleEl.textContent=c.title;
+  const descEl = document.querySelector('.course-detail-description');
+  if (descEl) descEl.textContent=c.description;
+  const aboutEl = document.querySelector('.course-about-text');
+  if (aboutEl) aboutEl.textContent=c.description;
+  const img=document.querySelector('.purchase-img');
+  if (img) {
+    img.src=c.image||'img/default-image-course.png';
+    img.alt=c.title;
+  }
+  const priceEl = document.querySelector('.course-price');
+  if (priceEl) priceEl.textContent = (c.price && Number(c.price) > 0) ? `₴${c.price}` : 'Безкоштовно';
+  const studentsEl = document.querySelector('.students-count');
+  if (studentsEl) studentsEl.textContent=`${c.students_count} студентів`;
+  const ratingsEl = document.querySelector('.ratings-info');
+  if (ratingsEl) ratingsEl.textContent = Number(c.average_rating).toFixed(1);
+  const starsEl = document.querySelector('.course-rating .stars');
+  if (starsEl) starsEl.innerHTML = generateStars(Number(c.average_rating));
+  const reviewsEl = document.querySelector('.reviews-count');
+  if (reviewsEl) reviewsEl.textContent=`(${c.reviews_count} відгуків)`;
   updateCourseDetail('Рівень складності',translateLevel(c.level));
   updateCourseDetail('Тривалість',c.duration);
   updateCourseDetail('Мова',c.language);
@@ -121,18 +132,22 @@ function loadMentorDetails(id){
   fetch(`${API_ROOT}/get_mentor.php?id=${id}`)
     .then(r=>r.json())
     .then(m=>{
-      if(m.error)return;
-      const name=[m.first_name,m.last_name].filter(Boolean).join(' ')||m.username;
-      document.querySelector('.instructor-name').textContent=name;
-      document.querySelector('.instructor-profile-name').textContent=name;
-      document.querySelector('.instructor-profile-title').textContent=m.title;
-      const av=document.querySelector('.instructor-profile-avatar');
-      av.src=m.avatar||av.src;
-      document.querySelectorAll('.stat-value')[0].textContent=`${m.students_count} студентів`;
-      document.querySelectorAll('.stat-value')[1].textContent=`${m.reviews_count} відгуків`;
-      document.querySelectorAll('.stat-value')[2].textContent=`${m.courses_count} курсів`;
-    })
-    .catch(_=>document.querySelector('#instructor').remove());
+      if(m.error) return;
+      const name = [m.first_name, m.last_name].filter(Boolean).join(' ').trim() || m.username || 'Невідомий автор';
+      const nameEls = document.querySelectorAll('.instructor-name, .instructor-profile-name');
+      nameEls.forEach(el => el.textContent = name);
+      const titleEl = document.querySelector('.instructor-profile-title');
+      if (titleEl) titleEl.textContent = m.title || '';
+      const av = document.querySelector('.instructor-profile-avatar');
+      if (av) av.src = m.avatar || av.src;
+      const instructorSection = document.querySelector('#instructor');
+      if (instructorSection) {
+        const statValues = instructorSection.querySelectorAll('.stat-value');
+        if (statValues[0]) statValues[0].textContent = `${m.students_count} студентів`;
+        if (statValues[1]) statValues[1].textContent = `${m.reviews_count} відгуків`;
+        if (statValues[2]) statValues[2].textContent = `${m.courses_count} курсів`;
+      }
+    });
 }
 
 function loadCourseSyllabus(id){
@@ -143,8 +158,12 @@ function loadCourseSyllabus(id){
       sec.innerHTML='';
       if(!s.sections.length)return sec.innerHTML='<p>Навчальний план відсутній</p>';
       document.getElementById('sections-count').textContent=s.sections.length;
-      document.getElementById('lessons-count').textContent=s.total_lessons;
-      s.sections.forEach((sx,i)=>sec.appendChild(makeSection(sx,i)));
+      let totalLessons = 0;
+      s.sections.forEach((sx,i)=>{
+        totalLessons += sx.resources_count;
+        sec.appendChild(makeSection(sx,i));
+      });
+      document.getElementById('lessons-count').textContent=totalLessons;
       attachSections();
     });
 }
@@ -152,13 +171,15 @@ function loadCourseSyllabus(id){
 function makeSection(s,i){
   const d=document.createElement('div');
   d.className='syllabus-section';
-  const lessons=s.lessons.map(l=>`<li><img src="${iconFor(l.content_type)}"><span>${l.title}</span><span>${l.duration}</span></li>`).join('');
+  const resources=s.resources.map(r=>
+    `<li><span class="resource-type">[${translateResourceType(r.type)}]</span> <span>${r.title}</span>${r.duration?` <span class="duration">(${r.duration} хв)</span>`:''}</li>`
+  ).join('');
   d.innerHTML=`
     <div class="section-header">
-      <div>${i+1}. ${s.title}</div>
-      <div><span>${s.lessons_count} уроків</span><span>${s.duration||''}</span><img src="img/arrow-down.png" class="section-toggle"></div>
+      <div><strong>${s.title}</strong><div class="section-description">${s.description||''}</div></div>
+      <div><span>${s.resources_count} уроків</span><img src="img/arrow-down.png" class="section-toggle"></div>
     </div>
-    <ul>${lessons}</ul>`;
+    <ul class="section-resources">${resources}</ul>`;
   return d;
 }
 
@@ -169,22 +190,55 @@ function attachSections(){
   });
 }
 
+function translateResourceType(type) {
+  switch(type) {
+    case 'video': return 'Відео';
+    case 'document': return 'Документ';
+    case 'image': return 'Зображення';
+    case 'text': return 'Текст';
+    case 'quiz': return 'Тест';
+    default: return type;
+  }
+}
+
 function loadRelatedCourses(id){
   fetch(`${API_ROOT}/get_related_courses.php?course_id=${id}`)
     .then(r=>r.json())
     .then(d=>{
       const list=document.querySelector('.courses-list');
       list.innerHTML='';
+      if (!d.courses || d.courses.length === 0) {
+        list.innerHTML = '<p class="no-content">Схожих курсів не знайдено</p>';
+        return;
+      }
       d.courses.slice(0,4).forEach(c=>{
         const div=document.createElement('div');
         div.className='course-card';
+        div.style.cursor = 'pointer';
+        div.onclick = () => window.location.href = `course.html?id=${c.id}`;
+        const image = c.image ? c.image : 'img/default-image-course.png';
+        let author = 'Невідомий автор';
+        if (c.first_name || c.last_name) {
+          author = `${c.first_name ? c.first_name : ''} ${c.last_name ? c.last_name : ''}`.trim();
+        } else if (c.author) {
+          author = c.author;
+        }
+        const duration = c.duration ? `${c.duration} год.` : '';
+        const level = c.level ? translateLevel(c.level) : '';
         div.innerHTML=`
-          <a href="course.html?id=${c.id}">
-            <img src="${c.image}">
-            <h3>${c.title}</h3>
-            <div>${generateStars(c.average_rating)}<span>${+c.average_rating.toFixed(1)}</span>(${c.reviews_count})</div>
-            <div>₴${c.price}</div>
-          </a>`;
+          <img class="course-image" src="${image}" alt="${c.title}">
+          <div class="course-details">
+            <h3 class="course-title">${c.title}</h3>
+            <p class="course-author">Автор: ${author}</p>
+            <div class="course-rating">
+              <div class="stars">${generateStars(Number(c.average_rating))}</div>
+              <span class="ratings-info">${Number(c.average_rating).toFixed(1)}</span>
+              <span class="reviews-count">(${c.reviews_count} відгуків)</span>
+            </div>
+            <div class="course-info">${duration} ${level}</div>
+            <p class="course-price">₴${c.price}</p>
+          </div>
+        `;
         list.appendChild(div);
       });
     });

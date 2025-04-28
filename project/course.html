@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="style.css">
   <title>Перегляд курсу</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta name="description" content="Вивчайте нові навички онлайн разом з нами!">
 </head>
 <body>
   <header class="header">
@@ -88,11 +92,15 @@
             </div>
           </div>
         </div>
-        <div class="course-detail-image">
-          <img src="img/default-image-course.png" alt="" class="course-img">
+        <div class="course-sidebar">
+          <div class="course-purchase-card">
+            <img src="img/default-image-course.png" alt="" class="course-img purchase-img">
+            <p class="course-price"></p>
+            <button class="add-to-cart-btn">Додати в корзину</button>
+            <button class="buy-now-btn">Купити курс</button>
+          </div>
         </div>
       </div>
-
       <div class="course-tabs">
         <div class="tabs-nav">
           <a href="#overview" class="tab-btn active">Опис</a>
@@ -101,72 +109,167 @@
           <a href="#reviews" class="tab-btn">Відгуки</a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section id="overview" class="course-section">
-    <div class="course-about">
-      <h2 class="section-title">Опис курсу</h2>
-      <p class="course-about-text"></p>
-    </div>
-  </section>
-
-  <section id="syllabus" class="course-section">
-    <h2 class="section-title">Навчальний план</h2>
-    <div class="syllabus-overview">
-      <div class="syllabus-stat"><div class="stat-value"><span id="sections-count">0</span> Розділів</div></div>
-      <div class="syllabus-stat"><div class="stat-value"><span id="lessons-count">0</span> Уроків</div></div>
-      <div class="syllabus-stat"><div class="stat-value"><span id="total-duration">0 год</span> Тривалість</div></div>
-    </div>
-    <div class="syllabus-sections"></div>
-  </section>
-
-  <section id="instructor" class="course-section">
-    <h2 class="section-title">Інструктор</h2>
-    <div class="instructor-profile">
-      <div class="instructor-profile-header">
-        <img src="img/avatars/default-avatar.png" alt="" class="instructor-profile-avatar">
-        <div class="instructor-profile-info">
-          <h3 class="instructor-profile-name"></h3>
-          <p class="instructor-profile-title"></p>
-          <div class="instructor-profile-stats">
-            <div class="instructor-stat"><img src="img/users.png" alt="" class="stat-icon"><span class="stat-value">0 студентів</span></div>
-            <div class="instructor-stat"><img src="img/star.png" alt="" class="stat-icon"><span class="stat-value">0 відгуків</span></div>
-            <div class="instructor-stat"><img src="img/course.png" alt="" class="stat-icon"><span class="stat-value">0 курсів</span></div>
-          </div>
+      <div class="course-detail-content">
+        <div class="course-main-content">
+          <section id="overview" class="course-section">
+            <div class="course-about">
+              <h2 class="section-title">Опис курсу</h2>
+              <p class="course-about-text"></p>
+            </div>
+          </section>
+          <section id="syllabus" class="course-section">
+            <h2 class="section-title">Навчальний план</h2>
+            <div class="syllabus-overview">
+              <div class="syllabus-stat"><div class="stat-value"><span id="sections-count">0</span> Розділів</div></div>
+              <div class="syllabus-stat"><div class="stat-value"><span id="lessons-count">0</span> Уроків</div></div>
+              <div class="syllabus-stat"><div class="stat-value"><span id="total-duration">0 год</span> Тривалість</div></div>
+            </div>
+            <div class="course-sections syllabus-sections"></div>
+          </section>
+          <section id="instructor" class="course-section">
+            <h2 class="section-title">Інструктор</h2>
+            <div class="instructor-profile">
+              <div class="instructor-profile-header">
+                <img src="img/avatars/default-avatar.png" alt="" class="instructor-profile-avatar">
+                <div class="instructor-profile-info">
+                  <h3 class="instructor-profile-name"></h3>
+                  <p class="instructor-profile-title"></p>
+                  <div class="instructor-profile-stats">
+                    <div class="instructor-stat"><img src="img/users.png" alt="" class="stat-icon"><span class="stat-value">0 студентів</span></div>
+                    <div class="instructor-stat"><img src="img/star.png" alt="" class="stat-icon"><span class="stat-value">0 відгуків</span></div>
+                    <div class="instructor-stat"><img src="img/course.png" alt="" class="stat-icon"><span class="stat-value">0 курсів</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section id="reviews" class="course-section course-reviews">
+            <h2 class="section-title">Відгуки студентів</h2>
+            <div class="reviews-summary">
+              <div class="reviews-average">
+                <span class="review-average-score"></span>
+                <div class="stars"></div>
+                <span class="review-total"></span>
+              </div>
+              <div class="reviews-breakdown">
+                <div class="review-bar"><span class="review-star">5 зірок</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
+                <div class="review-bar"><span class="review-star">4 зірки</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
+                <div class="review-bar"><span class="review-star">3 зірки</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
+                <div class="review-bar"><span class="review-star">2 зірки</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
+                <div class="review-bar"><span class="review-star">1 зірка</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
+              </div>
+            </div>
+            <div class="learner-reviews">
+              <div class="reviews-list"></div>
+              <button class="view-more-reviews-btn">Переглянути більше відгуків</button>
+            </div>
+          </section>
+          <section class="related-courses">
+            <h2 class="section-title">Схожі курси</h2>
+            <div class="courses-list"></div>
+          </section>
         </div>
       </div>
     </div>
   </section>
-
-  <section id="reviews" class="course-section">
-    <h2 class="section-title">Відгуки студентів</h2>
-    <div class="reviews-summary">
-      <div class="reviews-average">
-        <span class="review-average-score"></span>
-        <div class="stars"></div>
-        <span class="review-total"></span>
-      </div>
-      <div class="reviews-breakdown">
-        <div class="review-bar"><span class="review-star">5 зірок</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
-        <div class="review-bar"><span class="review-star">4 зірки</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
-        <div class="review-bar"><span class="review-star">3 зірки</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
-        <div class="review-bar"><span class="review-star">2 зірки</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
-        <div class="review-bar"><span class="review-star">1 зірка</span><div class="progress-bar"><div class="progress"></div></div><span class="review-percent"></span></div>
-      </div>
-    </div>
-    <div class="learner-reviews">
-      <div class="reviews-list"></div>
-      <button class="view-more-reviews-btn">Переглянути більше відгуків</button>
-    </div>
-  </section>
-
-  <section class="related-courses">
-    <h2 class="section-title">Схожі курси</h2>
-    <div class="courses-list"></div>
-  </section>
 </div>
 
+<footer class="footer">
+    <div class="footer-information">
+        <div class="footer-byway">
+            <img class="footer-logo" src="img/full-logo.png" alt="Логотип сайту">
+            <p class="footer-byway-info">Ми надаємо можливості для навчання через доступну та захоплюючу онлайн-освіту.
+                <br> Byway — провідна онлайн-платформа для навчання, яка пропонує високоякісні, гнучкі та доступні освітні послуги.</p>
+        </div>
+        <div class="footer-block">
+            <h3 class="footer-title">Отримати допомогу</h3>
+            <ul class="footer-info-list">
+                <li><a class="footer-info" id="contactLink" style="cursor: pointer">Зв'язатися з нами</a></li>
+                <li><a href="#" class="footer-info">Останні статті</a></li>
+                <li><a class="footer-info">FAQ</a></li>
+            </ul>
+        </div>
+        <div class="footer-block">
+            <h3 class="footer-title">Програми</h3>
+            <ul class="footer-info-list">
+                <li><a href="#" class="footer-info">Мистецтво та дизайн</a></li>
+                <li><a href="#" class="footer-info">Бізнес</a></li>
+                <li><a href="#" class="footer-info">ІТ та програмування</a></li>
+                <li><a href="#" class="footer-info">Мови</a></li>
+                <li><a href="#" class="footer-info">Програмування</a></li>
+            </ul>
+        </div>
+        <div class="footer-contactus">
+            <div class="footer-block">
+                <h3 class="footer-title">Зв'язатися з нами</h3>
+                <p class="footer-info">Адреса: 123 Main Street, Anytown, CA 12345</p>
+                <p class="footer-info">Тел: +(123) 456-7890</p>
+                <p class="footer-info">Ел. пошта: <a href="mailto:bywayedu@webkul.in" class="footer-info">bywayedu@webkul.in</a></p>
+            </div>
+            <div class="footer-social">
+                <img class="footer-social-logo" src="img/social-logo.png" alt="Іконки соціальних мереж">
+            </div>
+        </div>
+    </div>
+</footer>
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Зв'язатися з нами</h2>
+            <span class="close" id="closeModal">&times;</span>
+        </div>
+        <form id="contactForm">
+            <label for="name">Ім'я:</label>
+            <input class="modal-input" type="text" id="name" name="name" required><br>
+
+            <label for="email">Електронна адреса:</label>
+            <input class="modal-input" type="email" id="email" name="email" required><br>
+
+            <label for="message">Повідомлення:</label><br>
+            <textarea class="modal-input" id="message" name="message" rows="4" required></textarea><br>
+
+            <button type="submit" class="modal-button">Відправити</button>
+        </form>
+    </div>
+</div>
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Ви впевнені, що хочете відправити?</h2>
+            <span class="close" id="closeConfirmationModal">&times;</span>
+        </div>
+        <button id="confirmSend">Так</button>
+        <button id="cancelSend">Ні</button>
+    </div>
+</div>
+<div id="closeModalConfirm" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Ви впевнені, що хочете закрити це вікно?</h2>
+            <span class="close" id="closeCloseModalConfirm">&times;</span>
+        </div>
+        <button id="confirmClose" class="modal-button">Так</button>
+        <button id="cancelClose" class="modal-button">Ні</button>
+    </div>
+</div>
+<div id="verificationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Стати ментором</h2>
+            <span class="close" id="closeVerificationModal">&times;</span>
+        </div>
+        <form id="verificationForm">
+            <p style="margin-bottom: 20px; font-size: 16px; color: #334155; line-height: 1.5;">Щоб стати ментором і мати можливість створювати власні курси, підтвердіть, що ви не робот.</p>
+            <div class="verification-check">
+                <input type="checkbox" id="notRobot" name="notRobot" required>
+                <label for="notRobot">Я не робот</label>
+            </div>
+            <button type="submit" class="modal-button verification-btn">Підтвердити</button>
+        </form>
+    </div>
+</div>
+<script src="modal.js"></script>
+<script src="script.js"></script>
 <script src="course.js"></script>
 </body>
 </html>

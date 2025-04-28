@@ -99,8 +99,8 @@ async function loadSearchResults() {
  * Відображає результати пошуку на сторінці
  */
 function displaySearchResults(data) {
-    const coursesContainer = document.querySelector('.search-courses');
-    const instructorsContainer = document.querySelector('.search-instructors');
+    const coursesContainer = document.querySelector('.courses-list');
+    const instructorsContainer = document.querySelector('.instructors-list');
     const coursesCount = document.querySelector('.courses-count');
     const instructorsCount = document.querySelector('.instructors-count');
     const searchFooter = document.querySelector('.search-footer');
