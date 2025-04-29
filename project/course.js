@@ -23,6 +23,18 @@ document.addEventListener('DOMContentLoaded',()=>{
   loadCourseDetails(cid);
   loadCourseReviews(cid);
   loadRelatedCourses(cid);
+  
+  // Додаємо обробники для кнопок кошика
+  const addToCartBtn = document.querySelector('.add-to-cart-btn');
+  const purchaseBtn = document.querySelector('.buy-now-btn');
+  
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', () => addToCart(cid));
+  }
+  
+  if (purchaseBtn) {
+    purchaseBtn.addEventListener('click', () => purchaseCourse(cid));
+  }
 });
 
 async function loadCourseDetails(id){
@@ -272,3 +284,118 @@ document.addEventListener('scroll',()=>{
   s.forEach(sec=>{const t=sec.offsetTop-100; if(y>=t&&y< t+sec.offsetHeight)cur=sec.id;});
   btn.forEach(b=>b.classList.toggle('active',b.getAttribute('href').slice(1)===cur));
 });
+
+// Функції для роботи з кошиком
+function addToCart(courseId) {
+    // Перевіряємо чи користувач авторизований
+    if (!isUserLoggedIn()) {
+        showNotification('Будь ласка, увійдіть в систему', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+        return;
+    }
+
+    fetch('server/cart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Додаємо для передачі cookies
+        body: JSON.stringify({ course_id: courseId })
+    })
+        .then(response => {
+            if (response.status === 401) {
+                throw new Error('Unauthorized');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            showNotification('Курс додано до кошика', 'success');
+            updateCartCount();
+        })
+        .catch(error => {
+            console.error('Error adding to cart:', error);
+            if (error.message === 'Unauthorized') {
+                showNotification('Будь ласка, увійдіть в систему', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } else {
+                showNotification('Помилка додавання до кошика', 'error');
+            }
+        });
+}
+
+function purchaseCourse(courseId) {
+    // Перевіряємо чи користувач авторизований
+    if (!isUserLoggedIn()) {
+        showNotification('Будь ласка, увійдіть в систему', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+        return;
+    }
+
+    fetch('server/purchase.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Додаємо для передачі cookies
+        body: JSON.stringify({ course_id: courseId })
+    })
+        .then(response => {
+            if (response.status === 401) {
+                throw new Error('Unauthorized');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            showNotification('Курс успішно придбано!', 'success');
+            updateCartCount();
+        })
+        .catch(error => {
+            console.error('Error purchasing course:', error);
+            if (error.message === 'Unauthorized') {
+                showNotification('Будь ласка, увійдіть в систему', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } else {
+                showNotification('Помилка при купівлі курсу', 'error');
+            }
+        });
+}
+
+// Функція для перевірки авторизації користувача
+function isUserLoggedIn() {
+    const userData = localStorage.getItem('userData');
+    if (!userData) return false;
+    
+    try {
+        const user = JSON.parse(userData);
+        return Boolean(user && user.id);
+    } catch (e) {
+        return false;
+    }
+}
+
+// Функція для показу сповіщень
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}

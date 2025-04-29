@@ -1,8 +1,14 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+// Дозволяємо доступ тільки з нашого домену
+header("Access-Control-Allow-Origin: https://byway.store");
+// Дозволяємо передачу credentials (cookies, authorization headers)
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json');
+
+// Запускаємо сесію
+session_start();
 
 // Налаштування для виявлення помилок
 ini_set('display_errors', 1);
@@ -53,6 +59,11 @@ try {
             if (password_verify($password, $hashed_password)) {
                 error_log("Пароль вірний, авторизація успішна");
                 
+                // Встановлюємо дані в сесію
+                $_SESSION['user_id'] = $id;
+                $_SESSION['username'] = $username;
+                $_SESSION['role'] = $role;
+                
                 // Отримуємо повні дані користувача
                 $query = "SELECT id, username, email, role, first_name, last_name, 
                         avatar, gender, age, education, native_language, created_at 
@@ -65,6 +76,7 @@ try {
                 
                 // Логуємо для діагностики
                 error_log("Повні дані користувача при авторизації: " . print_r($user_data, true));
+                error_log("Встановлено сесію для користувача ID: " . $_SESSION['user_id']);
                 
                 $response_data = [
                     'success' => true,
