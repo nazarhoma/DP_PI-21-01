@@ -340,38 +340,7 @@ function purchaseCourse(courseId) {
         return;
     }
 
-    fetch('server/purchase.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include', // Додаємо для передачі cookies
-        body: JSON.stringify({ course_id: courseId })
-    })
-        .then(response => {
-            if (response.status === 401) {
-                throw new Error('Unauthorized');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            showNotification('Курс успішно придбано!', 'success');
-            updateCartCount();
-        })
-        .catch(error => {
-            console.error('Error purchasing course:', error);
-            if (error.message === 'Unauthorized') {
-                showNotification('Будь ласка, увійдіть в систему', 'error');
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
-            } else {
-                showNotification('Помилка при купівлі курсу', 'error');
-            }
-        });
+    window.location.href = `checkout.html?course_id=${courseId}`;
 }
 
 // Функція для перевірки авторизації користувача

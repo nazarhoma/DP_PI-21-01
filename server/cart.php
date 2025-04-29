@@ -1,6 +1,6 @@
 <?php
 // Дозволяємо доступ тільки з нашого домену
-header("Access-Control-Allow-Origin: https://byway.store");
+header("Access-Control-Allow-Origin: *");
 // Дозволяємо передачу credentials (cookies, authorization headers)
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
@@ -26,17 +26,40 @@ $user_id = $_SESSION['user_id'];
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        // Отримання вмісту кошика
+        // Отримання вмісту кошика з інформацією про автора
         $stmt = $conn->prepare("
-            SELECT c.id as cart_id, co.* 
+            SELECT c.id as cart_id, co.*, 
+                   CONCAT(COALESCE(u.first_name, ''), ' ', COALESCE(u.last_name, '')) as author_name,
+                   u.username
             FROM cart c 
             JOIN courses co ON c.course_id = co.id 
+            LEFT JOIN users u ON co.mentor_id = u.id
             WHERE c.user_id = ?
         ");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $cart_items = $result->fetch_all(MYSQLI_ASSOC);
+
+        // Форматуємо дані перед відправкою
+        foreach ($cart_items as &$item) {
+            // Формуємо ім'я автора
+            $item['author'] = trim($item['author_name']);
+            if (empty($item['author'])) {
+                $item['author'] = $item['username'] ? $item['username'] : 'Невідомий автор';
+            }
+
+            // Перевіряємо наявність зображення
+            if (empty($item['image']) || !file_exists('../' . $item['image'])) {
+                $item['image'] = 'img/default-image-course.png';
+            }
+
+            // Видаляємо непотрібні поля
+            unset($item['author_name']);
+            unset($item['username']);
+            unset($item['mentor_id']);
+        }
+
         echo json_encode($cart_items);
         break;
 

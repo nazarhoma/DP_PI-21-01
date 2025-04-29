@@ -3489,3 +3489,146 @@ a {
         width: 100%;
     }
 }
+
+/* Стилі для сторінки оплати */
+.checkout-section {
+    padding: 40px 5%;
+    min-height: calc(100vh - 77px - 300px);
+}
+
+.checkout-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 0 8px 0 rgba(59, 130, 246, 0.12);
+    padding: 30px;
+}
+
+.checkout-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.checkout-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.order-details {
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+.order-details h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.course-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.course-thumbnail {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.course-details h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.payment-form {
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.payment-form h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.price-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.price-input-group input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.currency {
+    font-size: 16px;
+    color: #64748b;
+}
+
+.price-mismatch-error {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.pay-button {
+    width: 100%;
+    padding: 14px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s ease;
+}
+
+.pay-button:hover {
+    background: #2563eb;
+}
+
+@media (max-width: 768px) {
+    .checkout-container {
+        padding: 20px;
+    }
+
+    .course-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .course-thumbnail {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+    }
+}

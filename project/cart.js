@@ -32,13 +32,13 @@ function loadCartItems() {
                 return `
                     <div class="cart-item" data-id="${item.cart_id}" data-course-id="${item.id}">
                         <div class="cart-item-image-container">
-                            <img src="${item.image || 'img/default-image-course.png'}" alt="${item.title}" class="cart-item-image">
+                            <img src="../${item.image}" alt="${item.title}" class="cart-item-image">
                         </div>
                         <div class="cart-item-details">
                             <div class="cart-item-header">
                                 <h3 class="cart-item-title">${item.title}</h3>
                             </div>
-                            <p class="cart-item-description">${item.description}</p>
+                            <p class="cart-item-author">Автор: ${item.author}</p>
                             <div class="cart-item-price">${item.price} грн</div>
                             <button class="remove-btn" onclick="removeFromCart(${item.cart_id})" aria-label="Видалити з кошика">
                                 <i class="fas fa-times"></i>
@@ -85,24 +85,9 @@ function purchaseAllItems() {
         return;
     }
 
-    // Отримуємо всі course_id з data-атрибутів
-    const courseIds = Array.from(cartItems).map(item => item.getAttribute('data-course-id'));
-    
-    // Створюємо масив промісів для кожної покупки
-    const purchases = courseIds.map(courseId => {
-        return purchaseItem(courseId);
-    });
-    
-    Promise.all(purchases)
-        .then(() => {
-            showNotification('Всі курси успішно придбано!', 'success');
-            loadCartItems();
-            updateCartCount();
-        })
-        .catch(error => {
-            console.error('Error purchasing all items:', error);
-            showNotification('Помилка при купівлі курсів', 'error');
-        });
+    // Отримуємо course_id першого товару (для демонстрації купуємо один товар)
+    const courseId = cartItems[0].getAttribute('data-course-id');
+    window.location.href = `checkout.html?course_id=${courseId}`;
 }
 
 function purchaseItem(courseId) {
