@@ -588,6 +588,8 @@
     padding: 15px;
     overflow-y: auto;
     background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
 }
 
 .message {
@@ -596,19 +598,23 @@
 }
 
 .message-incoming {
-    align-self: flex-start;
+    margin-right: auto;
 }
 
 .message-outgoing {
-    align-self: flex-end;
     margin-left: auto;
 }
 
 .message-text {
+    display: inline-block;
+    max-width: 350px;
+    min-width: 40px;
+    word-break: break-word;
     padding: 10px 15px;
     border-radius: 12px;
     font-size: 14px;
     line-height: 1.4;
+    box-sizing: border-box;
 }
 
 .message-incoming .message-text {
@@ -967,4 +973,12 @@
         right: 60px;
         top: 8px;
     }
+}
+
+.no-messages {
+    font-style: italic;
+    text-align: center;
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 30px;
 } 

@@ -71,6 +71,22 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(initReviewFilters, 0);
         setTimeout(renderReviewsPage, 0);
     }
+
+    // Додаю обробники для чату (винесено з renderChatMessages)
+    const sendButton = document.querySelector('.send-btn');
+    const messageInput = document.querySelector('.chat-input input');
+    if (sendButton && messageInput) {
+        sendButton.onclick = function() {
+            if (messageInput.value.trim() !== '') {
+                sendChatMessage();
+            }
+        };
+        messageInput.onkeypress = function(e) {
+            if (e.key === 'Enter' && messageInput.value.trim() !== '') {
+                sendChatMessage();
+            }
+        };
+    }
 });
 
 // Функція виходу з системи
@@ -492,21 +508,30 @@ function renderChatUsers(users) {
         return;
     }
     
+    // Сортуємо користувачів за датою останнього повідомлення (спочатку найновіші)
+    users = users.slice().sort((a, b) => {
+        if (a.last_message_time && b.last_message_time) {
+            return new Date(b.last_message_time) - new Date(a.last_message_time);
+        } else if (a.last_message_time) {
+            return -1;
+        } else if (b.last_message_time) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+    
     users.forEach(user => {
         if (!user || !user.id) {
             console.warn('Пропускаємо користувача з недійсними даними:', user);
             return;
         }
-        
         const userItem = document.createElement('div');
         userItem.classList.add('user-item');
         userItem.setAttribute('data-user-id', user.id);
-        
-        // Використовуємо дефолтну аватарку для запобігання помилок
-        const avatarSrc = 'img/avatars/default-avatar.png';
+        const avatarSrc = user.avatar_url && user.avatar_url !== '' ? user.avatar_url : 'img/avatars/default-avatar.png';
         const userName = user.name || 'Невідомий користувач';
         const userStatus = user.status || 'Student';
-        
         userItem.innerHTML = `
             <img src="${avatarSrc}" alt="${userName}">
             <div class="user-item-details">
@@ -515,21 +540,14 @@ function renderChatUsers(users) {
             </div>
             ${user.unread_messages ? `<div class="new-message">${user.unread_messages}</div>` : ''}
         `;
-        
         userItem.addEventListener('click', function() {
-            // Відзначаємо користувача як активного
             document.querySelectorAll('.user-item').forEach(item => {
                 item.classList.remove('active');
             });
             this.classList.add('active');
-            
-            // Завантажуємо історію повідомлень
             loadChatMessages(user.id);
-            
-            // Оновлюємо інформацію в заголовку чату
             updateChatHeader(user);
         });
-        
         usersList.appendChild(userItem);
     });
 }
@@ -565,7 +583,7 @@ function updateChatHeader(user) {
     
     const userInfoImg = chatHeader.querySelector('.chat-user-info img');
     if (userInfoImg) {
-        userInfoImg.src = 'img/avatars/default-avatar.png';
+        userInfoImg.src = user.avatar_url && user.avatar_url !== '' ? user.avatar_url : 'img/avatars/default-avatar.png';
     }
     
     const userNameElem = chatHeader.querySelector('.user-name');

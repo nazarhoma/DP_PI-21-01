@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('Europe/Kyiv');
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -50,10 +52,10 @@ try {
     
     // Вставляємо нове повідомлення
     $query = "INSERT INTO messages (sender_id, receiver_id, text, created_at, is_read) 
-              VALUES (?, ?, ?, NOW(), 0)";
-    
+              VALUES (?, ?, ?, ?, 0)";
+    $created_at = date('Y-m-d H:i:s');
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("iis", $adminId, $userId, $message);
+    $stmt->bind_param("iiss", $adminId, $userId, $message, $created_at);
     $stmt->execute();
     
     if ($stmt->affected_rows > 0) {

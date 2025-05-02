@@ -13,10 +13,15 @@ include 'connect.php';
 
 try {
     // Отримуємо всіх користувачів з ролями student та mentor
-    $sql = "SELECT id, username, email, first_name, last_name, role, avatar
-            FROM users 
-            WHERE role IN ('student', 'mentor')
-            ORDER BY username ASC";
+    $sql = "SELECT u.id, u.username, u.email, u.first_name, u.last_name, u.role, u.avatar,
+        (
+            SELECT MAX(created_at)
+            FROM messages
+            WHERE sender_id = u.id OR receiver_id = u.id
+        ) as last_message_time
+        FROM users u
+        WHERE u.role IN ('student', 'mentor')
+        ORDER BY username ASC";
     
     $result = $conn->query($sql);
     
@@ -32,10 +37,11 @@ try {
             $users[] = array(
                 'id' => $row['id'],
                 'name' => $name,
-                'status' => ucfirst($row['role']), // Статус = роль з великої літери
+                'status' => ucfirst($row['role']),
                 'email' => $row['email'],
                 'avatar_url' => $row['avatar'],
-                'unread_messages' => 0 // Тут можна додати логіку для підрахунку непрочитаних повідомлень
+                'unread_messages' => 0,
+                'last_message_time' => $row['last_message_time']
             );
         }
         
