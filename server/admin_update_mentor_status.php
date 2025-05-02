@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 include 'connect.php';
 
-// Перевіряємо, чи метод запиту POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
         'success' => false,
@@ -21,48 +20,67 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    // Перевіряємо наявність необхідних параметрів
     if (!isset($_POST['mentor_id']) || empty($_POST['mentor_id']) || 
         !isset($_POST['status']) || empty($_POST['status'])) {
         echo json_encode([
             'success' => false,
-            'message' => 'Не вказано ID ментора або статус'
+            'message' => 'Не вказано ID заявки або статус'
         ]);
         exit;
     }
     
-    $mentorId = (int)$_POST['mentor_id'];
+    $applicationId = (int)$_POST['mentor_id'];
     $status = $_POST['status']; // 'approved' або 'rejected'
     
-    // Оновлюємо статус користувача
-    if ($status === 'approved') {
-        // Схвалюємо ментора - нічого не робимо, так як користувач вже має роль 'mentor'
-        echo json_encode([
-            'success' => true,
-            'message' => 'Ментора успішно схвалено'
-        ]);
-    } else if ($status === 'rejected') {
-        // Відхиляємо ментора - змінюємо роль на 'student'
-        $sql = "UPDATE users SET role = 'student' WHERE id = ? AND role = 'mentor'";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $mentorId);
-        $stmt->execute();
-        
-        if ($stmt->affected_rows > 0) {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Ментора відхилено, роль змінено на студент'
-            ]);
-        } else {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Користувача не знайдено або він не є ментором'
-            ]);
-        }
-    } else {
+    if (!in_array($status, ['approved', 'rejected'])) {
         echo json_encode([
             'success' => false,
             'message' => 'Невірний статус. Допустимі значення: approved, rejected'
+        ]);
+        exit;
+    }
+
+    // Отримуємо заявку та user_id
+    $stmt = $conn->prepare('SELECT user_id FROM mentor_applications WHERE id = ?');
+    $stmt->bind_param('i', $applicationId);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows === 0) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Заявку не знайдено'
+        ]);
+        $stmt->close();
+        exit;
+    }
+    $stmt->bind_result($user_id);
+    $stmt->fetch();
+    $stmt->close();
+
+    if ($status === 'approved') {
+        // Оновлюємо статус заявки
+        $stmt = $conn->prepare('UPDATE mentor_applications SET mentor_status = "accepted" WHERE id = ?');
+        $stmt->bind_param('i', $applicationId);
+        $stmt->execute();
+        $stmt->close();
+        // Оновлюємо роль користувача
+        $stmt = $conn->prepare('UPDATE users SET role = "mentor" WHERE id = ?');
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        $stmt->close();
+        echo json_encode([
+            'success' => true,
+            'message' => 'Ментора успішно прийнято'
+        ]);
+    } else if ($status === 'rejected') {
+        // Оновлюємо статус заявки
+        $stmt = $conn->prepare('UPDATE mentor_applications SET mentor_status = "rejected" WHERE id = ?');
+        $stmt->bind_param('i', $applicationId);
+        $stmt->execute();
+        $stmt->close();
+        echo json_encode([
+            'success' => true,
+            'message' => 'Заявку ментора відхилено'
         ]);
     }
 } catch (Exception $e) {

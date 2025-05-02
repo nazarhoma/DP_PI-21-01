@@ -767,38 +767,32 @@ function showNewMentors() {
 function showMentorModal(mentor) {
     const mentorModal = document.getElementById('mentor-modal');
     const mentorInfo = mentorModal.querySelector('.mentor-info');
-    
+    const fullName = [mentor.first_name, mentor.last_name].filter(Boolean).join(' ').trim();
     mentorInfo.innerHTML = `
         <div class="mentor-info-item">
-            <label>Ім'я:</label>
-            <div class="value">${mentor.name}</div>
+            <label>ПІБ:</label>
+            <div class="value">${fullName || 'Не вказано'}</div>
         </div>
         <div class="mentor-info-item">
             <label>Email:</label>
-            <div class="value">${mentor.email}</div>
+            <div class="value">${mentor.email || 'Не вказано'}</div>
         </div>
         <div class="mentor-info-item">
             <label>Телефон:</label>
             <div class="value">${mentor.phone || 'Не вказано'}</div>
         </div>
         <div class="mentor-info-item">
-            <label>Спеціалізація:</label>
-            <div class="value">${mentor.specialization || 'Не вказано'}</div>
-        </div>
-        <div class="mentor-info-item">
-            <label>Досвід:</label>
-            <div class="value">${mentor.experience || 'Не вказано'}</div>
+            <label>Організація:</label>
+            <div class="value">${mentor.organization || 'Не вказано'}</div>
         </div>
         <div class="mentor-info-item">
             <label>Опис:</label>
-            <div class="value">${mentor.description || 'Не вказано'}</div>
+            <div class="value">${mentor.mentor_description || 'Не вказано'}</div>
         </div>
     `;
-    
-    // Зберігаємо ID ментора для кнопок прийняття або відхилення
-    document.getElementById('approve-mentor').setAttribute('data-mentor-id', mentor.id);
-    document.getElementById('reject-mentor').setAttribute('data-mentor-id', mentor.id);
-    
+    // Зберігаємо ID заявки для кнопок прийняття або відхилення
+    document.getElementById('approve-mentor').setAttribute('data-mentor-id', mentor.application_id);
+    document.getElementById('reject-mentor').setAttribute('data-mentor-id', mentor.application_id);
     // Показуємо модальне вікно
     mentorModal.style.display = 'block';
 }

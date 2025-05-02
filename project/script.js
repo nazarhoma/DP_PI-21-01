@@ -447,37 +447,34 @@ document.addEventListener('DOMContentLoaded', () => {
     if (verificationForm) {
         verificationForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             if (!userData.id) {
                 alert('Помилка: Неможливо ідентифікувати користувача. Будь ласка, увійдіть заново.');
                 return;
             }
-            
+            const phone = document.getElementById('mentor-phone').value.trim();
+            const organization = document.getElementById('mentor-organization').value.trim();
+            const mentorDescription = document.getElementById('mentor-description').value.trim();
+            if (!phone || !organization || !mentorDescription) {
+                alert('Будь ласка, заповніть всі поля форми.');
+                return;
+            }
             const formData = new FormData();
             formData.append('user_id', userData.id);
-            
-            fetch('/server/update_role.php', {
+            formData.append('phone', phone);
+            formData.append('organization', organization);
+            formData.append('mentor_description', mentorDescription);
+            fetch('/server/mentor_application.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Оновлюємо роль у локальному сховищі
-                    userData.role = 'mentor';
-                    localStorage.setItem('userData', JSON.stringify(userData));
-                    
-                    // Оновлюємо UI
-                    updateUIBasedOnRole('mentor');
-                    
-                    // Закриваємо модальне вікно
                     document.getElementById('verificationModal').style.display = 'none';
-                    
-                    // Показуємо повідомлення про успіх
-                    alert('Ваш аккаунт успішно змінено на менторський!');
+                    alert('Ваша заявка на менторство успішно відправлена! Очікуйте рішення адміністратора.');
                 } else {
-                    alert('Помилка: ' + data.message);
+                    alert('Помилка: ' + (data.message || 'Не вдалося відправити заявку.'));
                 }
             })
             .catch(error => {
