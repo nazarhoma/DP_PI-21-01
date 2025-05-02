@@ -21,44 +21,38 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    // Перевіряємо наявність user_id
-    if (!isset($_POST['user_id']) || empty($_POST['user_id'])) {
+    // Перевіряємо наявність ID відгуку
+    if (!isset($_POST['review_id']) || empty($_POST['review_id'])) {
         echo json_encode([
             'success' => false,
-            'message' => 'ID користувача не вказано'
+            'message' => 'ID відгуку не вказано'
         ]);
         exit;
     }
     
-    $userId = (int)$_POST['user_id'];
+    $reviewId = (int)$_POST['review_id'];
     
-    // Отримуємо роль користувача
-    $query = "SELECT role FROM users WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $userId);
+    // Видаляємо відгук
+    $sql = "DELETE FROM course_reviews WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $reviewId);
     $stmt->execute();
     
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows === 0) {
+    if ($stmt->affected_rows > 0) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Відгук успішно видалено'
+        ]);
+    } else {
         echo json_encode([
             'success' => false,
-            'message' => 'Користувача не знайдено'
+            'message' => 'Відгук не знайдено або вже видалено'
         ]);
-        exit;
     }
-    
-    $user = $result->fetch_assoc();
-    
-    echo json_encode([
-        'success' => true,
-        'role' => $user['role']
-    ]);
-    
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'message' => 'Помилка при отриманні ролі користувача: ' . $e->getMessage()
+        'message' => 'Помилка при видаленні відгуку: ' . $e->getMessage()
     ]);
 }
 

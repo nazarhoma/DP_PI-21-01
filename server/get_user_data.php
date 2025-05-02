@@ -1,79 +1,76 @@
 <?php
 // Налаштування заголовків для CORS
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 include 'connect.php';
 
-// Перевіряємо метод запиту
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Отримуємо ID користувача
-    $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : null;
-    
-    if (!$user_id) {
-        die(json_encode([
+// Перевіряємо, чи метод запиту POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Метод не дозволений'
+    ]);
+    exit;
+}
+
+try {
+    // Перевіряємо наявність user_id
+    if (!isset($_POST['user_id']) || empty($_POST['user_id'])) {
+        echo json_encode([
             'success' => false,
             'message' => 'ID користувача не вказано'
-        ]));
+        ]);
+        exit;
     }
     
-    // Підготовлений запит для отримання даних користувача
-    $stmt = $conn->prepare("
-        SELECT 
-            id, username, email, role, first_name, last_name, 
-            avatar, gender, age, education, native_language,
-            created_at, updated_at
-        FROM users 
-        WHERE id = ?
-    ");
+    $userId = (int)$_POST['user_id'];
     
-    $stmt->bind_param("i", $user_id);
+    // Отримуємо дані користувача з правильними назвами полів
+    $query = "SELECT id, username, email, role, first_name, last_name, avatar 
+              FROM users 
+              WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $userId);
     $stmt->execute();
+    
     $result = $stmt->get_result();
     
-    if ($result->num_rows > 0) {
-        // Отримуємо дані користувача
-        $user_data = $result->fetch_assoc();
-        
-        // Додаємо логування для діагностики
-        error_log("Дані користувача з бази даних: " . print_r($user_data, true));
-        
-        // Перевіряємо, що всі необхідні поля присутні
-        $required_fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name', 
-                           'avatar', 'gender', 'age', 'education', 'native_language', 'created_at', 'updated_at'];
-        
-        foreach ($required_fields as $field) {
-            if (!isset($user_data[$field])) {
-                error_log("Поле $field відсутнє в даних користувача");
-            } else if (empty($user_data[$field]) && $field != 'age') {  // age може бути 0
-                error_log("Поле $field порожнє в даних користувача");
-            }
-        }
-        
-        // Відправляємо успішну відповідь
-        echo json_encode([
-            'success' => true,
-            'user_data' => $user_data
-        ]);
-    } else {
-        // Відправляємо повідомлення про помилку
+    if ($result->num_rows === 0) {
         echo json_encode([
             'success' => false,
             'message' => 'Користувача не знайдено'
         ]);
+        exit;
     }
     
-    $stmt->close();
-} else {
-    // Якщо метод запиту не POST
+    $user = $result->fetch_assoc();
+    
+    // Формуємо правильну відповідь
+    echo json_encode([
+        'success' => true,
+        'user' => [
+            'id' => $user['id'],
+            'name' => !empty($user['first_name']) ? $user['first_name'] . ' ' . $user['last_name'] : $user['username'],
+            'email' => $user['email'],
+            'avatar_url' => $user['avatar'],
+            'role' => $user['role']
+        ]
+    ]);
+    
+} catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'message' => 'Невірний метод запиту'
+        'message' => 'Помилка при отриманні даних користувача: ' . $e->getMessage()
     ]);
 }
 
-// Закриваємо з'єднання
 $conn->close();
 ?> 

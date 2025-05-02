@@ -297,6 +297,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const lastBannerButton = document.querySelector('.last-banner-button');
         const startCareerButton = document.getElementById('startCareerButton');
         
+        // Елементи меню профілю користувача
+        const profileMenu = document.querySelector('.profile-menu');
+        
         // Перевіряємо, чи авторизований користувач
         const token = localStorage.getItem('userToken');
         
@@ -322,6 +325,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         console.log("updateUIBasedOnRole: користувач авторизований, роль:", role);
+        
+        // Додаємо посилання на адмін-панель для адміністраторів
+        if (role === 'admin' && profileMenu) {
+            // Перевіряємо, чи вже існує посилання на адмінпанель
+            if (!profileMenu.querySelector('.admin-link')) {
+                const adminLink = document.createElement('a');
+                adminLink.href = 'admin.html';
+                adminLink.className = 'profile-menu-item admin-link';
+                adminLink.textContent = 'Адмін-панель';
+                
+                // Вставляємо посилання на адмін-панель першим у меню
+                profileMenu.insertBefore(adminLink, profileMenu.firstChild);
+            }
+        }
         
         if (role === 'mentor') {
             // Ховаємо посилання на реєстрацію як ментор
@@ -550,7 +567,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log("Отримано дані користувача з БД:", data.user_data);
+                    console.log("Отримано дані користувача з БД:", data.user);
+                    
+                    // Перевіряємо, чи є у відповіді дані користувача
+                    if (!data.user) {
+                        console.error("Отримано успішну відповідь, але дані користувача відсутні");
+                        reject(new Error('Дані користувача відсутні у відповіді сервера'));
+                        return;
+                    }
                     
                     // Отримуємо поточні дані користувача, якщо вони є
                     const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -559,18 +583,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Зберігаємо повні дані користувача
                     const updatedUserData = {
                         ...currentUserData,
-                        id: data.user_data.id,
-                        name: data.user_data.username,
-                        email: data.user_data.email,
-                        role: data.user_data.role || 'student',
-                        first_name: data.user_data.first_name,
-                        last_name: data.user_data.last_name,
-                        avatar: data.user_data.avatar,
-                        gender: data.user_data.gender,
-                        age: data.user_data.age,
-                        education: data.user_data.education,
-                        native_language: data.user_data.native_language,
-                        registration_date: data.user_data.created_at
+                        id: data.user.id,
+                        name: data.user.name || data.user.username,
+                        email: data.user.email,
+                        role: data.user.role || 'student',
+                        first_name: data.user.first_name,
+                        last_name: data.user.last_name,
+                        avatar: data.user.avatar_url || data.user.avatar,
+                        gender: data.user.gender,
+                        age: data.user.age,
+                        education: data.user.education,
+                        native_language: data.user.native_language,
+                        registration_date: data.user.created_at
                     };
                     
                     console.log("Оновлені дані для localStorage:", updatedUserData);

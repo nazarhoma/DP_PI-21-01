@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін панель</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Бокова панель -->
+        <div class="sidebar">
+            <div class="logo">
+                <img src="img/logo.png" alt="Byway">
+                <span>Byway</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" data-section="courses" class="active"><i class="courses-icon"></i>Курси</a></li>
+                    <li><a href="#" data-section="communication"><i class="communication-icon"></i>Комунікації</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <img src="img/avatars/default-avatar.png" alt="Аватар користувача">
+                </div>
+                <div class="user-name">Hi, <span id="user-name">Admin</span></div>
+                <div class="dropdown-menu">
+                    <button id="dropdown-btn"></button>
+                    <div class="dropdown-content">
+                        <a href="index.html">Перейти на головну сторінку</a>
+                        <a href="#" id="logout-btn">Вийти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Головний контент -->
+        <div class="main-content">
+            <!-- Секція Курси -->
+            <div class="content-section active" id="courses-section">
+                <div class="section-header">
+                    <h1>Курси</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="new-mentors-btn">Нові ментори</button>
+                    </div>
+                </div>
+                
+                <div class="courses-container">
+                    <div class="courses-grid">
+                        <!-- Тут будуть картки курсів -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Секція Комунікації -->
+            <div class="content-section" id="communication-section">
+                <div class="section-header">
+                    <h1>Комунікації</h1>
+                </div>
+                
+                <div class="communication-tabs">
+                    <div class="tab-headers">
+                        <button class="tab-btn active" data-tab="reviews">Відгуки</button>
+                        <button class="tab-btn" data-tab="messages">Повідомлення</button>
+                        <button class="tab-btn" data-tab="notification">Сповіщення</button>
+                    </div>
+                    
+                    <div class="tab-content active" data-tab="reviews">
+                        <div class="reviews-filters">
+                            <div class="filter-group">
+                                <!-- Видалено чекбокси "Має коментар" і "Без відповіді" -->
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label>Рейтинг:</label>
+                                <select id="rating-filter">
+                                    <option value="all">Всі</option>
+                                    <option value="5">5 зірок</option>
+                                    <option value="4">4 зірки</option>
+                                    <option value="3">3 зірки</option>
+                                    <option value="2">2 зірки</option>
+                                    <option value="1">1 зірка</option>
+                                </select>
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label>Сортувати за:</label>
+                                <select id="sort-filter">
+                                    <option value="newest">Найновіші спочатку</option>
+                                    <option value="oldest">Найстаріші спочатку</option>
+                                </select>
+                            </div>
+                            
+                            <button id="export-csv" class="btn btn-primary">Експорт до CSV</button>
+                        </div>
+                        
+                        <div class="reviews-list">
+                            <!-- Тут будуть відгуки -->
+                        </div>
+                        
+                        <div class="pagination">
+                            <!-- Тут буде пагінація -->
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" data-tab="messages">
+                        <div class="chat-container">
+                            <div class="chat-sidebar">
+                                <div class="search-container">
+                                    <input type="text" placeholder="Пошук користувача" id="search-user">
+                                    <button class="search-btn"></button>
+                                </div>
+                                <div class="users-list">
+                                    <!-- Тут будуть користувачі чату -->
+                                </div>
+                            </div>
+                            <div class="chat-content">
+                                <div class="chat-header">
+                                    <div class="chat-user-info">
+                                        <img src="img/avatars/default-avatar.png" alt="User">
+                                        <div class="user-details">
+                                            <span class="user-name">Користувач</span>
+                                            <span class="user-status">Статус</span>
+                                        </div>
+                                    </div>
+                                    <div class="chat-actions">
+                                        <button class="btn btn-danger">Видалити</button>
+                                        <button class="btn btn-warning">Блокувати</button>
+                                    </div>
+                                </div>
+                                <div class="chat-messages">
+                                    <!-- Тут будуть повідомлення -->
+                                </div>
+                                <div class="chat-input">
+                                    <input type="text" placeholder="Введіть повідомлення...">
+                                    <button class="send-btn">Надіслати</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" data-tab="notification">
+                        <!-- Тут буде вміст вкладки сповіщень -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно нового ментора -->
+    <div class="modal" id="mentor-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Інформація про ментора</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="mentor-info">
+                    <!-- Тут буде інформація про ментора -->
+                </div>
+                <div class="mentor-actions">
+                    <button class="btn btn-success" id="approve-mentor">Прийняти</button>
+                    <button class="btn btn-danger" id="reject-mentor">Відхилити</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно для перегляду курсу -->
+    <div class="modal" id="course-modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <div class="modal-header-center">
+                    <h2>Інформація про курс</h2>
+                    <button class="btn btn-danger delete-course-top" id="delete-course">Видалити курс</button>
+                </div>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="course-detail-tabs">
+                    <div class="tab-headers">
+                        <button class="tab-btn" data-tab="course-reviews">Відгуки</button>
+                        <button class="tab-btn active" data-tab="customers">Покупці</button>
+                        <button class="tab-btn" data-tab="chapters">Розділи</button>
+                    </div>
+                    <div class="course-detail-content">
+                        <!-- Тут буде вміст вкладок курсу -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript файли -->
+    <script src="admin.js"></script>
+</body>
+</html> 
