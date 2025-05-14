@@ -14,7 +14,7 @@ $secRes = $stmt1->get_result();
 $sections = [];
 while($s = $secRes->fetch_assoc()) {
     $sid = $s['id'];
-    $sql2 = "SELECT title, resource_type, duration_minutes, order_num FROM section_resources WHERE section_id=? ORDER BY order_num";
+    $sql2 = "SELECT id, title, resource_type, duration_minutes, order_num, resource_url, content FROM section_resources WHERE section_id=? ORDER BY order_num";
     $stmt2 = $conn->prepare($sql2);
     $stmt2->bind_param('i',$sid);
     $stmt2->execute();
@@ -22,10 +22,13 @@ while($s = $secRes->fetch_assoc()) {
     $resources = [];
     while($r = $resRes->fetch_assoc()) {
         $resources[] = [
+            'id' => $r['id'],
             'title' => $r['title'],
             'type' => $r['resource_type'],
             'duration' => $r['duration_minutes'],
-            'order' => $r['order_num']
+            'order' => $r['order_num'],
+            'resource_url' => $r['resource_url'],
+            'content' => $r['content']
         ];
     }
     $sections[] = [

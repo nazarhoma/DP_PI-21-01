@@ -185,9 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (token) {
             // Користувач авторизований
-            profileSection.style.display = 'block';
-            loginBtn.style.display = 'none';
-            signupBtn.style.display = 'none';
+            if (profileSection) profileSection.style.display = 'block';
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (signupBtn) signupBtn.style.display = 'none';
             
             // Отримуємо дані користувача
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -269,9 +269,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             // Користувач не авторизований
-            profileSection.style.display = 'none';
-            loginBtn.style.display = 'block';
-            signupBtn.style.display = 'block';
+            if (profileSection) profileSection.style.display = 'none';
+            if (loginBtn) loginBtn.style.display = 'block';
+            if (signupBtn) signupBtn.style.display = 'block';
             
             // Скидаємо аватар до дефолтного
             if (headerAvatarImg) {
@@ -326,18 +326,66 @@ document.addEventListener('DOMContentLoaded', () => {
         
         console.log("updateUIBasedOnRole: користувач авторизований, роль:", role);
         
-        // Додаємо посилання на адмін-панель для адміністраторів
+        // Додаємо базові пункти меню для всіх ролей
+        if (profileMenu) {
+            // Очищаємо меню перед додаванням нових пунктів
+            profileMenu.innerHTML = '';
+            
+            // Додаємо базові пункти для всіх користувачів
+            const profileLink = document.createElement('a');
+            profileLink.href = 'profile.html';
+            profileLink.className = 'profile-menu-item';
+            profileLink.textContent = 'Мій профіль';
+            profileMenu.appendChild(profileLink);
+            
+            const chatLink = document.createElement('a');
+            chatLink.href = 'chats.html';
+            chatLink.className = 'profile-menu-item';
+            chatLink.textContent = 'Чат';
+            profileMenu.appendChild(chatLink);
+        }
+        
+        // Додаємо різні пункти меню залежно від ролі
         if (role === 'admin' && profileMenu) {
-            // Перевіряємо, чи вже існує посилання на адмінпанель
-            if (!profileMenu.querySelector('.admin-link')) {
+            // Додаємо "Адмін панель" для адміністраторів
                 const adminLink = document.createElement('a');
                 adminLink.href = 'admin.html';
                 adminLink.className = 'profile-menu-item admin-link';
-                adminLink.textContent = 'Адмін-панель';
-                
-                // Вставляємо посилання на адмін-панель першим у меню
-                profileMenu.insertBefore(adminLink, profileMenu.firstChild);
-            }
+            adminLink.textContent = 'Адмін панель';
+            profileMenu.appendChild(adminLink);
+            
+            // Додаємо "Мої курси" для адміністраторів (як у менторів)
+            const coursesLink = document.createElement('a');
+            coursesLink.href = 'mentor-courses.html';
+            coursesLink.className = 'profile-menu-item';
+            coursesLink.textContent = 'Мої курси';
+            profileMenu.appendChild(coursesLink);
+        }
+        
+        if (role === 'mentor' && profileMenu) {
+            // Додаємо "Мої курси" для менторів
+            const coursesLink = document.createElement('a');
+            coursesLink.href = 'mentor-courses.html';
+            coursesLink.className = 'profile-menu-item';
+            coursesLink.textContent = 'Мої курси';
+            profileMenu.appendChild(coursesLink);
+        }
+        
+        // Додаємо кнопку "Вийти" в кінці меню для всіх ролей
+        if (profileMenu) {
+            const logoutLink = document.createElement('a');
+            logoutLink.href = '#';
+            logoutLink.className = 'profile-menu-item logout';
+            logoutLink.textContent = 'Вийти';
+            profileMenu.appendChild(logoutLink);
+            
+            // Додаємо функціонал кнопки "Вийти"
+            logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('userToken');
+                localStorage.removeItem('userData');
+                window.location.reload();
+            });
         }
         
         if (role === 'mentor') {

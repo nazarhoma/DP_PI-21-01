@@ -3,19 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Час створення: Трв 02 2025 р., 15:32
+-- Час створення: Трв 12 2025 р., 17:00
 -- Версія сервера: 10.6.21-MariaDB-0ubuntu0.22.04.2
 -- Версія PHP: 8.1.2-1ubuntu2.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База даних: `users`
@@ -138,6 +132,37 @@ CREATE TABLE `languages` (
   `id` int(11) NOT NULL,
   `code` varchar(5) NOT NULL,
   `name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблиці `mentor_applications`
+--
+
+CREATE TABLE `mentor_applications` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `organization` varchar(255) NOT NULL,
+  `mentor_description` text NOT NULL,
+  `mentor_status` enum('accepted','considered','rejected') DEFAULT 'considered',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблиці `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `sender_id` int(11) NOT NULL,
+  `receiver_id` int(11) NOT NULL,
+  `text` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `is_read` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -266,6 +291,22 @@ ALTER TABLE `languages`
   ADD UNIQUE KEY `code` (`code`);
 
 --
+-- Індекси таблиці `mentor_applications`
+--
+ALTER TABLE `mentor_applications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Індекси таблиці `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `receiver_id` (`receiver_id`),
+  ADD KEY `idx_sender_receiver` (`sender_id`,`receiver_id`),
+  ADD KEY `idx_is_read` (`is_read`);
+
+--
 -- Індекси таблиці `orders`
 --
 ALTER TABLE `orders`
@@ -341,6 +382,18 @@ ALTER TABLE `languages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT для таблиці `mentor_applications`
+--
+ALTER TABLE `mentor_applications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблиці `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT для таблиці `orders`
 --
 ALTER TABLE `orders`
@@ -405,6 +458,19 @@ ALTER TABLE `course_sections`
   ADD CONSTRAINT `course_sections_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE;
 
 --
+-- Обмеження зовнішнього ключа таблиці `mentor_applications`
+--
+ALTER TABLE `mentor_applications`
+  ADD CONSTRAINT `mentor_applications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Обмеження зовнішнього ключа таблиці `messages`
+--
+ALTER TABLE `messages`
+  ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
 -- Обмеження зовнішнього ключа таблиці `orders`
 --
 ALTER TABLE `orders`
@@ -417,7 +483,3 @@ ALTER TABLE `orders`
 ALTER TABLE `section_resources`
   ADD CONSTRAINT `section_resources_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `course_sections` (`id`) ON DELETE CASCADE;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

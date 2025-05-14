@@ -141,7 +141,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                         <span class="progress-text">${course.progress || 0}% завершено</span>
                     </div>
-                    <a href="course.html?id=${course.id}" class="continue-btn">Продовжити навчання</a>
+                    <div class="course-actions">
+                        <a href="course_full.html?id=${course.id}" class="continue-learning-btn">Перейти до навчання</a>
+                    </div>
                 </div>
             `;
             

@@ -35,6 +35,41 @@ document.addEventListener('DOMContentLoaded',()=>{
   if (purchaseBtn) {
     purchaseBtn.addEventListener('click', () => purchaseCourse(cid));
   }
+
+  // --- Перевірка купленого курсу ---
+  const userData = localStorage.getItem('userData');
+  if (userData) {
+    try {
+      const user = JSON.parse(userData);
+      if (user && user.id) {
+        const formData = new FormData();
+        formData.append('user_id', user.id);
+        fetch('server/get_user_courses.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success && Array.isArray(data.courses)) {
+            const isPurchased = data.courses.some(c => String(c.id) === String(cid));
+            if (isPurchased) {
+              if (addToCartBtn) addToCartBtn.style.display = 'none';
+              if (purchaseBtn) purchaseBtn.style.display = 'none';
+              // Можна додати повідомлення для користувача
+              const card = document.querySelector('.course-purchase-card');
+              if (card && !card.querySelector('.already-purchased')) {
+                const info = document.createElement('div');
+                info.className = 'already-purchased';
+                info.style = 'color: #2e7d32; font-weight: 600; margin-top: 10px;';
+                info.textContent = 'Ви вже придбали цей курс';
+                card.appendChild(info);
+              }
+            }
+          }
+        });
+      }
+    } catch (e) {}
+  }
 });
 
 async function loadCourseDetails(id){

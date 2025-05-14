@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <title>Мій курс | Byway</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta name="description" content="Перегляд матеріалів курсу">
+</head>
+<body>
+  <header class="header">
+    <div class="logo-section">
+        <a href="index.html">
+            <img class="logo" src="img/logo.png" alt="Логотип Byway">
+        </a>
+        <span class="brand-name">Byway</span>
+    </div>
+    <a href="category.html" class="categories-link">Категорії</a>
+    <div class="search-bar">
+        <img class="magnifying-glass" src="img/search.png" alt="Пошук">
+        <form class="form-search" method="get">
+            <input
+                    class="search-bar-input"
+                    type="text"
+                    name="query"
+                    placeholder="Пошук курсів і менторів"
+                    aria-label="Пошук курсів і менторів">
+        </form>
+    </div>
+    <div class="group">
+        <button class="search-btn" aria-label="Відкрити пошук">
+            <img class="search-btn-img" src="img/search.png" alt="Пошук">
+        </button>
+        <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
+        <nav class="nav-menu">
+            <a href="category.html" class="categories-link">Категорії</a>
+            <span class="teach-link" style="display: none;">Викладати на Byway</span>
+            <a href="new-course.html" class="add-course-link" style="display: none;">Додати новий курс</a>
+            <div class="user-actions">
+                <a href="cart.html" class="cart-link">
+                    <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
+                </a>
+                <div class="profile-section" style="display: none;">
+                    <div class="profile-dropdown">
+                        <img class="profile-avatar" src="img/avatars/default-avatar.png" alt="Аватар користувача">
+                        <span class="profile-name">Користувач</span>
+                        <div class="profile-menu">
+                            <a href="profile.html" class="profile-menu-item">Мій профіль</a>
+                            <a href="#" class="profile-menu-item">Мої курси</a>
+                            <a href="#" class="profile-menu-item">Налаштування</a>
+                            <a href="#" class="profile-menu-item logout">Вийти</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="login-btn" id="logInButton">Увійти</button>
+                <button class="signup-btn" id="signUpButton">Зареєструватися</button>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="main-container">
+  <section class="course-full-section">
+    <div class="course-progress-container">
+      <div class="course-progress-bar">
+        <div class="progress-indicator" id="courseProgressIndicator" style="width: 0%"></div>
+      </div>
+      <div class="course-progress-text">
+        <span id="progressPercentage">0%</span> завершено
+      </div>
+    </div>
+    <div class="course-full-container">
+      <div class="course-full-header">
+        <div class="course-full-info">
+          <h1 class="course-full-title">Завантаження...</h1>
+          <div class="course-full-meta">
+            <span class="course-full-mentor">Ментор: <span class="mentor-name"></span></span>
+            <div class="course-actions">
+              <button class="open-chat-btn" style="display:none;">Зв'язатися з інструктором</button>
+              <button class="drop-course-btn">Покинути курс</button>
+              <button class="resume-course-btn" style="display:none;">Продовжити курс</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="course-full-content">
+        <div class="course-sections-full">
+          <!-- Секції та матеріали курсу тут -->
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+    <div class="footer-information">
+        <div class="footer-byway">
+            <img class="footer-logo" src="img/full-logo.png" alt="Логотип сайту">
+            <p class="footer-byway-info">Ми надаємо можливості для навчання через доступну та захоплюючу онлайн-освіту.
+                <br> Byway — провідна онлайн-платформа для навчання, яка пропонує високоякісні, гнучкі та доступні освітні послуги.</p>
+        </div>
+        <div class="footer-block">
+            <h3 class="footer-title">Отримати допомогу</h3>
+            <ul class="footer-info-list">
+                <li><a class="footer-info" id="contactLink" style="cursor: pointer">Зв'язатися з нами</a></li>
+                <li><a href="#" class="footer-info">Останні статті</a></li>
+                <li><a class="footer-info">FAQ</a></li>
+            </ul>
+        </div>
+        <div class="footer-block">
+            <h3 class="footer-title">Програми</h3>
+            <ul class="footer-info-list">
+                <li><a href="#" class="footer-info">Мистецтво та дизайн</a></li>
+                <li><a href="#" class="footer-info">Бізнес</a></li>
+                <li><a href="#" class="footer-info">ІТ та програмування</a></li>
+                <li><a href="#" class="footer-info">Мови</a></li>
+                <li><a href="#" class="footer-info">Програмування</a></li>
+            </ul>
+        </div>
+        <div class="footer-contactus">
+            <div class="footer-block">
+                <h3 class="footer-title">Зв'язатися з нами</h3>
+                <p class="footer-info">Адреса: 123 Main Street, Anytown, CA 12345</p>
+                <p class="footer-info">Тел: +(123) 456-7890</p>
+                <p class="footer-info">Ел. пошта: <a href="mailto:bywayedu@webkul.in" class="footer-info">bywayedu@webkul.in</a></p>
+            </div>
+            <div class="footer-social">
+                <img class="footer-social-logo" src="img/social-logo.png" alt="Іконки соціальних мереж">
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Модальні вікна -->
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Зв'язатися з нами</h2>
+            <span class="close" id="closeModal">&times;</span>
+        </div>
+        <form id="contactForm">
+            <label for="name">Ім'я:</label>
+            <input class="modal-input" type="text" id="name" name="name" required><br>
+
+            <label for="email">Електронна адреса:</label>
+            <input class="modal-input" type="email" id="email" name="email" required><br>
+
+            <label for="message">Повідомлення:</label><br>
+            <textarea class="modal-input" id="message" name="message" rows="4" required></textarea><br>
+
+            <button type="submit" class="modal-button">Відправити</button>
+        </form>
+    </div>
+</div>
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Ви впевнені, що хочете відправити?</h2>
+            <span class="close" id="closeConfirmationModal">&times;</span>
+        </div>
+        <button id="confirmSend">Так</button>
+        <button id="cancelSend">Ні</button>
+    </div>
+</div>
+<div id="closeModalConfirm" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Ви впевнені, що хочете закрити це вікно?</h2>
+            <span class="close" id="closeCloseModalConfirm">&times;</span>
+        </div>
+        <button id="confirmClose" class="modal-button">Так</button>
+        <button id="cancelClose" class="modal-button">Ні</button>
+    </div>
+</div>
+<div id="verificationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Стати ментором</h2>
+            <span class="close" id="closeVerificationModal">&times;</span>
+        </div>
+        <form id="verificationForm">
+            <label for="mentor-phone">Телефон:</label>
+            <input class="modal-input" type="text" id="mentor-phone" name="phone" required><br>
+
+            <label for="mentor-organization">Організація:</label>
+            <input class="modal-input" type="text" id="mentor-organization" name="organization" required><br>
+
+            <label for="mentor-description">Опис:</label><br>
+            <textarea class="modal-input" id="mentor-description" name="mentor_description" rows="4" required></textarea><br>
+
+            <button type="submit" class="modal-button verification-btn">Відправити заявку</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальне вікно для підтвердження покидання курсу -->
+<div id="dropCourseModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-title">
+            <h2>Покинути курс</h2>
+            <span class="close" id="closeDropCourseModal">&times;</span>
+        </div>
+        <p>Ви впевнені, що хочете покинути цей курс? Ваш прогрес буде збережено, але статус курсу зміниться на "Покинутий".</p>
+        <div class="modal-actions">
+            <button id="cancelDropCourse" class="modal-button">Скасувати</button>
+            <button id="confirmDropCourse" class="modal-button">Покинути курс</button>
+        </div>
+    </div>
+</div>
+
+<script src="modal.js"></script>
+<script src="script.js"></script>
+<script src="course_full.js"></script>
+<script src="cart-counter.js"></script>
+</body>
+</html> 

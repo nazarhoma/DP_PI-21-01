@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Allow: /admin/help.html
+
+Sitemap: https://byway.store/sitemap.xml
