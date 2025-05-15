@@ -78,7 +78,7 @@ try {
     }
     
     // Складаємо запит для отримання повідомлень
-    $sql = "SELECT m.id, m.sender_id, m.receiver_id, m.text, m.created_at 
+    $sql = "SELECT m.id, m.sender_id, m.receiver_id, m.text as message, m.created_at as sent_at 
             FROM messages m
             WHERE (m.sender_id = ? AND m.receiver_id = ?) 
                OR (m.sender_id = ? AND m.receiver_id = ?)
@@ -109,15 +109,15 @@ try {
     $stmt->execute();
     $res = $stmt->get_result();
     
-    // Формуємо масив повідомлень
+    // Формуємо масив повідомлень у форматі, очікуваному клієнтом
     $messages = [];
     while ($row = $res->fetch_assoc()) {
         $messages[] = [
             'id' => $row['id'],
-            'text' => $row['text'],
-            'time' => date('H:i', strtotime($row['created_at'])),
-            'date' => date('d.m.Y', strtotime($row['created_at'])),
-            'outgoing' => $row['sender_id'] == $user_id
+            'sender_id' => $row['sender_id'],
+            'receiver_id' => $row['receiver_id'],
+            'message' => $row['message'],
+            'sent_at' => $row['sent_at']
         ];
     }
     

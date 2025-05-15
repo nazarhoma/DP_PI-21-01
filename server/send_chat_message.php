@@ -36,11 +36,11 @@ try {
     $debug_info['sender_id'] = $sender_id;
     
     // Отримуємо ID отримувача
-    if (!isset($_POST['recipient_id']) || !$_POST['recipient_id']) {
+    if (!isset($_POST['receiver_id']) || !$_POST['receiver_id']) {
         throw new Exception("Не вказано отримувача");
     }
     
-    $receiver_id = intval($_POST['recipient_id']);
+    $receiver_id = intval($_POST['receiver_id']);
     $debug_info['receiver_id'] = $receiver_id;
     
     // Отримуємо текст повідомлення

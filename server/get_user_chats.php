@@ -32,118 +32,133 @@ if (!$user_id) {
     }
 }
 
-// Перевіряємо наявність користувача
+$user_role = $_POST['user_role'] ?? 'student';
+
+// Якщо користувача не знайдено, повертаємо помилку
 if (!$user_id) {
-    echo json_encode(['success' => false, 'message' => 'Не авторизовано']);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Користувача не знайдено'
+    ]);
     exit;
 }
 
 try {
-    // Отримуємо роль користувача
-    $stmt = $conn->prepare('SELECT role FROM users WHERE id = ?');
-    if (!$stmt) {
-        throw new Exception("Помилка підготовки запиту: " . $conn->error);
+    $users = [];
+    
+    if ($user_role === 'admin') {
+        // Для адміністратора показуємо всіх користувачів, з якими є чат
+        $query = "SELECT DISTINCT 
+                    u.id, u.first_name, u.last_name, u.avatar, u.role 
+                  FROM 
+                    users u
+                  JOIN 
+                    messages m ON (m.sender_id = u.id OR m.receiver_id = u.id)
+                  WHERE 
+                    (m.sender_id = ? OR m.receiver_id = ?) 
+                    AND u.id != ?
+                  ORDER BY 
+                    u.first_name, u.last_name";
+        
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('iii', $user_id, $user_id, $user_id);
+    }
+    elseif ($user_role === 'mentor') {
+        // Для ментора показуємо:
+        // 1. Студентів, які написали йому
+        // 2. Менторів курсів, які він купив
+        // 3. Адміністратора, якщо писав йому
+        $query = "SELECT DISTINCT 
+                    u.id, u.first_name, u.last_name, u.avatar, u.role 
+                  FROM 
+                    users u 
+                  LEFT JOIN 
+                    messages m ON ((m.sender_id = u.id AND m.receiver_id = ?) OR (m.receiver_id = u.id AND m.sender_id = ?))
+                  LEFT JOIN 
+                    courses c ON c.mentor_id = u.id 
+                  LEFT JOIN 
+                    course_enrollments ce ON ce.course_id = c.id AND ce.user_id = ?
+                  WHERE 
+                    ((u.role = 'student' AND m.id IS NOT NULL) OR (ce.id IS NOT NULL) OR (u.role = 'admin' AND m.id IS NOT NULL))
+                    AND u.id != ?
+                  ORDER BY 
+                    u.first_name, u.last_name";
+        
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('iiii', $user_id, $user_id, $user_id, $user_id);
+    }
+    else {
+        // Для звичайного користувача показуємо менторів курсів, які він купив, а також адміністратора, якщо є повідомлення
+        $query = "SELECT DISTINCT 
+                    u.id, u.first_name, u.last_name, u.avatar, u.role 
+                  FROM 
+                    users u 
+                  LEFT JOIN 
+                    messages m ON ((m.sender_id = u.id AND m.receiver_id = ?) OR (m.receiver_id = u.id AND m.sender_id = ?))
+                  LEFT JOIN 
+                    courses c ON c.mentor_id = u.id 
+                  LEFT JOIN 
+                    course_enrollments ce ON ce.course_id = c.id AND ce.user_id = ?
+                  WHERE 
+                    ((u.role IN ('mentor') AND ce.id IS NOT NULL) OR (u.role = 'admin' AND m.id IS NOT NULL))
+                    AND u.id != ?
+                  ORDER BY 
+                    u.first_name, u.last_name";
+        
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('iiii', $user_id, $user_id, $user_id, $user_id);
     }
     
-    $stmt->bind_param('i', $user_id);
     $stmt->execute();
-    $res = $stmt->get_result();
+    $result = $stmt->get_result();
     
-    if (!$res->num_rows) {
-        echo json_encode(['success' => false, 'message' => 'Користувача не знайдено']);
-        exit;
+    while ($row = $result->fetch_assoc()) {
+        $users[] = $row;
     }
     
-    $role = $res->fetch_assoc()['role'];
-    $debug_info = ['user_id' => $user_id, 'role' => $role];
-
-    $chats = [];
-    if ($role === 'student') {
-        // Студент: отримуємо менторів, у яких він купив курси
-        $sql = "SELECT DISTINCT u.id, u.first_name, u.last_name, u.username, u.avatar
-                FROM course_enrollments ce
-                JOIN courses c ON ce.course_id = c.id
-                JOIN users u ON c.mentor_id = u.id
-                WHERE ce.user_id = ? AND u.id IS NOT NULL AND u.id != ?";
-        
-        $debug_info['sql_student'] = $sql;
-        
-        $stmt = $conn->prepare($sql);
-        if (!$stmt) {
-            throw new Exception("Помилка підготовки запиту для студента: " . $conn->error);
+    // Додаємо окремий запит для адміністратора, якщо відсутній у результатах
+    if (!$user_role == 'admin') {
+        $adminExists = false;
+        foreach ($users as $user) {
+            if ($user['role'] === 'admin') {
+                $adminExists = true;
+                break;
+            }
         }
         
-        $stmt->bind_param('ii', $user_id, $user_id);
-        $success = $stmt->execute();
-        if (!$success) {
-            throw new Exception("Помилка виконання запиту для студента: " . $stmt->error);
+        if (!$adminExists) {
+            // Перевіряємо, чи є повідомлення з адміністратором
+            $adminQuery = "SELECT DISTINCT 
+                            u.id, u.first_name, u.last_name, u.avatar, u.role 
+                           FROM 
+                            users u 
+                           JOIN 
+                            messages m ON ((m.sender_id = u.id AND m.receiver_id = ?) OR (m.receiver_id = u.id AND m.sender_id = ?))
+                           WHERE 
+                            u.role = 'admin'
+                           LIMIT 1";
+            
+            $adminStmt = $conn->prepare($adminQuery);
+            $adminStmt->bind_param('ii', $user_id, $user_id);
+            $adminStmt->execute();
+            $adminResult = $adminStmt->get_result();
+            
+            if ($adminResult->num_rows > 0) {
+                $users[] = $adminResult->fetch_assoc();
+            }
         }
-        
-        $res = $stmt->get_result();
-        $debug_info['mentors_count'] = $res->num_rows;
-        
-        while ($row = $res->fetch_assoc()) {
-            $row['name'] = trim(($row['first_name'] ?? '') . ' ' . ($row['last_name'] ?? '')) ?: $row['username'];
-            $row['avatar_url'] = $row['avatar'] ?: 'img/avatars/default-avatar.png';
-            $chats[] = $row;
-        }
-    } else if ($role === 'mentor') {
-        // Перевіряємо, чи є курси у ментора
-        $checkMentorCourses = $conn->prepare("SELECT COUNT(*) as count FROM courses WHERE mentor_id = ?");
-        if (!$checkMentorCourses) {
-            throw new Exception("Помилка підготовки запиту перевірки курсів: " . $conn->error);
-        }
-        
-        $checkMentorCourses->bind_param('i', $user_id);
-        $checkMentorCourses->execute();
-        $courseCount = $checkMentorCourses->get_result()->fetch_assoc()['count'];
-        
-        $debug_info['courses_count'] = $courseCount;
-        
-        if ($courseCount == 0) {
-            // Немає курсів, повертаємо порожній список
-            echo json_encode(['success' => true, 'users' => [], 'debug' => $debug_info]);
-            exit;
-        }
-        
-        // Ментор: отримує студентів, які купили його курси
-        $sql = "SELECT DISTINCT u.id, u.first_name, u.last_name, u.username, u.avatar
-                FROM users u
-                JOIN course_enrollments ce ON u.id = ce.user_id
-                JOIN courses c ON ce.course_id = c.id
-                WHERE c.mentor_id = ? AND u.id != ?";
-                
-        $debug_info['sql_mentor'] = $sql;
-        
-        $stmt = $conn->prepare($sql);
-        if (!$stmt) {
-            throw new Exception("Помилка підготовки запиту для ментора: " . $conn->error);
-        }
-        
-        $stmt->bind_param('ii', $user_id, $user_id);
-        $success = $stmt->execute();
-        if (!$success) {
-            throw new Exception("Помилка виконання запиту для ментора: " . $stmt->error);
-        }
-        
-        $res = $stmt->get_result();
-        $debug_info['students_count'] = $res->num_rows;
-        
-        while ($row = $res->fetch_assoc()) {
-            $row['name'] = trim(($row['first_name'] ?? '') . ' ' . ($row['last_name'] ?? '')) ?: $row['username'];
-            $row['avatar_url'] = $row['avatar'] ?: 'img/avatars/default-avatar.png';
-            $chats[] = $row;
-        }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Недостатньо прав']);
-        exit;
     }
-
-    $debug_info['chats_count'] = count($chats);
-    echo json_encode(['success' => true, 'users' => $chats, 'debug' => $debug_info]);
     
+    echo json_encode([
+        'success' => true,
+        'users' => $users
+    ]);
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => 'Помилка сервера: ' . $e->getMessage()]);
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
 } finally {
     if (isset($conn)) {
         $conn->close();

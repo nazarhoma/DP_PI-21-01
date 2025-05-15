@@ -11,80 +11,82 @@
   <meta name="description" content="Чати з інструкторами та студентами">
 </head>
 <body>
-<header class="header">
-    <div class="logo-section">
-        <a href="index.html">
-            <img class="logo" src="img/logo.png" alt="Логотип Byway">
-        </a>
-        <span class="brand-name">Byway</span>
-    </div>
-    <a href="category.html" class="categories-link">Категорії</a>
-    <div class="search-bar">
-        <img class="magnifying-glass" src="img/search.png" alt="Пошук">
-        <form class="form-search" method="get">
-            <input
-                    class="search-bar-input"
-                    type="text"
-                    name="query"
-                    placeholder="Пошук курсів і менторів"
-                    aria-label="Пошук курсів і менторів">
-        </form>
-    </div>
-    <div class="group">
-        <button class="search-btn" aria-label="Відкрити пошук">
-            <img class="search-btn-img" src="img/search.png" alt="Пошук">
-        </button>
-        <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
-        <nav class="nav-menu">
-            <a href="category.html" class="categories-link">Категорії</a>
-            <span class="teach-link">Викладати на Byway</span>
-            <a href="new-course.html" class="add-course-link" style="display: none;">Додати новий курс</a>
-            <div class="user-actions">
-                <a class="cart-link" href="cart.html">
-                    <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
-                </a>
-                <div class="profile-section">
-                    <div class="profile-dropdown">
-                        <img class="profile-avatar" src="img/avatars/default-avatar.png" alt="Аватар користувача">
-                        <span class="profile-name">Користувач</span>
-                        <div class="profile-menu">
-                            <a href="profile.html" class="profile-menu-item">Мій профіль</a>
-                            <a href="#" class="profile-menu-item">Мої курси</a>
-                            <a href="#" class="profile-menu-item">Налаштування</a>
-                            <a href="#" class="profile-menu-item logout">Вийти</a>
+    <header class="header">
+        <div class="logo-section">
+            <a href="index.html">
+                <img class="logo" src="img/logo.png" alt="Логотип Byway">
+            </a>
+            <span class="brand-name">Byway</span>
+        </div>
+        <a href="category.html" class="categories-link">Категорії</a>
+        <div class="search-bar">
+            <img class="magnifying-glass" src="img/search.png" alt="Пошук">
+            <form class="form-search" method="get">
+                <input
+                        class="search-bar-input"
+                        type="text"
+                        name="query"
+                        placeholder="Пошук курсів і менторів"
+                        aria-label="Пошук курсів і менторів">
+            </form>
+        </div>
+        <div class="group">
+            <button class="search-btn" aria-label="Відкрити пошук">
+                <img class="search-btn-img" src="img/search.png" alt="Пошук">
+            </button>
+            <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
+            <nav class="nav-menu">
+                <a href="category.html" class="categories-link">Категорії</a>
+                <span class="teach-link" style="display: none;">Викладати на Byway</span>
+                <a href="new-course.html" class="add-course-link" style="display: none;">Додати новий курс</a>
+                <div class="user-actions">
+                    <a href="cart.html" class="cart-link">
+                        <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
+                        <span class="cart-count">0</span>
+                    </a>
+                    <div class="profile-section" style="display: none;">
+                        <div class="profile-dropdown">
+                            <img class="profile-avatar" src="img/avatars/default-avatar.png" alt="Аватар користувача">
+                            <span class="profile-name">Користувач</span>
+                            <div class="profile-menu">
+                                <a href="profile.html" class="profile-menu-item">Мій профіль</a>
+                                <a href="chats.html" class="profile-menu-item">Чат</a>
+                                <a href="#" class="profile-menu-item logout">Вийти</a>
+                            </div>
                         </div>
                     </div>
+                    <button class="login-btn" id="logInButton">Увійти</button>
+                    <button class="signup-btn" id="signUpButton">Зареєструватися</button>
                 </div>
-            </div>
-        </nav>
-    </div>
-</header>
+            </nav>
+        </div>
+    </header>
 
 <div class="main-container">
-  <section class="chats-section">
-    <div class="chats-container">
-      <div class="chats-users-list-block">
+    <section class="chats-section">
+        <div class="chats-container">
+            <div class="chats-users-list-block">
         <h2 class="chats-users-title">Співрозмовники</h2>
-        <div class="chats-users-list">
+                <div class="chats-users-list">
           <!-- Список співрозмовників -->
-        </div>
-      </div>
-      <div class="chats-chat-block">
-        <div class="chat-header">
+                </div>
+            </div>
+            <div class="chats-chat-block">
+                <div class="chat-header">
           <button class="chat-toggle-users">Список чатів</button>
           <img class="chat-user-avatar" src="img/avatars/default-avatar.png" alt="Аватар користувача" style="display: none;">
           <span class="chat-user-name">Оберіть співрозмовника</span>
-        </div>
-        <div class="chat-messages">
+                </div>
+                <div class="chat-messages">
           <!-- Повідомлення -->
-        </div>
+                </div>
         <div class="chat-input-block" style="display:none;">
           <input class="chat-input" type="text" placeholder="Введіть повідомлення...">
-          <button class="send-chat-btn"></button>
+                    <button class="send-chat-btn"></button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 </div>
 
 <footer class="footer">
@@ -171,5 +173,6 @@
 <script src="modal.js"></script>
 <script src="chats.js"></script>
 <script src="cart-counter.js"></script>
+<script src="auth.js"></script>
 </body>
 </html> 

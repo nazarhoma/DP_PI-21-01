@@ -65,7 +65,7 @@ WHERE
     c.id = ?";
 
 try {
-    $stmt = $conn->prepare($sql);
+$stmt = $conn->prepare($sql);
     if (!$stmt) {
         throw new Exception("Помилка підготовки запиту: " . $conn->error);
     }
@@ -80,16 +80,16 @@ try {
         throw new Exception("Помилка виконання запиту: " . $stmt->error);
     }
     
-    $res = $stmt->get_result();
+$res = $stmt->get_result();
     if ($res === false) {
         throw new Exception("Помилка отримання результатів: " . $stmt->error);
     }
     
-    if($row = $res->fetch_assoc()) {
-        echo json_encode($row);
-    } else {
-        echo json_encode(['error'=>'Курс не знайдено']);
-    }
+if($row = $res->fetch_assoc()) {
+    echo json_encode($row);
+} else {
+    echo json_encode(['error'=>'Курс не знайдено']);
+}
 } catch (Exception $e) {
     echo json_encode(['error'=>'Помилка запиту: ' . $e->getMessage()]);
 }
