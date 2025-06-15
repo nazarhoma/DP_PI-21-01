@@ -80,10 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const rightButton = document.querySelector('.comments-button-right');
         
         if (commentsContainer && leftButton && rightButton) {
-            // Перевіряємо чи є карточки коментарів
             const cards = commentsContainer.querySelectorAll('.comment-card');
             if (cards.length === 0) {
-                // Якщо карточок немає, спробуємо ініціалізувати слайдер пізніше
                 setTimeout(initializeCommentSlider, 500);
                 return;
             }
