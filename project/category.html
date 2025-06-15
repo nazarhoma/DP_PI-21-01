@@ -72,10 +72,10 @@
       <div class="sort">
         <span class="sort-text">Сортувати за</span>
         <select class="sort-select">
-          <option value="relevance">Доречністю</option>
-          <option value="price">Ціна</option>
-          <option value="popularity">Популярністю</option>
-          <option value="rating">Рейтинг</option>
+          <option value="rating" selected>Рейтинг</option>
+          <option value="duration">Тривалість</option>
+          <option value="price_asc">Ціна (за зростанням)</option>
+          <option value="price_desc">Ціна (за спаданням)</option>
         </select>
       </div>
     </div>
@@ -87,35 +87,35 @@
             <img src="img/down-chevron.png" alt="стрілка вниз">
           </button>
           <div class="filter-info hidden">
-            <div class="stars">
+            <div class="stars" data-rating="5">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
             </div>
-            <div class="stars">
+            <div class="stars" data-rating="4">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/gstar.png" alt="Зірка">
             </div>
-            <div class="stars">
+            <div class="stars" data-rating="3">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/gstar.png" alt="Зірка">
               <img class="star" src="img/gstar.png" alt="Зірка">
             </div>
-            <div class="stars">
+            <div class="stars" data-rating="2">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/gstar.png" alt="Зірка">
               <img class="star" src="img/gstar.png" alt="Зірка">
               <img class="star" src="img/gstar.png" alt="Зірка">
             </div>
-            <div class="stars">
+            <div class="stars" data-rating="1">
               <img class="star" src="img/star.png" alt="Зірка">
               <img class="star" src="img/gstar.png" alt="Зірка">
               <img class="star" src="img/gstar.png" alt="Зірка">
@@ -126,30 +126,26 @@
         </div>
         <div class="filter-card">
           <button class="filter-card-button">
-            <span class="filter-card-text">Кількість лекцій</span>
+            <span class="filter-card-text">Тривалість</span>
             <img src="img/down-chevron.png" alt="стрілка вниз">
           </button>
           <div class="filter-info hidden">
             <div class="check-box">
-              <input type="checkbox" id="checkbox1" value="1-10">
-              <label for="checkbox1">1-10</label>
+              <input type="checkbox" id="duration1" value="0-10">
+              <label for="duration1">До 10 годин</label>
             </div>
             <div class="check-box">
-              <input type="checkbox" id="checkbox2" value="10-15">
-              <label for="checkbox2">10-15</label>
+              <input type="checkbox" id="duration2" value="10-20">
+              <label for="duration2">10-20 годин</label>
             </div>
-            <div class="check-box hidden">
-              <input type="checkbox" id="checkbox3" value="15-20">
-              <label for="checkbox3">15-20</label>
+            <div class="check-box">
+              <input type="checkbox" id="duration3" value="20-40">
+              <label for="duration3">20-40 годин</label>
             </div>
-            <div class="check-box hidden">
-              <input type="checkbox" id="checkbox4" value="20-25">
-              <label class="checkbox-text" for="checkbox4">20-25</label>
+            <div class="check-box">
+              <input type="checkbox" id="duration4" value="40+">
+              <label for="duration4">Більше 40 годин</label>
             </div>
-            <button class="see-more-button" aria-label="Переглянути більше лекцій">
-              <span class="filter-card-text blue-text">Переглянути більше</span>
-              <img src="img/bdown-chevron.png" alt="синя стрілка вниз">
-            </button>
           </div>
         </div>
         <div class="filter-card">
@@ -157,15 +153,40 @@
             <span class="filter-card-text">Ціна</span>
             <img src="img/down-chevron.png" alt="стрілка вниз">
           </button>
-          <div class="filter-info hidden"></div>
+          <div class="filter-info hidden">
+            <div class="price-range">
+              <div class="price-input">
+                <input type="number" id="price-min" placeholder="Від" min="0">
+                <span>-</span>
+                <input type="number" id="price-max" placeholder="До" min="0">
+                <span>₴</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="filter-card">
+          <button class="filter-card-button">
+            <span class="filter-card-text">Складність</span>
+            <img src="img/down-chevron.png" alt="стрілка вниз">
+          </button>
+          <div class="filter-info hidden">
+            <div id="difficulty-options">
+              <!-- Буде заповнено динамічно -->
+            </div>
+          </div>
         </div>
         <div class="filter-card">
           <button class="filter-card-button">
             <span class="filter-card-text">Категорія</span>
             <img src="img/down-chevron.png" alt="стрілка вниз">
           </button>
-          <div class="filter-info hidden"></div>
+          <div class="filter-info hidden">
+            <div id="category-options">
+              <!-- Буде заповнено динамічно -->
+            </div>
+          </div>
         </div>
+        <button class="apply-filters-btn">Застосувати фільтри</button>
       </div>
       <div class="courses-pagination">
         <div class="courses-list"></div>
@@ -290,8 +311,8 @@
   </div>
 </div>
 <script src="script.js"></script>
-<script src="filter.js"></script>
 <script src="jsonLoader.js"></script>
+<script src="filter.js"></script>
 <script src="modal.js"></script>
 <script src="auth.js"></script>
 <script src="cart-counter.js"></script>
