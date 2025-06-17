@@ -12,44 +12,57 @@
     <meta name="description" content="Управління курсами ментора">
 </head>
 <body>
-<header class="header">
-    <div class="logo-section">
-        <a href="index.html">
-            <img class="logo" src="img/logo.png" alt="Логотип сайту">
-        </a>
-    </div>
-    <div class="navs">
-        <nav class="header-nav">
-            <ul class="nav-list">
-                <li><a href="index.html">Головна</a></li>
-                <li><a class="active" href="#">Мої курси</a></li>
-                <li><a href="#0">Розклад</a></li>
-                <li><a href="#0">Студенти</a></li>
-                <li><a href="#0">Оплати</a></li>
-            </ul>
-        </nav>
-        <div class="header-icons">
-            <div class="header-icon">
-                <a href="wishlist.html">
-                    <i class="fa-solid fa-heart"></i>
-                </a>
-            </div>
-            <div class="header-icon">
-                <a href="cart.html" class="cart" id="cart-icon">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span class="header-icon-number" id="cart-counter">0</span>
-                </a>
-            </div>
-            <div class="header-icon">
-                <a href="account.html">
-                    <img class="header-user-icon" src="img/avatars/user-default.jpg" alt="Іконка користувача">
-                </a>
-            </div>
+    <header class="header">
+        <div class="logo-section">
+            <a href="index.html">
+                <img class="logo" src="img/logo.png" alt="Логотип Byway">
+            </a>
+            <span class="brand-name">Byway</span>
         </div>
-    </div>
-</header>
+        <a href="category.html" class="categories-link">Категорії</a>
+        <div class="search-bar">
+            <img class="magnifying-glass" src="img/search.png" alt="Пошук">
+            <form class="form-search" method="get">
+                <input
+                        class="search-bar-input"
+                        type="text"
+                        name="query"
+                        placeholder="Пошук курсів і менторів"
+                        aria-label="Пошук курсів і менторів">
+            </form>
+        </div>
+        <div class="group">
+            <button class="search-btn" aria-label="Відкрити пошук">
+                <img class="search-btn-img" src="img/search.png" alt="Пошук">
+            </button>
+            <button class="burger-menu" aria-label="Відкрити меню">&#9776;</button>
+            <nav class="nav-menu">
+                <a href="category.html" class="categories-link">Категорії</a>
+                <span class="teach-link" style="display: none;">Викладати на Byway</span>
+                <a href="new-course.html" class="add-course-link" style="display: none;">Додати новий курс</a>
+                <div class="user-actions">
+                    <a href="cart.html" class="cart-link">
+                        <img class="cart-icon" src="img/cart.png" alt="Іконка кошика">
+                        <span class="cart-count">0</span>
+                    </a>
+                    <div class="profile-section" style="display: none;">
+                        <div class="profile-dropdown">
+                            <img class="profile-avatar" src="img/avatars/default-avatar.png" alt="Аватар користувача">
+                            <span class="profile-name">Користувач</span>
+                            <div class="profile-menu">
+                                <a href="profile.html" class="profile-menu-item">Мій профіль</a>
+                                <a href="chats.html" class="profile-menu-item">Чат</a>
+                                <a href="#" class="profile-menu-item logout">Вийти</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="login-btn" id="logInButton">Увійти</button>
+                    <button class="signup-btn" id="signUpButton">Зареєструватися</button>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-<!-- Основний контент -->
 <div class="main-content">
     <section class="mentor-courses-section">
         <h1 class="page-title">Мої курси</h1>
@@ -58,19 +71,7 @@
             <!-- Блок списку курсів - тепер постійно відображається на ПК і згортається на мобільних -->
             <div class="courses-list-block" id="courses-sidebar">
                 <div class="courses-sidebar-header">
-                    <div class="search-container">
-                        <!-- Кнопка пошуку для мобільних пристроїв -->
-                        <button class="search-btn" title="Пошук">
-                            <i class="fas fa-search"></i>
-                        </button>
-                        <!-- Поле пошуку -->
-                        <div class="search-bar">
-                            <input type="text" placeholder="Пошук курсів..." id="search-courses">
-                            <button class="search-submit">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <h2>Список курсів</h2>
                     <!-- Кнопка згортання для мобільних пристроїв -->
                     <button class="toggle-sidebar-btn" id="toggle-sidebar-btn" title="Згорнути/розгорнути">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -340,7 +341,7 @@
             
             <div class="form-field resource-content-field" id="resource-file-field" style="display: none;">
                 <label for="resource-file">Файл*</label>
-                <input class="modal-input" type="file" id="resource-file" name="resource_file">
+                <input class="modal-input" type="file" id="resource-file" name="resource_file" accept="image/jpeg,image/png,image/gif,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
             </div>
             
             <div class="form-field">
@@ -362,8 +363,14 @@
         </div>
         <p>Виберіть тип ресурсу, який хочете додати:</p>
         <div class="resource-buttons">
-            <button type="button" class="add-text-resource-btn" id="add-text-resource-btn">Текстовий ресурс</button>
-            <button type="button" class="add-file-resource-btn" id="add-file-resource-btn">Файловий ресурс</button>
+            <button type="button" class="add-text-resource-btn" id="add-text-resource-btn">
+                <i class="fas fa-file-alt"></i>
+                Текстовий ресурс
+            </button>
+            <button type="button" class="add-file-resource-btn" id="add-file-resource-btn">
+                <i class="fas fa-file-upload"></i>
+                Файловий ресурс
+            </button>
         </div>
     </div>
 </div>

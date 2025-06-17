@@ -13,6 +13,9 @@ try {
     // Базова частина запиту
     $base_query = "FROM courses c 
     LEFT JOIN users u ON c.mentor_id = u.id 
+    LEFT JOIN difficulty_levels dl ON c.level_id = dl.id
+    LEFT JOIN languages l ON c.language_id = l.id
+    LEFT JOIN categories cat ON c.category_id = cat.id
     WHERE 1=1";
     
     $where_conditions = array();
@@ -104,6 +107,10 @@ try {
     $query = "SELECT 
         c.*,
         CONCAT(u.first_name, ' ', u.last_name) as mentor_name,
+        u.id as mentor_id,
+        dl.name AS level,
+        l.name AS language,
+        cat.name AS category,
         COALESCE((SELECT COUNT(*) FROM course_reviews cr WHERE cr.course_id = c.id), 0) as reviews_count,
         COALESCE((SELECT AVG(rating) FROM course_reviews cr WHERE cr.course_id = c.id), 0) as rating
         " . $base_query . "
@@ -121,7 +128,47 @@ try {
     
     $courses = array();
     while ($row = mysqli_fetch_assoc($result)) {
-        $courses[] = $row;
+        // Форматуємо ім'я автора
+        $author_name = trim($row['mentor_name']);
+        if (empty($author_name)) {
+            $author_name = "Невідомий автор";
+        }
+
+        // Форматуємо рівень складності
+        $level_text = "";
+        switch($row['level']) {
+            case 'beginner':
+                $level_text = "Для початківців";
+                break;
+            case 'intermediate':
+                $level_text = "Середній рівень";
+                break;
+            case 'advanced':
+                $level_text = "Просунутий рівень";
+                break;
+            default:
+                $level_text = "Для всіх рівнів";
+        }
+
+        // Формуємо інформацію про курс
+        $info = $row['duration_hours'] . " год. " . $level_text;
+
+        // Перевіряємо наявність зображення
+        $image = !empty($row['image_url']) ? $row['image_url'] : 'img/default-image-course.png';
+
+        $courses[] = array(
+            'id' => $row['id'],
+            'title' => $row['title'],
+            'author' => $author_name,
+            'mentor_id' => $row['mentor_id'],
+            'rating' => floatval($row['rating']),
+            'reviews' => intval($row['reviews_count']),
+            'info' => $info,
+            'price' => floatval($row['price']),
+            'image' => $image,
+            'description' => $row['short_description'],
+            'category' => $row['category']
+        );
     }
 
     // Логуємо результат

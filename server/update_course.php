@@ -3,6 +3,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Max-Age: 3600");
 header("Content-Type: application/json; charset=UTF-8");
 
 // Перевіряємо, чи запит має метод OPTIONS (preflight запит)
@@ -12,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Підключення до бази даних
-include 'connect.php';
+require_once 'connect.php';
 
 // Перевірка методу запиту
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -20,6 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
         'success' => false,
         'message' => 'Метод не дозволено. Використовуйте POST.'
+    ]);
+    exit;
+}
+
+// Перевірка наявності course_id
+if (!isset($_POST['course_id']) || empty($_POST['course_id'])) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'ID курсу не вказано'
     ]);
     exit;
 }
@@ -164,7 +175,7 @@ try {
         if ($languageId === null) $languageId = NULL;
         if ($levelId === null) $levelId = NULL;
         
-        $updateStmt->bind_param("sssiiiddi", 
+        $updateStmt->bind_param("sssiiidii", 
             $title, $shortDescription, $longDescription, 
             $categoryId, $languageId, $levelId, 
             $price, $durationHours, 

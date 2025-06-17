@@ -203,15 +203,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Відкриття чату з вибраним користувачем
   function openChat(userId, userName, userAvatar, userRole) {
+    if (chatUpdateInterval) {
+      clearInterval(chatUpdateInterval);
+    }
+
     currentChatId = userId;
-    lastMessageId = 0; // Скидаємо для отримання всіх повідомлень
+    lastMessageId = 0;
     
     chatUserName.textContent = userName || 'Чат';
     chatUserAvatar.src = userAvatar || 'img/avatars/default-avatar.png';
     chatUserAvatar.style.display = 'block';
     chatInputBlock.style.display = 'flex';
     
-    // Додаємо роль користувача в заголовок чату (якщо не адмін)
+    // Додаємо роль користувача в заголовок чату
     const roleSpan = document.querySelector('.chat-user-role-header');
     if (roleSpan) {
       roleSpan.remove();
@@ -227,224 +231,106 @@ document.addEventListener('DOMContentLoaded', () => {
     // Очищаємо відображення повідомлень
     chatMessages.innerHTML = '<div class="no-messages">Завантаження повідомлень...</div>';
     
-    // Завантажуємо повідомлення
+    // Завантажуємо початкові повідомлення
     loadChatMessages(userId);
     
-    // Налаштовуємо інтервал оновлення
-    if (chatUpdateInterval) {
-      clearInterval(chatUpdateInterval);
-    }
-    
-    chatUpdateInterval = setInterval(() => {
-      loadChatMessages(userId, true);
-    }, CHAT_UPDATE_INTERVAL);
+    // Встановлюємо інтервал оновлення
+    chatUpdateInterval = setInterval(function() {
+      if (!document.hidden && currentChatId) {
+        loadChatMessages(currentChatId, true);
+      }
+    }, 1000); // Зменшуємо інтервал до 1 секунди для тестування
   }
 
-  // Завантаження повідомлень чату
-  function loadChatMessages(userId, isUpdate = false) {
-    const formData = new FormData();
-    formData.append('user_id', currentUserId);
-    formData.append('chat_user_id', userId);
-    if (lastMessageId > 0 && isUpdate) {
-      formData.append('last_message_id', lastMessageId);
-    }
-    
-    fetch(`${baseUrl}/server/get_chat_messages.php?${getNoCacheParam()}`, {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP помилка: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log("Отримано повідомлення чату:", data);
-      
-      if (data.success) {
-        if (!isUpdate || (data.messages && data.messages.length > 0)) {
-          displayChatMessages(data.messages || [], isUpdate);
-        }
-      } else {
-        if (!isUpdate) {
-          chatMessages.innerHTML = `<div class="no-messages">Помилка: ${data.message || 'Невідома помилка'}</div>`;
-        }
-      }
-    })
-    .catch(error => {
-      console.error("Помилка при завантаженні повідомлень:", error);
-      if (!isUpdate) {
-        chatMessages.innerHTML = `<div class="no-messages">Не вдалося завантажити повідомлення. Спробуйте пізніше.</div>`;
-      }
-    });
-  }
-
-  // Відображення повідомлень чату
+  // Відображення повідомлень
   function displayChatMessages(messages, isUpdate = false) {
-    // Зберігаємо поточну позицію прокрутки
-    const scrollPos = chatMessages.scrollTop;
-    const wasAtBottom = isUserAtBottom;
-    
     if (!messages || messages.length === 0) {
       if (!isUpdate) {
         chatMessages.innerHTML = '<div class="no-messages">Немає повідомлень. Почніть розмову!</div>';
       }
       return;
     }
-    
+
     if (!isUpdate) {
-      // Очищаємо повністю при першому завантаженні
       chatMessages.innerHTML = '';
     }
-    
-    let currentDate = '';
-    if (isUpdate) {
-      // Знаходимо останній роздільник дати, якщо він є
-      const dateSeparators = chatMessages.querySelectorAll('.chat-date-separator');
-      if (dateSeparators.length > 0) {
-        const lastDateSeparator = dateSeparators[dateSeparators.length - 1];
-        currentDate = lastDateSeparator.getAttribute('data-date') || '';
-      }
-    }
-    
-    // Перевіряємо чи є повідомлення для додавання
-    let newMessagesAdded = false;
-    
+
+    let hasNewMessages = false;
+
     messages.forEach(message => {
-      // Перевірка наявності обов'язкових полів
       if (!message || !message.id) return;
-      
-      // Оновлюємо ID останнього повідомлення
-      if (message.id > lastMessageId) {
-        lastMessageId = message.id;
-      }
-      
-      // Перевіряємо, чи вже є таке повідомлення в чаті
+
+      // Перевіряємо чи повідомлення вже відображено
       if (document.querySelector(`.chat-message[data-id="${message.id}"]`)) {
         return;
       }
-      
-      newMessagesAdded = true;
-      
-      // Перевіряємо, чи є в повідомленні дата
-      if (!message.sent_at) {
-        console.error("Повідомлення без дати:", message);
-        message.sent_at = new Date().toISOString(); // Використовуємо поточну дату
+
+      hasNewMessages = true;
+
+      // Оновлюємо lastMessageId
+      if (parseInt(message.id) > lastMessageId) {
+        lastMessageId = parseInt(message.id);
       }
-      
-      // Форматуємо дату для роздільника
-      let messageDate;
-      try {
-        messageDate = formatDate(message.sent_at);
-      } catch (e) {
-        console.error("Помилка при форматуванні дати:", e);
-        messageDate = "Нещодавно";
-      }
-      
-      // Перевіряємо, чи потрібно додати роздільник дати
-      if (messageDate !== currentDate) {
-        currentDate = messageDate;
-        
-        const dateSeparator = document.createElement('div');
-        dateSeparator.classList.add('chat-date-separator');
-        dateSeparator.setAttribute('data-date', currentDate);
-        dateSeparator.textContent = currentDate;
-        
-        chatMessages.appendChild(dateSeparator);
-      }
-      
-      // Створюємо елемент повідомлення
+
       const messageElement = document.createElement('div');
       messageElement.classList.add('chat-message');
       messageElement.dataset.id = message.id;
-      
-      // Визначаємо напрямок повідомлення (вхідне/вихідне)
+
       const isIncoming = parseInt(message.sender_id) !== parseInt(currentUserId);
       messageElement.classList.add(isIncoming ? 'incoming' : 'outgoing');
-      
-      // Перевірка тексту повідомлення
-      const messageText = message.message || "Пусте повідомлення";
-      
-      // Форматуємо час повідомлення
+
       let formattedTime;
       try {
         const messageTime = new Date(message.sent_at);
-        if (isNaN(messageTime.getTime())) {
-          throw new Error("Invalid Date");
-        }
         formattedTime = messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
       } catch (e) {
-        console.error("Помилка при форматуванні часу:", e);
-        formattedTime = "Невідомий час";
+        formattedTime = 'Невідомий час';
       }
-      
-      // Наповнюємо повідомлення
+
       messageElement.innerHTML = `
-        <div class="message-text">${messageText}</div>
+        <div class="message-text">${message.message || ''}</div>
         <div class="message-time">${formattedTime}</div>
       `;
-      
+
       chatMessages.appendChild(messageElement);
     });
-    
-    // Якщо це перше завантаження, прокручуємо до останнього повідомлення
-    if (!isUpdate) {
+
+    if (hasNewMessages) {
       scrollToBottom(true);
-    } 
-    // Якщо додані нові повідомлення і користувач був внизу до оновлення, або це наше власне повідомлення
-    else if (newMessagesAdded && wasAtBottom) {
-      scrollToBottom(true);
-    }
-    // Інакше відновлюємо позицію прокрутки
-    else if (isUpdate && !wasAtBottom) {
-      chatMessages.scrollTop = scrollPos;
     }
   }
-  
-  // Функція форматування дати
-  function formatDate(dateStr) {
-    try {
-      // Перевірка валідності вхідної дати
-      if (!dateStr) throw new Error("Empty date string");
-      
-      // Перетворити рядок дати у об'єкт Date
-      const date = new Date(dateStr);
-      if (isNaN(date.getTime())) throw new Error("Invalid date");
-      
-      const now = new Date();
-      const yesterday = new Date(now);
-      yesterday.setDate(now.getDate() - 1);
-      
-      // Отримати день, місяць та рік
-      const day = date.getDate();
-      const month = date.getMonth();
-      const year = date.getFullYear();
-      
-      // Перевірити, чи це сьогодні
-      if (day === now.getDate() && month === now.getMonth() && year === now.getFullYear()) {
-        return 'Сьогодні';
+
+  // Функція для завантаження повідомлень
+  function loadChatMessages(userId, isUpdate = false) {
+    if (!userId) return;
+
+    $.ajax({
+      url: `${baseUrl}/server/get_chat_messages.php`,
+      type: 'POST',
+      data: {
+        user_id: currentUserId,
+        chat_user_id: userId,
+        last_message_id: isUpdate ? lastMessageId : 0,
+        timestamp: new Date().getTime()
+      },
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        if (data.success && data.messages) {
+          displayChatMessages(data.messages, isUpdate);
+        } else {
+          if (!isUpdate) {
+            chatMessages.innerHTML = `<div class="no-messages">Помилка: ${data.message || 'Невідома помилка'}</div>`;
+          }
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error("Помилка при завантаженні повідомлень:", error);
+        if (!isUpdate) {
+          chatMessages.innerHTML = '<div class="no-messages">Не вдалося завантажити повідомлення</div>';
+        }
       }
-      
-      // Перевірити, чи це вчора
-      if (day === yesterday.getDate() && month === yesterday.getMonth() && year === yesterday.getFullYear()) {
-        return 'Вчора';
-      }
-      
-      // Якщо це не сьогодні і не вчора, повертаємо дату у форматі ДД.ММ.РРРР
-      const formattedDay = day.toString().padStart(2, '0');
-      const formattedMonth = (month + 1).toString().padStart(2, '0');
-      
-      // Якщо це поточний рік, не показуємо рік
-      if (year === now.getFullYear()) {
-        return `${formattedDay}.${formattedMonth}`;
-      }
-      
-      return `${formattedDay}.${formattedMonth}.${year}`;
-    } catch (error) {
-      console.error("Помилка форматування дати:", error, "для рядка:", dateStr);
-      return "Невідома дата";
-    }
+    });
   }
 
   // Обробник натискання Enter у полі вводу
@@ -463,36 +349,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageText = chatInput.value.trim();
     if (!messageText || !currentChatId) return;
 
-    const formData = new FormData();
-    formData.append('user_id', currentUserId);
-    formData.append('receiver_id', currentChatId);
-    formData.append('message', messageText);
-    
-    // Очищаємо поле вводу
-    chatInput.value = '';
-    
-    fetch(`${baseUrl}/server/send_chat_message.php?${getNoCacheParam()}`, {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP помилка: ${response.status}`);
+    $.ajax({
+      url: `${baseUrl}/server/send_chat_message.php`,
+      type: 'POST',
+      data: {
+        user_id: currentUserId,
+        receiver_id: currentChatId,
+        message: messageText,
+        timestamp: new Date().getTime()
+      },
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        if (data.success) {
+          chatInput.value = '';
+          // Відразу завантажуємо нові повідомлення
+          loadChatMessages(currentChatId, true);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error("Помилка при відправці повідомлення:", error);
       }
-      return response.json();
-    })
-    .then(data => {
-      console.log("Результат відправки повідомлення:", data);
-      
-      if (data.success) {
-        // Оновлюємо повідомлення
-        loadChatMessages(currentChatId, true);
-        // Прокручуємо вниз
-        scrollToBottom(true);
-      }
-    })
-    .catch(error => {
-      console.error("Помилка при відправці повідомлення:", error);
     });
   }
 

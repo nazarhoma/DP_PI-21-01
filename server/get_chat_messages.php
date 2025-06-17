@@ -65,31 +65,20 @@ try {
         throw new Exception("Користувач не знайдений");
     }
     
-    // Налаштовуємо параметри запиту для отримання повідомлень
-    $sql_params = "";
-    $params_types = 'ii';
-    $params_values = [$user_id, $chat_user_id];
-    
-    // Якщо є ID останнього повідомлення, додаємо умову для отримання тільки нових
-    if ($last_message_id > 0) {
-        $sql_params = " AND m.id > ?";
-        $params_types .= 'i';
-        $params_values[] = $last_message_id;
-    }
-    
     // Складаємо запит для отримання повідомлень
     $sql = "SELECT m.id, m.sender_id, m.receiver_id, m.text as message, m.created_at as sent_at 
             FROM messages m
             WHERE (m.sender_id = ? AND m.receiver_id = ?) 
-               OR (m.sender_id = ? AND m.receiver_id = ?)
-               $sql_params
-            ORDER BY m.created_at ASC";
+               OR (m.sender_id = ? AND m.receiver_id = ?)";
     
-    $debug_info['sql'] = $sql;
+    if ($last_message_id > 0) {
+        $sql .= " AND m.id > ?";
+    }
     
-    // Якщо ID останнього повідомлення не вказаний, отримуємо останні 30 повідомлень
+    $sql .= " ORDER BY m.id ASC";
+    
     if ($last_message_id === 0) {
-        $sql .= " LIMIT 30";
+        $sql .= " LIMIT 50";
     }
     
     $stmt = $conn->prepare($sql);
@@ -98,20 +87,17 @@ try {
         throw new Exception("Помилка підготовки запиту: " . $conn->error);
     }
     
-    // Доповнюємо масив параметрів
-    $params_types .= 'ii';
-    $params_values[] = $chat_user_id;
-    $params_values[] = $user_id;
-    
-    // Викликаємо bind_param з динамічним масивом параметрів
-    $stmt->bind_param($params_types, ...$params_values);
+    if ($last_message_id > 0) {
+        $stmt->bind_param('iiiii', $user_id, $chat_user_id, $chat_user_id, $user_id, $last_message_id);
+    } else {
+        $stmt->bind_param('iiii', $user_id, $chat_user_id, $chat_user_id, $user_id);
+    }
     
     $stmt->execute();
-    $res = $stmt->get_result();
+    $result = $stmt->get_result();
     
-    // Формуємо масив повідомлень у форматі, очікуваному клієнтом
     $messages = [];
-    while ($row = $res->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $messages[] = [
             'id' => $row['id'],
             'sender_id' => $row['sender_id'],
@@ -121,11 +107,15 @@ try {
         ];
     }
     
-    // Повертаємо результат з повідомленнями
+    // Додаємо інформацію про кількість повідомлень
+    $debug_info['messages_count'] = count($messages);
+    $debug_info['last_message_id'] = $last_message_id;
+    
+    // Повертаємо результат
     echo json_encode([
         'success' => true,
         'messages' => $messages,
-        'debug' => $debug_info
+        'timestamp' => time()
     ]);
     
 } catch (Exception $e) {

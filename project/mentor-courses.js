@@ -857,7 +857,28 @@ document.addEventListener('DOMContentLoaded', function() {
             // Для документів та зображень
             const resourceFile = document.getElementById('resource-file');
             if (resourceFile.files.length > 0) {
-                formData.append('resource_file', resourceFile.files[0]);
+                // Перевіряємо тип файлу перед відправкою
+                const file = resourceFile.files[0];
+                console.log('File info:', {
+                    name: file.name,
+                    type: file.type,
+                    size: file.size
+                });
+
+                const allowedTypes = {
+                    'image': ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+                    'document': ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+                };
+
+                console.log('Selected resource type:', type);
+                console.log('Allowed types for this resource:', allowedTypes[type]);
+
+                if (!allowedTypes[type].includes(file.type)) {
+                    showError(`Непідтримуваний тип файлу. Дозволені типи для ${type}: ${allowedTypes[type].join(', ')}`);
+                    return;
+                }
+
+                formData.append('resource_file', file);
             } else if (url.trim()) {
                 formData.append('resource_url', url);
             } else {
@@ -869,17 +890,34 @@ document.addEventListener('DOMContentLoaded', function() {
         if (duration) {
             formData.append('duration_minutes', duration);
         }
+
+        // Логуємо всі дані, що відправляються
+        console.log('FormData contents:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
+        }
         
         // URL для запиту залежно від того, чи створюємо новий ресурс або редагуємо існуючий
         const url_endpoint = resourceId ? `${API_ROOT}/update_resource.php` : `${API_ROOT}/create_resource.php`;
+        console.log('Sending request to:', url_endpoint);
         
         // Відправити запит на створення/оновлення ресурсу
         fetch(url_endpoint, {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.log('Error response text:', text);
+                    throw new Error(`Помилка сервера: ${text}`);
+                });
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Response data:', data);
             if (data.success) {
                 // Закрити модальне вікно
                 resourceModal.classList.remove('show');
@@ -893,8 +931,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => {
-            console.error('Помилка при збереженні ресурсу:', error);
-            showError('Помилка при збереженні ресурсу');
+            console.error('Error details:', error);
+            showError('Помилка при збереженні ресурсу: ' + error.message);
         });
     }
     
@@ -978,6 +1016,14 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('image', imageInput.files[0]);
         }
         
+        // Отримуємо course_id
+        const courseId = document.getElementById('course-id').value;
+        if (!courseId) {
+            showError('ID курсу не знайдено');
+            return;
+        }
+        formData.append('course_id', courseId);
+        
         // Показати індикатор завантаження або блокувати форму
         const submitBtn = editCourseForm.querySelector('.submit-btn');
         const originalBtnText = submitBtn.textContent;
@@ -991,34 +1037,23 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.text().then(text => {
+                    throw new Error(`Помилка сервера: ${text}`);
+                });
             }
-            return response.text();
+            return response.json();
         })
-        .then(text => {
+        .then(data => {
             // Розблокувати кнопку
             submitBtn.textContent = originalBtnText;
             submitBtn.disabled = false;
             
-            // Перевірити, чи є текст порожнім
-            if (!text.trim()) {
-                showError('Отримано порожню відповідь від сервера');
-                return;
-            }
-            
-            try {
-                const data = JSON.parse(text);
-                if (data.success) {
-                    showSuccess('Курс успішно оновлено');
-                    
-                    // Оновити список курсів
-                    loadMentorCourses();
-                } else {
-                    showError(data.message || 'Помилка при оновленні курсу');
-                }
-            } catch (error) {
-                console.error('Помилка розбору JSON відповіді:', error, text);
-                showError('Помилка при оновленні курсу: неправильний формат відповіді');
+            if (data.success) {
+                showSuccess('Курс успішно оновлено');
+                // Оновити список курсів
+                loadMentorCourses();
+            } else {
+                showError(data.message || 'Помилка при оновленні курсу');
             }
         })
         .catch(error => {
